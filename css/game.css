@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;700&family=Unica+One&display=swap');
+
+.game {
+    background-color: transparent;
+    width: 100%;
+    margin-top: 25px;
+    /*height: calc(80vh - 115px);*/
+    height: 155px;
+    border-radius: 8px;
+    /*overflow: hidden;*/
+    transform: translate3d(0,0,0);
+    font-family: 'Unica One', cursive;
+    
+}
+
+.viewport
+{
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 55px,70px 55px,70px 0%,100% 0%,100% 100%,0% 100%);
+}
+
+.game #hudbg {
+    background-color: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    width: 68px;
+    height: 55px;
+    border-radius: 7px;
+    pointer-events:none;
+}
+
+.game #score {
+    font-size: 28px;
+    position: absolute;
+    left: 6px;
+    pointer-events:none;
+}
+
+.game #lives {
+    position: absolute;
+    /*left: 100px;*/
+    top: 30px;
+    left: 6px;
+    pointer-events:none;
+}
+
+.game #lives img {
+    width: 19px;
+    height: 19px;
+    pointer-events:none;
+    transition: opacity 0.25s ease-in-out;
+}
+
+.game .pausegame {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 8px;
+}
+
+.game .menu
+{
+    position: absolute;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
+    background-color: rgba(0,0,0,0.75);
+    top: -15px;
+    left: -15px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+}
+
+.game .menu.open
+{
+    display: block;
+}
+
+.game .menu .page
+{
+    width: 200px;
+    max-width: calc(100% - 20px);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    display: none;
+}
+
+.game .menu .page.active
+{
+    display: block;
+}
+
+.game .menu .page .highscore
+{
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+}
+
+.game .menu .page .title
+{
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: wheat;
+}
+
+.game .menu .page .title.gameover
+{
+    color: tomato;
+    font-size: 32px;
+}

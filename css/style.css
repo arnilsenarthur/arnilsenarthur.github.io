@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400&display=swap');
+body {
+    background-color: rgba(24,24,24);
+}
+
+button {
+    padding: 8px 16px;
+    
+    /*box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);*/
+    line-height: 1.25;
+    border: var(--bg) 3px solid;
+    background: transparent;
+    font-weight: bold;
+    text-decoration: none;
+    color: var(--bg);
+    font-size: 16px;
+    letter-spacing: .08em;
+    border-radius: 7px;
+    transition: background-color .6s ease;
+    overflow: hidden;
+    cursor: pointer;
+
+    background-position: center;
+    transition: background 0.8s,border 0.8s, color 0.2s;
+}
+
+.red {
+    --bg: tomato;
+    --bgdarker: rgb(197, 77, 56);
+}
+
+.contact {
+    --bg: wheat;
+    --bgdarker: rgb(151, 133, 100);
+    --text: rgb(73, 73, 73);
+}
+
+.facebook {
+    --bg: #3b5998;
+}
+
+.twitter {
+    --bg: #1da1f2;
+}
+
+.linkedin {
+    --bg: #0a66c2;
+}
+
+.gmail {
+    --bg: #ea4335;
+}
+
+.github {
+    --bg: black;
+}
+
+.play {
+    --bg: #27C93F;
+    margin-top: 10px;
+}
+
+.green {
+    --bg: #27C93F;
+}
+
+.yellow {
+    --bg: rgb(172, 169, 10);
+}
+
+
+
+button:hover:not(.inverse) , button.inverse:not(:hover) {
+    border: transparent 3px solid;
+    color: var(--text);
+    background: var(--bg) radial-gradient(circle, transparent 1%, var(--bg) 1%) center/15000%;
+}
+button:active {
+    color: var(--text);;
+    background-color: var(--bgdarker);
+    background-size: 100%;
+    transition: background 0s;
+}
+
+.back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+}
+
+*::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+    background: #222; 
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 3px;
+}
+
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}
+
+.full {
+    width: 100%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.center {
+    text-align: center;
+}
+
+.footer {
+    width: auto;
+    text-align: center;
+    color: white;
+    font-family: 'Readex Pro', sans-serif;
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    font-size: 12px;
+    transform: translate(-50%,0);
+}
+
+.fa {
+    font-size: 24px !important;
+}
+
+button .fa.side {
+    line-height: 14px;
+    margin-right: 12px;
+}
+
+button.social .fa.side {
+    line-height: 14px;
+    transform: translate(0px,4px);
+    margin-right: 12px;
+    margin-bottom: 8px;
+}
+
+
+button.social
+{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+*:focus {
+    outline: none;
+}
+
+button:focus {
+    outline: none;
+}

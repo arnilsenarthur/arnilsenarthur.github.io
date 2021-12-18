@@ -1,0 +1,117 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script> "
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/window.css">
+    <link rel="stylesheet" href="css/game.css">
+    <script src="js/animations.js"></script>
+    <script src="js/background.js"></script>
+    <script src="js/pagesystem.js"></script>
+    <script src="js/game.js"></script>
+
+</head>
+
+<body>
+    <div class="back">
+    </div>
+    <div class="window">
+        <div class="header">
+            <div class="dot red"></div>
+            <div class="dot amber"></div>
+            <div class="dot green"></div>
+
+            <a class="link" href="#skills">Skills</a>
+            <a class="link" href="#projects">Projects</a>
+            <a class="link" href="#whatido">What I Do</a>
+            <a class="link" href="#">Home</a>
+            <a class="link return" href="#">Back</a>
+        </div>
+        <div class="canvas">
+            <div class="menubar">
+                <a class="link" href="#skills">Skills</a>
+                <a class="link" href="#projects">Projects</a>
+                <a class="link" href="#whatido">What I Do</a>
+                <a class="link" href="#">Home</a>
+            </div>
+            <!--Home-->
+            <div class="content" page="">
+                <div class="info">
+                    <h2 class="title">Hi! I'm <b>Arnilsen Arthur</b></h2>
+                    <img src="https://avatars.githubusercontent.com/u/13054390?v=4" class="profile mobile">
+                    <p>Just a random text saying how amazing i am! Just a random text saying how amazing i am! Just a
+                        random
+                        text saying how amazing i am! Just a random text saying how amazing i am!</p>
+                    <button class="contact inverse full" onclick="location.href='#contact'">Contact me</button>
+                    <button class="play full" onclick="location.href='#game'"><i class="fa fa-gamepad side"></i>Play a
+                        Game!</button>
+                </div>
+                <img src="https://avatars.githubusercontent.com/u/13054390?v=4" class="profile desktop">
+            </div>
+            <!--Contacts-->
+            <div class="content" page="contact">
+
+                <h3 class="center">You can find me in <b>all</b> the links bellow</h3>
+                <button class="github social inverse"><i class="fa fa-github side"></i>arnilsenarthur</button>
+                <button class="linkedin social inverse "><i class="fa fa-linkedin side"></i>arnilsenarthur</button>
+                <button class="twitter social inverse"><i class="fa fa-twitter side"></i>arnilsenarthur</button>
+                <button class="gmail social inverse"><i class="fa fa-google side"></i>arnilsenarthur</button>
+                <button class="facebook social inverse"><i class="fa fa-facebook side"></i>arnilsenarthur</button>
+                <br>
+                <button class="red full" onclick="location.href='#'">Back</button>
+            </div>
+
+            <!--Game-->
+            <div class="content" page="game">
+                <div class="game">
+                    <div id="hudbg"></div>
+                    <div id="score">
+                        0000
+                    </div>
+                    <div id="lives">
+                        <img src="img/heart.png">
+                        <img src="img/heart.png">
+                        <img src="img/heart.png">
+                    </div>
+                    <div class="viewport" id="gamecanvas"></div>
+                    <button class="red pausegame" onclick="pauseGame()"><i class="fa fa-pause"></i></button>
+                    <div class="menu open">
+                        <div class="page" id="pagepause">
+                            <div class="highscore">HI 2500</div>
+                            <div class="title currentscore">0201</div>
+                            <button class="yellow full inverse" onclick="resumeGame()">Continue</button>
+                        </div>
+                        <div class="page active" id="pageplay">
+                            <div class="highscore">HI 2500</div>
+                            <div class="title">Jump5</div>
+                            <button class="green full inverse" onclick="resumeGame()">Play</button>
+                        </div>
+                        <div class="page" id="pageover">
+                            <div class="highscore">HI 2500</div>
+                            <div class="title gameover">Game Over</div>
+                            <button class="red full inverse" onclick="playAgain()">Play Again</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        Created by Árnilsen Arthur
+    </div>
+
+    <script>
+        initAnimations();
+        initBackground();
+
+        onOpenPage(window.location.hash.substring(1));
+
+    </script>
+</body>
+
+</html>
