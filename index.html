@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script> "
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.0.2/pixi.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/window.css">
     <link rel="stylesheet" href="css/game.css">
@@ -74,19 +74,17 @@
                         0000
                     </div>
                     <div id="lives">
-                        <img src="img/heart.png">
-                        <img src="img/heart.png">
-                        <img src="img/heart.png">
+                        
                     </div>
                     <div class="viewport" id="gamecanvas"></div>
                     <button class="red pausegame" onclick="pauseGame()"><i class="fa fa-pause"></i></button>
-                    <div class="menu open">
+                    <div class="menu">
                         <div class="page" id="pagepause">
                             <div class="highscore">HI 2500</div>
                             <div class="title currentscore">0201</div>
                             <button class="yellow full inverse" onclick="resumeGame()">Continue</button>
                         </div>
-                        <div class="page active" id="pageplay">
+                        <div class="page" id="pageplay">
                             <div class="highscore">HI 2500</div>
                             <div class="title">Jump5</div>
                             <button class="green full inverse" onclick="resumeGame()">Play</button>
