@@ -9,30 +9,28 @@ function onOpenPage(page) {
     $("a[href='#" + page + "']").addClass("active");
 
     function open(justOpened) {
-        
+
         $(".content.current").removeClass("current");
         $(".content[page='" + page + "']").css('opacity', 0);
         $(".content[page='" + page + "']").addClass("current");
         $(".window").css('max-height', '1000px');
 
-        $(".link.return").css('display',page == "game"? 'block' : 'none');
+        $(".link.return").css('display', page == "game" ? 'block' : 'none');
 
         if (page == "game") {
             $(".menubar").addClass("hidden");
 
-            newGame();
+
             $(".menu").addClass("open");
             $("#pageplay").addClass("active");
 
-            if(game == null || game.p5 == null)
-                game.p5 = new p5(s);
+            onGameOpen();
         }
-        else if(game != null && game.p5 != null)
-        {  
+        else if (game != null) {
             $(".menubar").removeClass("hidden");
 
-            game.p5.remove();
-            game = null;
+
+            onGameClose();
         }
 
         openContents(justOpened != null);
@@ -90,4 +88,24 @@ function openContents(needToShake) {
             rotateY: 0,
             easing: 'spring(0.5, 80, 5, 0)',
         });
+}
+
+function playAgain() {
+
+    game.p5.remove();
+    game = null;
+    newGame();
+    game.p5 = new p5(s);
+
+    anime({
+        targets: '.menu.open',
+        opacity: [1, 0],
+        duration: 250,
+        easing: 'linear',
+        complete: () => {
+            closeGameWindows();
+            $(".menu").removeClass("open");
+            game.playing = true;
+        }
+    });
 }
