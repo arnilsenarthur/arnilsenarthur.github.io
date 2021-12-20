@@ -20,11 +20,9 @@ function onOpenPage(page) {
         if (page == "game") {
             $(".menubar").addClass("hidden");
 
-
-            $(".menu").addClass("open");
-            $("#pageplay").addClass("active");
-
             onGameOpen();
+            $(".menu").addClass("open");
+            $("#pageplay").addClass("active"); 
         }
         else if (game != null) {
             $(".menubar").removeClass("hidden");

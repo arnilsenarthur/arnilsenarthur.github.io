@@ -7,9 +7,10 @@ body {
 button {
     padding: 8px 16px;
     
+    --bd: 3px solid;
     /*box-shadow: 0px 0px 12px -2px rgba(0,0,0,0.5);*/
     line-height: 1.25;
-    border: var(--bg) 3px solid;
+    border: var(--bg) var(--bd);
     background: transparent;
     font-weight: bold;
     text-decoration: none;
@@ -72,7 +73,7 @@ button {
 
 
 button:hover:not(.inverse) , button.inverse:not(:hover) {
-    border: transparent 3px solid;
+    border: transparent var(--bd);
     color: var(--text);
     background: var(--bg) radial-gradient(circle, transparent 1%, var(--bg) 1%) center/15000%;
 }
