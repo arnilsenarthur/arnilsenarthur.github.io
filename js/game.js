@@ -7,11 +7,7 @@ const deg2rad = Math.PI / 180;
 const bulletChunks = 5;
 const chanceToSpawnCollectible = 25;
 const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-const textStyle = new PIXI.TextStyle({
-    fill: '#00FF00',
-    fontFamily: 'Share Tech Mono',
-    fontSize: 40
-});
+var textStyle;
 
 
 function onGameOpen() {
@@ -41,11 +37,11 @@ function onGameOpen() {
             score: $(".game #score")
         },
         getHighscore: () => {
-            let hg = localStorage.getItem("highscore");
+            let hg = localStorage.getItem("gjg_highscore");
             return hg == null ? 0 : parseInt(hg);
         },
         setHighscore: (value) => {
-            localStorage.setItem("highscore", value);
+            localStorage.setItem("gjg_highscore", value);
         },
         getAudio: () => {
             let hg = localStorage.getItem("audio");
@@ -69,11 +65,11 @@ function onGameOpen() {
 
         addToCollection: (item) => {
             s = game.sortCollection(item + game.getCollection());
-            localStorage.setItem("collection", s);
+            localStorage.setItem("gjg_collection", s);
         },
 
         getCollection: () => {
-            let cl = localStorage.getItem("collection");
+            let cl = localStorage.getItem("gjg_collection");
             return cl == null ? "" : cl;
         },
 
@@ -101,6 +97,12 @@ function onGameOpen() {
 
     //On Game Start
     onGameStart();
+
+    textStyle = new PIXI.TextStyle({
+        fill: '#00FF00',
+        fontFamily: 'Share Tech Mono',
+        fontSize: 40
+    });
 
     //Main Game Loop
     game.app.ticker.add((delta) => {
@@ -267,14 +269,6 @@ function onGameUpdate(delta) {
 
 
 function jump() {
-    /*
-    if ((game.doubleJump && (game.player.position[1] < -40 || game.player.velocity <= 0)) || (game.player.position[1] == 0)) {
-        game.doubleJump = game.player.position[1] == 0;
- 
-        game.player.velocity = game.player.jumpForce
-    }
-    */
-
     if (game.doubleJump || (game.player.position[1] == game.currentGround)) {
         if (game.player.position[1] == game.currentGround) {
             playEffect("jump");
@@ -285,8 +279,6 @@ function jump() {
             game.doubleJump = false;
             game.player.velocity = game.player.jumpForce * 1. + (game.player.position[1] / -20)
         }
-
-
     }
 }
 
@@ -491,7 +483,7 @@ function createBullet(offset, rx, y, chunk) {
     bullet.lineStyle(3, 0xFF0000);
     let m = [8, 10, 12][Math.floor(Math.random() * 3)];
 
-    let sides = Math.floor(Math.random() * 2) + 3;
+    let sides = Math.floor(Math.random() * 97)%4 + 2;
     let sd = 360 / sides;
 
     bullet.moveTo(Math.sin(0 * deg2rad) * m, Math.cos(0 * deg2rad) * m);
