@@ -6,7 +6,8 @@ const hearticon = PIXI.Texture.from('img/heart.png');
 const deg2rad = Math.PI / 180;
 const bulletChunks = 5;
 const chanceToSpawnCollectible = 25;
-const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const letters = 'JUMPXAEIOU';
+const invencibilityTime = 1.5;
 var textStyle;
 
 
@@ -17,6 +18,7 @@ function onGameOpen() {
         currentGround: 0,
         currentCeiling: 148,
         firstFrame: true,
+        invencibility: 0,
         app: null,
         speed: 0,
         score: 0,
@@ -109,6 +111,8 @@ function onGameOpen() {
         const ms = delta / PIXI.settings.TARGET_FPMS;
         onGameUpdate(ms / 1000);
     });
+
+    $("#score").removeClass("blink_me");
 }
 
 function onGameStart() {
@@ -158,13 +162,16 @@ function onGameUpdate(delta) {
             game.player.velocity = 0;
         }
 
+        game.graphics.player.alpha = game.invencibility <= 0 ? 1 : Math.floor(Math.round(Math.sin(game.invencibility * deg2rad * 720 * 2)));
+
         game.graphics.player.y = game.player.position[1];
 
         //Update game variables
         game.distance += delta * game.speed * 300;
+        game.invencibility -= delta;
 
         if (game.speed < 1) {
-            game.speed += delta / 2.5;
+            game.speed += delta / 1.75;
             if (game.speed > 1)
                 game.speed = 1;
         }
@@ -186,16 +193,20 @@ function onGameUpdate(delta) {
                 bullet.position[0] -= delta * game.speed * 60;
 
                 if (intersection(bullet, game.player)) {
-
-                    game.player.lives--;
-                    playEffect('damage');
-                    updateLives();
                     chunk.removeChild(bullet.sprite);
                     chunk.bullets.splice(j, 1);
-                    if (game.player.lives == 0) {
-                        gameOver();
-                        game.playing = 0;
-                        //game.speed = 0;
+
+                    if (game.invencibility <= 0) {
+                        game.player.lives--;
+                        game.invencibility = invencibilityTime;
+                        playEffect('damage');
+                        updateLives();
+
+                        if (game.player.lives == 0) {
+                            gameOver();
+                            game.playing = 0;
+                            //game.speed = 0;
+                        }
                     }
                     break;
                 }
@@ -203,6 +214,9 @@ function onGameUpdate(delta) {
         }
 
         let chunk = game.chunks[0];
+        if(chunk == null)
+            return;
+
         game.currentGround = 0;
         game.currentCeiling = 148;
 
@@ -234,21 +248,27 @@ function onGameUpdate(delta) {
             if (intersection(o, game.player)) {
                 chunk.objects.splice(i, 1);
                 i--;
-
-                o.chunk.addChild(o.renderer);
-
-                game.player.lives--;
-                playEffect('damage');
-                updateLives();
-                if (game.player.lives == 0) {
-                    gameOver();
-                    game.playing = 0;
-                    //game.speed = 0;
+                if (game.invencibility <= 0) {
+                    o.chunk.addChild(o.renderer);
+                    game.invencibility = invencibilityTime;
+                    game.player.lives--;
+                    playEffect('damage');
+                    updateLives();
+                    if (game.player.lives == 0) {
+                        gameOver();
+                        game.playing = 0;
+                        //game.speed = 0;
+                    }
                 }
             }
             else if (game.player.position[0] > (o.position[0] + o.size[0] + 10)) {
                 if (o.point) {
                     game.score++;
+                    if (game.score % 10 == 0) {
+                        $("#score").addClass("blink");
+                        playEffect('points');
+                    }
+
                     if (game.score % 50 == 0) {
                         for (let l = 0; l < bulletChunks; l++)
                             genWorldPiece(-1, l == bulletChunks - 1 ? 3 : 2);
@@ -417,8 +437,8 @@ function createWorldChunk(x, rx, empty = false, bullets = 2) {
     //#endregion
 
     //#region World Renderer
-    chunk.lineStyle(4, rgbToHex(lerp([255, 255, 255], [230, 173, 67], Math.abs(Math.sin((rx / chunkSize) * 5 * Math.PI / 180)))));
-
+    let color = rgbToHex(lerp([255, 255, 255], [230, 173, 67], Math.abs(Math.sin((rx / chunkSize) * 5 * Math.PI / 180))));
+  
     let top = [0, ceilingHeight];
     let bottom = [0, groundHeight];
 
@@ -429,14 +449,13 @@ function createWorldChunk(x, rx, empty = false, bullets = 2) {
         let aa = o.position[0] - rx;
 
         let object = new PIXI.Graphics();
-        object.lineStyle(4, 0xff0000);
+        object.lineStyle(4, 0x000000);
 
         if (ground) {
             object.moveTo(aa, groundHeight);
             object.lineTo(aa, groundHeight - o.size[1]);
             object.moveTo(aa + o.size[0], groundHeight - o.size[1]);
             object.lineTo(aa + o.size[0], groundHeight);
-
 
             bottom.push(aa, groundHeight)
             bottom.push(aa, groundHeight - o.size[1])
@@ -449,7 +468,7 @@ function createWorldChunk(x, rx, empty = false, bullets = 2) {
             object.moveTo(aa + o.size[0], o.position[1] + groundHeight);
             object.lineTo(aa + o.size[0], o.position[1] + groundHeight - o.size[1]);
 
-            top.push(aa, o.position[1] + groundHeight - o.size[1])
+            top.push(aa, o.position[1] + groundHeight - o.size[1]) 
             top.push(aa, o.position[1] + groundHeight)
             top.push(aa + o.size[0], o.position[1] + groundHeight)
             top.push(aa + o.size[0], o.position[1] + groundHeight - o.size[1])
@@ -464,11 +483,25 @@ function createWorldChunk(x, rx, empty = false, bullets = 2) {
 
     chunk.moveTo(top[0], top[1]);
     for (let i = 2; i < top.length; i += 2)
+    {
+        if((i/2)%2 == 1)
+            chunk.lineStyle(4, color);
+        else
+            chunk.lineStyle(4, 0xff0000);
+
         chunk.lineTo(top[i], top[i + 1]);
+    }
 
     chunk.moveTo(bottom[0], bottom[1]);
     for (let i = 2; i < bottom.length; i += 2)
+    {
+        if((i/2)%2 == 1)
+            chunk.lineStyle(4, color);
+        else
+            chunk.lineStyle(4, 0xff0000);
+
         chunk.lineTo(bottom[i], bottom[i + 1]);
+    }
 
 
     chunk.x = x;
@@ -483,7 +516,7 @@ function createBullet(offset, rx, y, chunk) {
     bullet.lineStyle(3, 0xFF0000);
     let m = [8, 10, 12][Math.floor(Math.random() * 3)];
 
-    let sides = Math.floor(Math.random() * 97)%4 + 2;
+    let sides = Math.floor(Math.random() * 97) % 4 + 2;
     let sd = 360 / sides;
 
     bullet.moveTo(Math.sin(0 * deg2rad) * m, Math.cos(0 * deg2rad) * m);
@@ -575,6 +608,7 @@ function playAgain() {
         easing: 'linear',
         complete: () => {
             closeGameWindows();
+            playEffect('play');
             $(".menu").removeClass("open");
             game.playing = true;
         }
@@ -675,11 +709,21 @@ function playEffect(eff) {
             synth.triggerAttackRelease("E6", "10n", now)
             break;
 
+        case 'points':
+            synth.triggerAttackRelease("E4", "10n", now)
+            synth.triggerAttackRelease("E5", "10n", now + 0.1)
+            break;
+
         default:
             break;
     }
 }
 
+function openCollectionFromGameOver(){
+    onGameClose();
+    onGameOpen();
+    openCollection();
+}
 
 function openCollection() {
     $(".menu").addClass("open");
@@ -726,6 +770,9 @@ function closeCollection() {
 }
 
 function pauseGame() {
+    if(game == null || !game.playing)
+        return false;
+
     playEffect('pause');
     game.playing = false;
     $(".menu").addClass("open");
@@ -768,7 +815,7 @@ function onCollectionOpen() {
 
 //#region Input
 $('body').keydown(function (e) {
-    if (game != null && game.playing) {
+    if (game != null && game.playing && game.speed >= 1) {
         jump();
     }
 });
@@ -778,7 +825,7 @@ $('body').mousedown(function () {
         var x = event.clientX, y = event.clientY;
         let c = document.elementFromPoint(x, y);
         if (c.tagName.toLowerCase() == "canvas")
-            if (game != null && game.playing)
+            if (game != null && game.playing && game.speed >= 1)
                 jump();
     } catch (e) { }
 });
@@ -786,7 +833,7 @@ $('body').mousedown(function () {
 window.addEventListener('touchstart', function (event) {
     try {
         if (event.target.tagName.toLowerCase() == "canvas")
-            if (game != null && game.playing)
+            if (game != null && game.playing && game.speed >= 1)
                 jump();
     } catch (e) { }
 }, false);

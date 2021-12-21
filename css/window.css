@@ -121,6 +121,7 @@
     top: 50%;
     transform: translate(-50%,calc(-50% + 7.5px));
     right: -50px;
+    border: 2px solid #666;
 }
 
 .content .info
@@ -157,7 +158,7 @@
     color: #E14640 !important;
 }
 
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 400px) {
     button.social .fa.side::after {
         content: '----------'; display: block;
         color: transparent;
@@ -179,7 +180,7 @@
 
     .window {
         /*width: min(300px,calc(100% - 50px));*/
-        width: calc(100% - 120px);
+        width: calc(100% - 80px);
     }
 
     .menubar{
@@ -212,12 +213,14 @@
         border-radius: 50%;
         margin-left: auto;
         margin-right: auto;
+        border: 2px solid #666;
     }
     
     .footer {
         bottom: 10px;
     }
 }
+
 
 .content
 {
