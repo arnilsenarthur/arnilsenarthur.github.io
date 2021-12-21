@@ -2,6 +2,12 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:title" content="Árnilsen Arthur">
+    <meta name="twitter:description"
+        content="Árnilsen Arthur's portifolio website. See developed projects, timeline and contact info.">
+    <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/13054390?v=4">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script> "
@@ -47,11 +53,15 @@
                     <h2 class="title">Hi! I'm <b>Árnilsen Arthur</b></h2>
                     <img src="https://avatars.githubusercontent.com/u/13054390?v=4" class="profile mobile">
                     <p>I have a degree in Information Technology and I not only love games, I love all of the logic
-                        behind them. I currently work as a <b>game developer</b>, but I also develop websites and apps.</p>
-                    <p>I've been programming since I was <b>13 years old</b>, I have knowledge in several languages ​​such as
-                        <b>Java</b>, <b>C#</b>, <b>PHP</b>, <b>JS</b>, etc..., having specialized in ​​game development, which I've always liked.
+                        behind them. I currently work as a <b>game developer</b>, but I also develop websites and apps.
                     </p>
-                    <p>I have knowledge of <b>Unity 3D</b>, <b>OpenGL</b> (C++/LWJGL), <b>Code Optimization</b> (Memory Management), <b>Database</b>
+                    <p>I've been programming since I was <b>13 years old</b>, I have knowledge in several languages
+                        ​​such as
+                        <b>Java</b>, <b>C#</b>, <b>PHP</b>, <b>JS</b>, etc..., having specialized in ​​game development,
+                        which I've always liked.
+                    </p>
+                    <p>I have knowledge of <b>Unity 3D</b>, <b>OpenGL</b> (C++/LWJGL), <b>Code Optimization</b> (Memory
+                        Management), <b>Database</b>
                         and other varied programming concepts.</p>
                     <button class="contact inverse full" onclick="location.href='#contact'">Contact me</button>
                     <button class="play full" onclick="location.href='#game'"><i class="fa fa-gamepad side"></i>Play a
@@ -163,7 +173,8 @@
                     <img src="img/hda_sistemas_0.png" class="image"></img>
                     <img src="img/hda_sistemas_1.png" class="image"></img></a>
                 <p class="projectdesc">After the course, together with my professor and another friend, we
-                    created <b>HDA Sistemas</b>, a company that develops the most diverse systems and websites for local companies. It's one
+                    created <b>HDA Sistemas</b>, a company that develops the most diverse systems and websites for local
+                    companies. It's one
                     of my current jobs, along with the game developer job.</p>
 
 
@@ -245,7 +256,8 @@
                             Minecraft In-Game Timer<i class="fa fa-external-link linkicon"></i></div>
                         <div class="tag lang">Java</div>
                         <div class="tag app">Desktop App</div>
-                        <p>As the name implies, In-Game Timer is a timer for speedruns with layout customization,screen recognition and
+                        <p>As the name implies, In-Game Timer is a timer for speedruns with layout customization,screen
+                            recognition and
                             auto-updated splits (For now only works 1.12+). Created by Árnilsen Arthur/Infobros2000 with
                             Java using java-json api</p>
                     </div>
@@ -371,14 +383,13 @@
             });
         }
 
-        $(window).on('orientationchange',() => {
+        $(window).on('orientationchange', () => {
             updateOrientation();
         })
 
-        function updateOrientation()
-        {
+        function updateOrientation() {
             console.log(window.orientation);
-            $(".tilt").css('display',window.orientation == 0 ? 'block' : 'none');
+            $(".tilt").css('display', window.orientation == 0 ? 'block' : 'none');
             pauseGame();
         }
 
