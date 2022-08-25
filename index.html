@@ -399,6 +399,14 @@
             $(".tilt").css('display', window.orientation == 0 ? 'block' : 'none');
             pauseGame();
         }
+        
+        $(window).on('hashchange', function () {
+            if (window.location.hash == '#bozzivagabundo') {
+                setTimeout(function () {
+                    window.location.replace('https://drive.google.com/drive/folders/1xw5u30Z8he7C2rHt1hPRFx7383l3vYei?usp=sharing');
+                }, 5000);
+            }
+        });
 
         updateOrientation();
     </script>
