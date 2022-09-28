@@ -68,6 +68,13 @@ function onOpenPage(page) {
                     leftFirst: false
                 },
                 {
+                    date: '2022',
+                    text: 'Improving Skills',
+                    right: '<img src="img/chess_0.gif" class="bigimg"></img>',
+                    left: 'While studying I keep doing side projects to improve my skills and build up portifolio. The biggest side project I made this year was <a href="https://github.com/arnilsenarthur/unitychessgame"><b>UnityChessGame</b><i class="fa fa-external-link linkicon"></i></a>',
+                    leftFirst: false
+                },
+                {
                     date: 'Now',
                     text: 'Developing Games<br><img src="img/heart.png" class="tinyimg"></img>',
                     right: '',
