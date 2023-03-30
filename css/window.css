@@ -158,6 +158,10 @@
     color: #E14640 !important;
 }
 
+.return-feed {
+    color: #E14640 !important;
+}
+
 @media only screen and (max-width: 400px) {
     button.social .fa.side::after {
         content: '----------'; display: block;
