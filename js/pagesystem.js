@@ -155,8 +155,8 @@ function onOpenPage(page) {
         $(".content[page='" + page + "']").addClass("current");
         $(".window").css('max-height', '1000px');
 
-        $(".menubar > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
-        $(".header > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
+        //$(".menubar > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
+        //$(".header > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
         
         $(".link.return").css('display', (page == "game") ? 'block' : 'none');
         $(".link.return-feed").css('display', (page == "post") ? 'block' : 'none');
