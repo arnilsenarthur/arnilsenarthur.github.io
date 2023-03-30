@@ -169,6 +169,10 @@
     }
 }
 
+.force-hide {
+    display: none !important;
+}
+
 @media only screen and (max-width: 890px) {
     .content .info {
         width: 40%;
@@ -187,7 +191,7 @@
         width: calc(100% - 80px);
     }
 
-    .menubar{
+    .menubar {
         display: flex;
     }
 

@@ -155,9 +155,17 @@ function onOpenPage(page) {
         $(".content[page='" + page + "']").addClass("current");
         $(".window").css('max-height', '1000px');
 
-        //$(".menubar > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
-        //$(".header > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
-        
+        if(page == "post")
+        {
+            $(".menubar > .link:not(.return-feed)").addClass("force-hide")
+            $(".header > .link:not(.return-feed)").addClass("force-hide")
+        }
+        else
+        {
+            $(".menubar > .link:not(.return-feed)").removeClass("force-hide")
+            $(".header > .link:not(.return-feed)").removeClass("force-hide")
+        }
+
         $(".link.return").css('display', (page == "game") ? 'block' : 'none');
         $(".link.return-feed").css('display', (page == "post") ? 'block' : 'none');
 
