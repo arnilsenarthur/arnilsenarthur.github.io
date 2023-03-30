@@ -481,6 +481,70 @@ h4
     background-color: #27C93F;
 }
 
+.papertitle
+{
+    color: white !important;
+    font-size: 25px;
+}
+
+.paperdesc
+{
+    display: block;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    overflow: hidden;
+    max-height: 3.6em;
+    line-height: 1.8em;
+    opacity: 0.6;
+}
+
+.paperitem
+{
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding: 8px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+}
+
+#papers
+{
+    overflow-y: scroll;
+}
+
+#post
+{
+    overflow-y: scroll;
+    color: white !important;
+}
+
+#post img
+{
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+#post a
+{
+    color: wheat !important;
+}
+
+#post b, strong
+{
+    color: wheat !important;
+}
+
+.loadingitem
+{
+    background-color: white;
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
 @media only screen and (max-width: 1190px) {
     .timeline.header {
         top: 5px;
