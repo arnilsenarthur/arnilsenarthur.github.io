@@ -43,15 +43,19 @@
             <div class="dot green"></div>
             <a class="link" href="arnilsen_arthur.pdf">CV</a>
             <a class="link" href="#timeline">Timeline</a>
+            <a class="link" href="#feed">Feed</a>
             <a class="link" href="#projects">Projects</a>
             <a class="link" href="#skills">Skills</a>
             <a class="link" href="#">Home</a>
             <a class="link return" href="#">Back</a>
+            <a class="link return-feed" href="#feed" onclick="reopenFeed()">Back</a>
         </div>
         <div class="canvas">
             <div class="menubar">
+                <a class="link return-feed" href="#feed" onclick="reopenFeed()">Back</a>
                 <a class="link" href="arnilsen_arthur.pdf">CV</a>
                 <a class="link" href="#timeline">Timeline</a>
+                <a class="link" href="#feed">Feed</a>
                 <a class="link" href="#projects">Projects</a>
                 <a class="link" href="#skills">Skills</a>
                 <a class="link" href="#">Home</a>
@@ -79,7 +83,6 @@
             </div>
             <!--Contacts-->
             <div class="content" page="contact">
-
                 <h3 class="center">You can find me in <b>all</b> the links bellow</h3>
                 <button class="github social inverse"
                     onclick="window.open('https://github.com/arnilsenarthur','_blank')"><i
@@ -95,6 +98,7 @@
                 <br>
                 <button class="red full" onclick="location.href='#'">Back</button>
             </div>
+            
             <!--Skills-->
             <div class="content" page="skills">
                 <h2>Development</h2>
@@ -342,6 +346,22 @@
                 </div>
             </div>
         </div>
+
+        <!--Papers-->
+        <div class="content" page="feed" id="papers">
+            <h2>Feed</h2>
+            <div id="paperscontent">
+                <center>
+                <div class="loadingitem"></div>
+                <div class="loadingitem"></div>
+                <div class="loadingitem"></div>
+                </center>
+            </div>
+        </div>
+
+        <div class="content" page="post" id="post">
+            <div id="postcontent"></div>
+        </div>
     </div>
     </div>
     <div class="footer">
@@ -400,6 +420,12 @@
                 else
                     $(this).attr('style', `opacity: ${(1 - l)};transform:translate(${l * 400}px,-50%)`);
             });
+
+            let discount = $(".menubar").height() + $(".header").height();
+            
+            let amount = ($(window).height() - discount) * 0.8 - 50;
+            $("#papers").css('max-height', `${amount}px`);
+            $("#post").css('max-height', `${amount}px`);
         }
 
         $(window).on('orientationchange', () => {
@@ -421,6 +447,7 @@
         });
 
         updateOrientation();
+        updateView();
     </script>
 </body>
 </html>
