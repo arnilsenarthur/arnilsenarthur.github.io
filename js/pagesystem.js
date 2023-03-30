@@ -1,3 +1,7 @@
+let feedPosts = [];
+let currentFeedPost = 0;
+let lastFeedScrollPos = 0;
+
 window.onhashchange = () => {
     onOpenPage(window.location.hash.substring(1));
 };
@@ -151,7 +155,11 @@ function onOpenPage(page) {
         $(".content[page='" + page + "']").addClass("current");
         $(".window").css('max-height', '1000px');
 
-        $(".link.return").css('display', page == "game" ? 'block' : 'none');
+        $(".menubar > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
+        $(".header > .link:not(.return-feed)").css('display', (page == "post") ? 'none' : 'block');
+        
+        $(".link.return").css('display', (page == "game") ? 'block' : 'none');
+        $(".link.return-feed").css('display', (page == "post") ? 'block' : 'none');
 
         if (page == "game") {
             $(".menubar").addClass("hidden");
@@ -161,10 +169,51 @@ function onOpenPage(page) {
             $("#pageplay").addClass("active");
         }
         else if (game != null) {
+            
             $(".menubar").removeClass("hidden");
-
-
             onGameClose();
+        }
+
+        if(page == "feed")
+        {
+            $(".menubar").removeClass("hidden");
+            $(".menu").addClass("open");
+            
+            $.get("https://api.rss2json.com/v1/api.json?rss_url=https://medium.com/feed/@arnilsenarthur", function( data ) {
+                
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                ];
+                let papers = "";
+            
+                for(var i in data.items)
+                {
+                    let paper = data.items[i];
+                    let date = new Date(paper.pubDate);
+                    let description = paper.description.replace(/(<figure>.*<\/figure>)|(<img[^>]*>)|(<figcaption>.*<\/figcaption>)/, "").replace(/<\/?[^>]+(>|$)/g, "");
+
+                    paper.date = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+                    
+                    feedPosts.push({
+                        date: paper.date,
+                        content: paper.content,
+                        title: paper.title
+                    });
+                    //papers += `<div class="paperitem" onclick="window.open('${paper.link}', '_blank').focus();">${paper.date}<br><b class="papertitle">${paper.title}</b><br><div class="paperdesc">${description}</div></div><br>\n`;
+                    papers += `<div class="paperitem" onclick="lastFeedScrollPos = $('#papers').scrollTop(); currentFeedPost = ${feedPosts.length - 1}; onOpenPage('post');">${paper.date}<br><b class="papertitle">${paper.title}</b><br><div class="paperdesc">${description}</div></div><br>\n`;
+                }
+
+                $("#paperscontent").html(papers);
+                $('#papers').scrollTop(lastFeedScrollPos);
+            });
+            //
+            //a
+        }
+
+        if(page == "post")
+        {
+            let post = feedPosts[currentFeedPost];
+            $("#postcontent").html(`<br>${post.date}<h1>${post.title}</h1><div class="separator"></div>${post.content}`);
         }
 
         openContents(justOpened != null);
@@ -178,6 +227,10 @@ function onOpenPage(page) {
         open(true);
 
     firstOpen = false;
+}
+
+function reopenFeed() {
+    onOpenPage("feed");
 }
 
 function closeContents(callback) {
