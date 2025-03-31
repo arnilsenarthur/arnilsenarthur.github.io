@@ -57,6 +57,10 @@ button {
     --bg: black;
 }
 
+.netbuff {
+    --bg: rgb(76, 174, 79);
+}
+
 .play {
     --bg: #27C93F;
     margin-top: 10px;
@@ -70,13 +74,12 @@ button {
     --bg: rgb(172, 169, 10);
 }
 
-
-
 button:hover:not(.inverse) , button.inverse:not(:hover) {
     border: transparent var(--bd);
     color: var(--text);
     background: var(--bg) radial-gradient(circle, transparent 1%, var(--bg) 1%) center/15000%;
 }
+
 button:active {
     color: var(--text);;
     background-color: var(--bgdarker);

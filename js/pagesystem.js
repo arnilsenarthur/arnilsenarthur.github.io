@@ -79,6 +79,13 @@ function onOpenPage(page) {
                     leftFirst: false
                 },
                 {
+                    date: '2023',
+                    text: 'Joined Monomyto / FCL',
+                    right: 'In 2023 I joined <b>Fried Chicken Labs</b>, a game company that is part of <b>Snackclub</b>. I developed multiplayer projects using Photon\'s Quantum Engine</i></a>',
+                    left: '<img src="img/fried_chicken_labs_logo.png" class="bigimg"></img>',
+                    leftFirst: false
+                },
+                {
                     date: 'Now',
                     text: 'Developing Games<br><img src="img/heart.png" class="tinyimg"></img>',
                     right: '',

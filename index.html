@@ -42,6 +42,7 @@
             <div class="dot amber"></div>
             <div class="dot green"></div>
             <a class="link" href="arnilsen_arthur.pdf">CV</a>
+            <a class="link" href="#netbuff">NetBuff</a>
             <a class="link" href="#timeline">Timeline</a>
             <a class="link" href="#feed">Feed</a>
             <a class="link" href="#projects">Projects</a>
@@ -54,6 +55,7 @@
             <div class="menubar">
                 <a class="link return-feed" href="#feed" onclick="reopenFeed()">Back</a>
                 <a class="link" href="arnilsen_arthur.pdf">CV</a>
+                <a class="link" href="#netbuff">NetBuff</a>
                 <a class="link" href="#timeline">Timeline</a>
                 <a class="link" href="#feed">Feed</a>
                 <a class="link" href="#projects">Projects</a>
@@ -65,16 +67,13 @@
                 <div class="info">
                     <h2 class="title">Hi! I'm <b>Árnilsen Arthur</b></h2>
                     <img src="https://avatars.githubusercontent.com/u/13054390?v=4" class="profile mobile">
-                    <p>I have a degree in Information Technology and I not only love games, I love all of the logic
-                        behind them. I currently work as a <b>game developer</b>, but I also develop websites and apps.
-                    </p>
-                    <p>I've been programming since I was <b>13 years old</b>, I have knowledge in several languages such as
-                        <b>Java</b>, <b>C#</b>, <b>PHP</b>, <b>JS</b>, etc..., having specialized in game development,
-                        which I've always liked.
-                    </p>
-                    <p>I have knowledge of <b>Unity 3D</b>, <b>OpenGL</b> (C++/LWJGL), <b>Code Optimization</b> (Memory
-                        Management), <b>Database</b>
-                        and other varied programming concepts.</p>
+                    <p>I have a degree in Information Technology, and I not only love games, but also the logic behind them. I currently work as a <b>game developer</b>, while also developing websites and apps.</p>
+
+<p>I've been programming since I was <b>13 years old</b>, gaining expertise in several languages such as <b>Java</b>, <b>C#</b>, <b>PHP</b>, and <b>JS</b>. My passion for game development led me to specialize in it, constantly refining my skills.</p>
+
+<p>I have extensive experience in <b>multiplayer game development</b>, working with libraries such as <b>UNet</b> and <b>Photon</b> for Unity, as well as creating networking systems from scratch using <b>Java</b> and <b>C#</b>. My deep understanding of network architecture even led me to develop my own multiplayer library, <b><a href="https://netbuff.buffbuffstudios.com/" target="_blank" class="h4">NetBuff<i class="fa fa-external-link linkicon"></i></a></b>, optimizing performance and synchronization for real-time experiences.</p>
+
+<p>I also have knowledge of <b>Unity 3D</b>, <b>OpenGL</b> (C++/LWJGL), <b>Code Optimization</b> (Memory Management), <b>Database</b>, and various other programming concepts.</p>
                     <button class="contact inverse full" onclick="location.href='#contact'">Contact me</button>
                     <button class="play full" onclick="location.href='#game'"><i class="fa fa-gamepad side"></i>Play a
                         Game!</button>
@@ -101,14 +100,20 @@
             
             <!--Skills-->
             <div class="content" page="skills">
-                <h2>Development</h2>
+                <h2>Networking Development</h2>
+                <h4>Multiplayer (Java / C# / Photon)</h4>
+                <div class="progress green" number="5"></div>
+                <h4>Back-End Server (Java / C# / JS)</h4>
+                <div class="progress blue" number="4"></div>
+
+                <h2>General Development</h2>
                 <h4>Game (Unity 3D)</h4>
                 <div class="progress blue" number="4"></div>
-                <h4>Game (OpenGL/ LWJGL)</h4>
-                <div class="progress yellow" number="3"></div>
+                <h4>Game (OpenGL / LWJGL)</h4>
+                <div class="progress yellow" number="3"></div> 
                 <h4>Web Development</h4>
                 <div class="progress yellow" number="3"></div>
-                <h4>System Development (Java/ C#/ NodeJS)</h4>
+                <h4>System Development (Java / C# / NodeJS)</h4>
                 <div class="progress blue" number="4"></div>
                 <h4>Arduino/ Electronics Projects</h4>
                 <div class="progress purple" number="2"></div>
@@ -139,20 +144,55 @@
                 <h4>Python</h4>
                 <div class="progress purple" number="2"></div>
             </div>
+
+            <!--NetBuff-->
+            <div class="content" page="netbuff" id="netbuff">
+                <a href="https://netbuff.buffbuffstudios.com/" target="_blank" class="h4"><h2>NetBuff
+                    <i class="fa fa-external-link linkicon"></i>
+                    </h2>
+                    <img src="img/net_buff_0.png" style="height: 265px;" class="image"></img>
+                    <img src="img/net_buff_1.png" style="height: 265px;" class="image"></img>
+                </a>
+                <p class="projectdesc">
+                    <b>NetBuff</b> is a networking system based on the Unity game engine. Initially created for a college project, the system has been improved to the point of deserving to be polished and released / made available separately.
+                </p>
+                <p class="projectdesc">
+                    The <b>NetBuff</b> comes as a lighter and simpler alternative to other existing solutions such as Unity's own NGO (Netcode For GameObjects) and third-party solutions (Mirror, etc...)
+                </p>
+
+                <button class="netbuff social inverse"
+                    onclick="window.open('https://netbuff.buffbuffstudios.com/','_blank')"><i
+                        class="fa fa-globe side"></i>NetBuff Home Page</button>
+            </div>
+
             <!--Timeline-->
             <div class="content" page="timeline" id="timeline">
             </div>
 
             <!--Projects-->
             <div class="content" page="projects">
-                <h2>College Projects</h2>
-
-                <a href="https://buff-buff-studios.itch.io/sketch-fleets" target="_blank" class="h4">Unity Chess Project
+                <h2>Libraries</h2>
+                <a href="https://netbuff.buffbuffstudios.com/" target="_blank" class="h4">NetBuff (Unity Network Library)
                     <i class="fa fa-external-link linkicon"></i>
                     <br>
-                    <img src="img/chess_0.gif" style="height: 265px;" class="image"></img>
-                    <img src="img/chess_1.png" class="image"></img></a>
-                <p class="projectdesc">Created in Unity 3D by Árnilsen Arthur as a small college project. Has animations, move generation, simple AI and Stockfish support. Supports <b>PGN</b> and <b>FEN</b> notations.</p>
+                    <img src="img/net_buff_0.png" style="height: 265px;" class="image"></img>
+                    <img src="img/net_buff_1.png" style="height: 265px;" class="image"></img>
+                    </a>
+                <p class="projectdesc">
+                    <b>NetBuff</b> is a networking system based on the Unity game engine. Initially created for a college project, the system has been improved to the point of deserving to be polished and released / made available separately.
+                </p>
+                <p class="projectdesc">
+                    The <b>NetBuff</b> comes as a lighter and simpler alternative to other existing solutions such as Unity's own NGO (Netcode For GameObjects) and third-party solutions (Mirror, etc...)
+                </p>
+                <div class="separator"></div>
+                <h2>College Projects</h2>
+                
+                <a href="https://buff-buff-studios.itch.io/solis" target="_blank" class="h4">Solis
+                    <i class="fa fa-external-link linkicon"></i>
+                    <br>
+                    <img src="img/solis_0.png" style="height: 265px;" class="image"></img>
+                    <img src="img/solis_1.png" style="height: 265px;" class="image"></img></a>
+                <p class="projectdesc"><b>Solis</b> is a cooperative platformer and puzzle game for two players. Nina & Ram, alongside their loyal companion Dilúvio, embark on a journey after a climatic disaster leaves Ram incapacitated. To save him, they must work together to overcome challenges, solve puzzles, and strengthen their bond.</p>    
 
                 <a href="https://buff-buff-studios.itch.io/sketch-fleets" target="_blank" class="h4">Sketch
                     Fleets
@@ -165,6 +205,13 @@
                     enemies, forming a fleet. The game has an artistic style based on sketches, hence the
                     name of the game.</p>
 
+                <a href="https://buff-buff-studios.itch.io/between-death" target="_blank" class="h4">Between Death
+                    <i class="fa fa-external-link linkicon"></i>
+                    <br>
+                    <img src="img/between_death_0.png" style="height: 265px;" class="image"></img>
+                    <img src="img/between_death_1.png" style="height: 265px;" class="image"></img></a>
+                <p class="projectdesc">In <b>Between Death</b>, immerse yourself in a dark and gothic RPG that pushes the boundaries of the supernatural. Dive into a universe where the line between life and death blurs, and uncover a world steeped in mystery and darkness.</p>
+                
                 <a href="https://www.artstation.com/artwork/g2XynK" target="_blank" class="h4">Amica Run
                     <i class="fa fa-external-link linkicon"></i>
                     <br>
@@ -175,6 +222,13 @@
                     college project. It was the first game that I applied my networking skills to create a multiplayer
                     game in just six months.
                 </p>
+
+                <a href="https://buff-buff-studios.itch.io/sketch-fleets" target="_blank" class="h4">Unity Chess Project
+                    <i class="fa fa-external-link linkicon"></i>
+                    <br>
+                    <img src="img/chess_0.gif" style="max-height: 245px;" class="image"></img>
+                    <img src="img/chess_1.png" style="max-height: 245px;" class="image"></img></a>
+                <p class="projectdesc">Created in Unity 3D by Árnilsen Arthur as a small college project. Has animations, move generation, simple AI and Stockfish support. Supports <b>PGN</b> and <b>FEN</b> notations.</p>
 
                 <div class="separator"></div>
                 <h2>Systems</h2>
@@ -199,8 +253,6 @@
                     created <b>HDA Sistemas</b>, a company that develops the most diverse systems and websites for local
                     companies. It's one
                     of my current jobs, along with the game developer job.</p>
-
-
 
                 <div class="separator"></div>
                 <h2>Misc</h2>
