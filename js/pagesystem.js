@@ -228,6 +228,7 @@ function onOpenPage(page) {
         if(page == "post")
         {
             let post = feedPosts[currentFeedPost];
+            $("#postcontent").scrollTop(0);
             $("#postcontent").html(`<br>${post.date}<h1>${post.title}</h1><div class="separator"></div>${post.content}`);
         }
 
@@ -276,7 +277,6 @@ function openContents(needToShake) {
         delay: function (el, i, l) {
             if ($(el).hasClass("progress")) {
                 
-
                 setTimeout(() => {
                     $(el).css('width', '');
                     $(el).addClass("fill");
@@ -285,7 +285,10 @@ function openContents(needToShake) {
 
             if (l < 10)
                 return i * 100;
-            return i * 50;
+            if (l < 30)
+                return i * 50;
+
+            return i * 2;
         },
     });
 
