@@ -1,0 +1,43 @@
+
+<div id="timeline-wrapper">
+    <div id="timeline-canvas-container" style="color: white; text-align: center;"></div>
+</div>
+
+<script>
+    // Pass data to global scope for the module
+    window.timelineData = {{ timeline | dump | safe }};
+</script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+    }
+  }
+</script>
+
+<script type="module">
+    import { init3DTimeline } from '/js/timeline-3d.js';
+
+    let instance = null;
+
+    window.ensureTimeline3D = () => {
+        if (instance) return;
+        instance = init3DTimeline(window.timelineData);
+        window.timeline3D = instance;
+    };
+
+    window.destroyTimeline3D = () => {
+        if (!instance) return;
+        if (instance.destroy) instance.destroy();
+        instance = null;
+        window.timeline3D = null;
+    };
+
+    if (window.location.hash === '#timeline' && !document.hidden) {
+        setTimeout(() => {
+            window.ensureTimeline3D();
+        }, 1000);
+    }
+</script>

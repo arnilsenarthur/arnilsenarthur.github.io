@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{name}} - CV</title>
+    <style>
+        @page { size: A4; margin: 0; }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: red;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: #111827;
+        }
+
+        .page {
+            width: 210mm !important;
+            height: 297mm !important;
+            display: block;
+            page-break-after: always;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .page:last-child { page-break-after: avoid; }
+
+        .sidebar {
+            width: 68mm !important;
+            height: 297mm !important;
+            padding: 14mm 10mm;
+            background: #0b6b3a;
+            color: #f9fafb;
+            box-sizing: border-box;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .avatar {
+            width: 40mm;
+            height: 40mm;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2mm solid rgba(255, 255, 255, 0.18);
+            margin: 0 auto 7mm auto;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .name {
+            font-size: 18pt;
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            text-align: center;
+            margin-bottom: 2mm;
+        }
+
+        .headline {
+            font-size: 10.5pt;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 7mm;
+        }
+
+        .sidebar-section { margin-top: 8mm; }
+
+        .sidebar-title {
+            font-size: 9pt;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            margin-bottom: 4mm;
+        }
+
+        .sidebar-text {
+            font-size: 9pt;
+            line-height: 1.35;
+        }
+
+        .sidebar-text p { margin-bottom: 2.5mm; }
+        .sidebar-text p:last-child { margin-bottom: 0; }
+
+        .contact-list { margin-top: 2mm; }
+
+        .contact-item {
+            display: block;
+            font-size: 9pt;
+            line-height: 1.25;
+            color: #f9fafb;
+            text-decoration: none;
+            margin-bottom: 3mm;
+            word-break: break-word;
+        }
+
+        .contact-item:last-child { margin-bottom: 0; }
+
+        .lang-row {
+            display: flex;
+            align-items: center;
+            gap: 3mm;
+            margin-bottom: 3mm;
+        }
+
+        .lang-row:last-child { margin-bottom: 0; }
+
+        .lang-text { font-size: 9pt; }
+
+        .pill-wrap { display: flex; flex-wrap: wrap; gap: 2mm; }
+
+        .pill {
+            font-size: 8pt;
+            line-height: 1;
+            padding: 1.6mm 2.6mm;
+            border-radius: 20mm;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.08);
+            color: #f9fafb;
+        }
+
+        .content {
+            width: calc(210mm - 68mm) !important;
+            height: 297mm !important;
+            padding: 14mm 12mm;
+            background: #ffffff;
+            position: absolute;
+            left: 68mm;
+            top: 0;
+            box-sizing: border-box;
+        }
+
+        .page-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: flex-start;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 7mm;
+            padding-bottom: 4mm;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .topbar-left { font-size: 9pt; color: #374151; }
+        .topbar-right { font-size: 9pt; color: #6b7280; }
+
+        .section { margin-bottom: 7mm; }
+        .section:last-child { margin-bottom: 0; }
+
+        .section h2 {
+            font-size: 11pt;
+            font-weight: 800;
+            color: #0b6b3a;
+            margin-bottom: 3.5mm;
+        }
+
+        .muted { color: #6b7280; }
+
+        .entry { margin-bottom: 4mm; }
+        .entry:last-child { margin-bottom: 0; }
+
+        .entry-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 6mm;
+            margin-bottom: 1mm;
+        }
+
+        .entry-title { font-size: 10pt; font-weight: 800; color: #111827; }
+        .entry-meta { font-size: 9pt; color: #6b7280; white-space: nowrap; }
+
+        .entry-sub { font-size: 9pt; color: #374151; }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6mm;
+        }
+
+        .card {
+            border: 1px solid #e5e7eb;
+            border-radius: 3mm;
+            padding: 4mm;
+        }
+
+        .card-title { font-size: 10pt; font-weight: 800; margin-bottom: 1mm; }
+        .card-sub { font-size: 9pt; color: #6b7280; margin-bottom: 2mm; }
+        .card-desc { font-size: 9pt; color: #374151; line-height: 1.3; }
+
+        .tag-row { margin-top: 2.5mm; display: flex; flex-wrap: wrap; gap: 2mm; }
+
+        .tag {
+            font-size: 7.8pt;
+            padding: 1.2mm 2.2mm;
+            border-radius: 12mm;
+            background: #f3f4f6;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <aside class="sidebar">
+            {{sidebar}}
+        </aside>
+        <main class="content">
+            <div class="page-content">
+                {{page1Main}}
+            </div>
+        </main>
+    </div>
+
+    <div class="page">
+        <aside class="sidebar">
+            {{sidebar}}
+        </aside>
+        <main class="content">
+            <div class="page-content">
+                {{page2Main}}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV</title>
+    <style>
+        @page { size: A4; margin: 20mm; }
+
+        /* Typography System */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11pt;
+            line-height: 1.5;
+            color: #2d3748;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Consistent Spacing Scale */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20pt;
+            border-bottom: 3px solid #d97706;
+            padding: 12pt 0;
+            margin-bottom: 20pt;
+        }
+
+        .photo-container {
+            flex-shrink: 0;
+        }
+
+        .photo {
+            width: 50pt;
+            height: 50pt;
+            border-radius: 50%;
+            border: 3px solid #d97706;
+            object-fit: cover;
+            box-shadow: 0 2pt 4pt rgba(0, 0, 0, 0.1);
+        }
+
+        .header-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        /* Typography Hierarchy */
+        .name {
+            font-size: 22pt;
+            font-weight: 700;
+            margin-bottom: 6pt;
+            color: #1a202c;
+            letter-spacing: -0.5px;
+        }
+
+        .title {
+            font-size: 13pt;
+            color: #718096;
+            font-weight: 400;
+        }
+
+        /* Section Styling */
+        .section {
+            margin-bottom: 12pt;
+        }
+
+        .section-title {
+            font-size: 13pt;
+            font-weight: 600;
+            color: #d97706;
+            margin-bottom: 6pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-left: 4px solid #f59e0b;
+            padding-left: 6pt;
+        }
+
+        /* Contact Information */
+        .contact-info {
+            text-align: center;
+            margin-bottom: 12pt;
+            padding: 8pt;
+            background: #f7fafc;
+            border-radius: 4pt;
+        }
+
+        .contact-item {
+            display: inline-block;
+            margin: 0 12pt;
+            font-size: 10pt;
+            color: #d97706;
+            font-weight: 500;
+        }
+
+        /* Content Items */
+        .experience-item, .education-item, .project-item, .award-item {
+            margin-bottom: 6pt;
+            padding-bottom: 4pt;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .experience-item:last-child, .education-item:last-child, .project-item:last-child, .award-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .job-title, .project-title {
+            font-weight: 600;
+            font-size: 11pt;
+            color: #2d3748;
+            margin-bottom: 2pt;
+        }
+
+        .company, .school, .award-org {
+            font-size: 10pt;
+            color: #718096;
+            font-style: italic;
+        }
+
+        .experience-achievements {
+            margin-top: 4pt;
+        }
+
+        .achievement {
+            font-size: 9pt;
+            color: #4a5568;
+            line-height: 1.2;
+            margin-bottom: 2pt;
+        }
+
+        .achievement:last-child {
+            margin-bottom: 0;
+        }
+
+        .award-title {
+            font-weight: 600;
+            font-size: 10pt;
+            color: #2d3748;
+            margin-bottom: 2pt;
+        }
+
+        .project-description {
+            font-size: 10pt;
+            color: #4a5568;
+            line-height: 1.4;
+        }
+
+        /* Skills */
+        .skills-list {
+            line-height: 1.6;
+        }
+
+        .skill-tag {
+            color: #4a5568;
+            font-size: 10pt;
+            font-weight: 500;
+            display: inline;
+        }
+
+        .skill-tag:not(:last-child)::after {
+            content: ' • ';
+            color: #4a5568;
+        }
+
+        /* Languages */
+        .language-item {
+            font-size: 10pt;
+            color: #4a5568;
+            margin-bottom: 4pt;
+        }
+
+        .language-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Layout */
+        .two-column {
+            display: flex;
+            gap: 16pt;
+            margin-bottom: 12pt;
+        }
+
+        .column {
+            flex: 1;
+        }
+
+        /* Footer */
+        .cv-footer {
+            margin-top: 12pt;
+            padding-top: 8pt;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+            font-size: 9pt;
+            color: #718096;
+        }
+
+        .references {
+            margin-bottom: 3pt;
+            font-weight: 500;
+        }
+
+        .last-updated {
+            font-style: italic;
+        }
+
+        /* Professional touches */
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="photo-container">
+            <img class="photo" src="https://avatars.githubusercontent.com/u/13054390?v=4" alt="{{name}}">
+        </div>
+        <div class="header-info">
+            <div class="name">{{name}}</div>
+            <div class="title">{{title}}</div>
+        </div>
+    </div>
+
+    <div class="contact-info">
+        {{contact}}
+    </div>
+
+    <div class="section">
+        <div class="section-title">👤 Profile</div>
+        <div>{{professionalSummary}}</div>
+        <div style="margin-top: 8pt;">{{about}}</div>
+    </div>
+
+    <div class="two-column">
+        <div class="column">
+            <div class="section">
+                <div class="section-title">💼 Experience</div>
+                {{experience}}
+            </div>
+
+            <div class="section">
+                <div class="section-title">🎓 Education</div>
+                {{education}}
+            </div>
+        </div>
+
+        <div class="column">
+            <div class="section">
+                <div class="section-title">💻 Skills</div>
+                <div class="skills-list">
+                    {{skills}}
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🌍 Languages</div>
+                <div>{{languages}}</div>
+            </div>
+
+            <div class="section">
+                <div class="section-title">🏆 Awards & Recognition</div>
+                {{awards}}
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">📁 Projects</div>
+        {{projects}}
+    </div>
+
+    <div class="cv-footer">
+        <div class="references">References available upon request</div>
+        <div class="last-updated">Last updated: {{lastUpdated}}</div>
+    </div>
+</body>
+</html>

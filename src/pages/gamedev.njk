@@ -1,0 +1,295 @@
+---
+layout: layout.njk
+title: Árnilsen Arthur - Game Developer
+persona: gamedev
+permalink: /gamedev/
+---
+
+<!--Home-->
+<div class="content" page="">
+    <div class="landing-section">
+        <div class="landing-header">
+            <div class="landing-avatar">
+                <img src="{{ gamedev.avatar }}" class="landing-profile-image" alt="{{ gamedev.name }}">
+            </div>
+            <div class="landing-text-content">
+                <div class="landing-title-group">
+                    <h1 class="landing-title">Hi, I'm <span class="highlight">{{ gamedev.name }}</span></h1>
+                    <p class="landing-subtitle">{{ gamedev.tagline }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="landing-content">
+            {% for paragraph in gamedev.bio %}
+            <p>{{ paragraph | safe }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="landing-footer">
+            <div class="action-buttons">
+                <button class="contact inverse full" onclick="location.href='#contact'"><i data-lucide="mail" class="side"></i>Contact me</button>
+                <button class="play full" onclick="location.href='#game'"><i data-lucide="play" class="side"></i>Play a Game!</button>
+            </div>
+            <div class="quick-stats">
+                {% for highlight in gamedev.highlights %}
+                <div class="stat-item">
+                    <div class="stat-number">{{ highlight.split(' ')[0] }}</div>
+                    <div class="stat-label">{{ highlight.split(' ').slice(1).join(' ') }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Contacts-->
+<div class="content" page="contact">
+    <div class="contact-section">
+        <div class="contact-header">
+            <h2 class="contact-title">{{ personal.contact.title }}</h2>
+            <p class="contact-subtitle">{{ personal.contact.subtitle }}</p>
+        </div>
+
+        <div class="contact-links">
+            {% for link in personal.contact.links %}
+            <div class="contact-card" onclick="{% if link.url and link.url.indexOf('mailto:') === 0 %}window.open('{{ link.url }}','_self'){% else %}window.open('{{ link.url }}','_blank'){% endif %}">
+                <div class="contact-icon">
+                    <i class="fa {{ link.icon }}"></i>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-text">{{ link.text }}</div>
+                    <div class="contact-description">{{ link.description }}</div>
+                </div>
+                <div class="contact-arrow">
+                    <i data-lucide="external-link"></i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="contact-footer">
+            <button class="red full" onclick="location.href='#'">
+                <i data-lucide="arrow-left" class="side"></i>
+                Back to Portfolio
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--Skills-->
+<div class="content" page="skills">
+    <div class="skills-section">
+        <div class="skills-header">
+            <h2 class="skills-title">Technical Expertise - Game Development</h2>
+            <p class="skills-subtitle">Skills focused on game development and multiplayer systems</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="globe"></i>
+                    Networking & Multiplayer
+                </h3>
+                <div class="skill-list">
+                    {% for skill in gamedev.skills.networking %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress level-{{ skill.level }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="gamepad-2"></i>
+                    Game Development
+                </h3>
+                <div class="skill-list">
+                    {% for skill in gamedev.skills.development %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress level-{{ skill.level }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="terminal"></i>
+                    Programming Languages
+                </h3>
+                <div class="skill-list">
+                    {% for skill in gamedev.skills.languages %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress level-{{ skill.level }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="wrench"></i>
+                    Tools & Technologies
+                </h3>
+                <div class="skill-list">
+                    {% for skill in gamedev.skills.tools %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress level-{{ skill.level }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="message-circle"></i>
+                    Communication
+                </h3>
+                <div class="skill-list">
+                    {% for skill in gamedev.skills.communication %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress level-{{ skill.level }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Projects-->
+<div class="content" page="projects">
+    <h2>Game Development Projects</h2>
+
+    <!-- Filter Buttons -->
+    <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+
+        {% set allTags = [] %}
+        {% for project in gamedev.projects %}
+            {% if project.tags %}
+                {% for tag in project.tags %}
+                    {% set allTags = allTags.concat([{name: tag.name, type: tag.type}]) %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+
+        {% set uniqueTags = [] %}
+        {% for tag in allTags %}
+            {% set tagExists = false %}
+            {% for existingTag in uniqueTags %}
+                {% if existingTag.name == tag.name %}
+                    {% set tagExists = true %}
+                {% endif %}
+            {% endfor %}
+            {% if not tagExists %}
+                {% set uniqueTags = uniqueTags.concat([tag]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% set sortedTags = uniqueTags | sort(attribute='type') %}
+        {% for tag in sortedTags %}
+        <button class="filter-btn" data-filter="{{ tag.name | lower | replace(' ', '-') }}">{{ tag.name }}</button>
+        {% endfor %}
+    </div>
+
+    {% for project in gamedev.projects %}
+    <div class="project-item" data-tags="{% if project.tags %}{% for tag in project.tags %}{{ tag.name | lower | replace(' ', '-') }}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}" style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        {% if project.url %}
+                        <a href="{{ project.url }}" target="_blank">{{ project.title }}
+                        </a>
+                        {% else %}
+                        {{ project.title }}
+                        {% endif %}
+                    </h3>
+                    {% if project.subtitle %}
+                    <p class="project-subtitle">{{ project.subtitle }}</p>
+                    {% endif %}
+                </div>
+                {% if project.tags %}
+                <div class="project-tech">
+                    {% for tag in project.tags %}
+                    <span class="tech-tag" data-type="{{ tag.type }}">
+                        {{ tag.name }}
+                    </span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if project.images %}
+            <div class="project-gallery">
+                {% for image in project.images %}
+                <img src="{{ image }}" class="project-image" alt="{{ project.title }}">
+                {% endfor %}
+            </div>
+            {% elif project.thumbnail %}
+            <div class="project-gallery">
+                <img src="{{ project.thumbnail }}" class="project-image" alt="{{ project.title }}">
+            </div>
+            {% endif %}
+
+            <div class="project-content">
+                {% if project.description %}
+                {% for desc in project.description %}
+                <p class="project-description">{{ desc | safe }}</p>
+                {% endfor %}
+                {% else %}
+                <p class="project-description">{{ project.description }}</p>
+                {% endif %}
+
+                {% if project.achievements %}
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        {% for achievement in project.achievements %}
+                        <li>{{ achievement }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if project.url %}
+            <div class="project-actions">
+                <button class="red" onclick="window.open('{{ project.url }}', '_blank')">
+                    <i data-lucide="external-link"></i>
+                    View Project
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!--Timeline-->
+<div class="content" page="timeline" id="timeline">
+{% include "timeline.njk" %}
+</div>

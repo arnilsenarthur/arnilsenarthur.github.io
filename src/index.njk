@@ -1,0 +1,312 @@
+---
+layout: layout.njk
+title: Árnilsen Arthur Portfolio
+---
+
+<!--Home-->
+<div class="content" page="">
+    <div class="landing-section">
+        <div class="landing-header">
+            <div class="landing-avatar">
+                <img src="{{ landing.avatar }}" class="landing-profile-image" alt="{{ landing.name }}">
+            </div>
+            <div class="landing-text-content">
+                <div class="landing-title-group">
+                    <h1 class="landing-title">Hi, I'm <span class="highlight">{{ landing.name }}</span></h1>
+                    <p class="landing-subtitle">{{ landing.tagline }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="persona-choice">
+            <h2 class="choice-title">Choose Your Path</h2>
+            <p class="choice-subtitle">Explore my work through different lenses</p>
+
+            <div class="persona-cards">
+                <div class="persona-card game-dev" onclick="switchToGames()">
+                    <div class="persona-icon">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3>🎮 Game Developer</h3>
+                        <p>Multiplayer games, Unity development, networking systems, and interactive experiences</p>
+                        <div class="persona-highlights">
+                            <span class="highlight-tag">Unity</span>
+                            <span class="highlight-tag">C#</span>
+                            <span class="highlight-tag">Multiplayer</span>
+                            <span class="highlight-tag">Game Design</span>
+                        </div>
+                    </div>
+                    <div class="persona-arrow">
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="persona-card dev-fullstack" onclick="switchToDevelopment()">
+                    <div class="persona-icon">
+                        <i data-lucide="code"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3>💻 Full Stack Developer</h3>
+                        <p>Web applications, system architecture, APIs, and scalable software solutions</p>
+                        <div class="persona-highlights">
+                            <span class="highlight-tag">Full-Stack</span>
+                            <span class="highlight-tag">Node.js</span>
+                            <span class="highlight-tag">System Design</span>
+                            <span class="highlight-tag">APIs</span>
+                        </div>
+                    </div>
+                    <div class="persona-arrow">
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Contacts-->
+<div class="content" page="contact">
+    <div class="contact-section">
+        <div class="contact-header">
+            <h2 class="contact-title">{{ personal.contact.title }}</h2>
+            <p class="contact-subtitle">{{ personal.contact.subtitle }}</p>
+        </div>
+
+        <div class="contact-links">
+            {% for link in personal.contact.links %}
+            <div class="contact-card" onclick="{% if link.url and link.url.indexOf('mailto:') === 0 %}window.open('{{ link.url }}','_self'){% else %}window.open('{{ link.url }}','_blank'){% endif %}">
+                <div class="contact-icon">
+                    <i class="fa {{ link.icon }}"></i>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-text">{{ link.text }}</div>
+                    <div class="contact-description">{{ link.description }}</div>
+                </div>
+                <div class="contact-arrow">
+                    <i data-lucide="external-link"></i>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="contact-footer">
+            <button class="red full" onclick="location.href='#'">
+                <i data-lucide="arrow-left" class="side"></i>
+                Back to Portfolio
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--Skills-->
+<div class="content" page="skills">
+    <div class="skills-section">
+        <div class="skills-header">
+            <h2 class="skills-title">Technical Expertise</h2>
+            <p class="skills-subtitle">A comprehensive overview of my technical skills and proficiency levels</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="globe"></i>
+                    Networking & Multiplayer
+                </h3>
+                <div class="skill-list">
+                    {% for skill in skills.networking %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress {{ skill.color }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="code"></i>
+                    Game Development
+                </h3>
+                <div class="skill-list">
+                    {% for skill in skills.development %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress {{ skill.color }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="languages"></i>
+                    Programming Languages
+                </h3>
+                <div class="skill-list">
+                    {% for skill in skills.languages %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress {{ skill.color }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="message-circle"></i>
+                    Communication
+                </h3>
+                <div class="skill-list">
+                    {% for skill in skills.communication %}
+                    <div class="skill-item">
+                        <div class="skill-info">
+                            <span class="skill-name">{{ skill.title }}</span>
+                            <span class="skill-level">{{ skill.level }}/5</span>
+                        </div>
+                        <div class="progress {{ skill.color }}" number="{{ skill.level }}"></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Timeline-->
+<div class="content" page="timeline" id="timeline">
+{% include "timeline.njk" %}
+</div>
+
+<!--Projects-->
+<div class="content" page="projects">
+    <h2>Projects</h2>
+
+    <!-- Filter Buttons -->
+    <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        {% set projects = (gamedev.projects or []) %}
+        {% for project in dev.projects or [] %}
+            {% set projects = projects.concat([project]) %}
+        {% endfor %}
+        {% set filterTags = [] %}
+        {% for project in projects %}
+            {% if project.tags %}
+                {% for tag in project.tags %}
+                    {% if tag.type %}
+                        {% if tag.text[0] != '!' %}
+                            {% set filterTags = filterTags.concat([tag.text]) %}
+                        {% endif %}
+                    {% else %}
+                        {% if tag[0] != '!' %}
+                            {% set filterTags = filterTags.concat([tag]) %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        {% set uniqueFilterTags = [] %}
+        {% for tag in filterTags %}
+            {% if tag not in uniqueFilterTags %}
+                {% set uniqueFilterTags = uniqueFilterTags.concat([tag]) %}
+            {% endif %}
+        {% endfor %}
+        {% for tag in uniqueFilterTags %}
+        <button class="filter-btn" data-filter="{{ tag | lower | replace(' ', '-') }}">{{ tag }}</button>
+        {% endfor %}
+    </div>
+
+    {% for project in projects %}
+    <div class="project-item" data-tags="{% if project.tags %}{% for tag in project.tags %}{% if tag.type %}{{ tag.text | lower | replace(' ', '-') }}{% else %}{{ tag | lower | replace(' ', '-') }}{% endif %}{% if not loop.last %},{% endif %}{% endfor %}{% endif %}" style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        {% if project.url %}
+                        <a href="{{ project.url }}" target="_blank">{{ project.title }}
+                        </a>
+                        {% else %}
+                        {{ project.title }}
+                        {% endif %}
+                    </h3>
+                    {% if project.subtitle %}
+                    <p class="project-subtitle">{{ project.subtitle }}</p>
+                    {% endif %}
+                </div>
+                {% if project.tags %}
+                <div class="project-tech">
+                    {% for tag in project.tags %}
+                    {% if tag.type %}
+                    <span class="tech-tag {{ tag.type }}">
+                        {% if tag.text[0] == '!' %}
+                            {{ tag.text | slice(1) }}
+                        {% else %}
+                            {{ tag.text }}
+                        {% endif %}
+                    </span>
+                    {% else %}
+                    <span class="tech-tag">
+                        {% if tag[0] == '!' %}
+                            {{ tag | slice(1) }}
+                        {% else %}
+                            {{ tag }}
+                        {% endif %}
+                    </span>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            {% if project.images %}
+            <div class="project-gallery">
+                {% for image in project.images %}
+                <img src="{{ image }}"
+                     class="project-image"
+                     alt="{{ project.title }}"
+                     loading="lazy">
+                {% endfor %}
+            </div>
+            {% elif project.thumbnail %}
+            <div class="project-gallery">
+                <img src="{{ project.thumbnail }}"
+                     class="project-image"
+                     alt="{{ project.title }}"
+                     loading="lazy">
+            </div>
+            {% endif %}
+
+            <div class="project-content">
+                {% if project.description %}
+                {% for desc in project.description %}
+                <p class="project-description">{{ desc | safe }}</p>
+                {% endfor %}
+                {% else %}
+                <p class="project-description">{{ project.description }}</p>
+                {% endif %}
+
+                {% if project.achievements %}
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        {% for achievement in project.achievements %}
+                        <li>{{ achievement }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>

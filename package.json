@@ -1,0 +1,39 @@
+{
+  "name": "arnilsenarthur-portfolio",
+  "version": "1.0.0",
+  "description": "Árnilsen Arthur's Portfolio Website",
+  "main": "index.js",
+  "scripts": {
+    "build": "node optimize-images.js && eleventy && node minify-assets.js",
+    "start": "eleventy --serve",
+    "dev": "eleventy --serve --watch",
+    "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
+    "optimize-images": "node optimize-images.js",
+    "minify": "node minify-assets.js",
+    "generate-cv": "node cv-generator/generate-cv.js"
+  },
+  "keywords": [
+    "portfolio",
+    "game-development",
+    "web-development"
+  ],
+  "author": "Árnilsen Arthur",
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "clean-css-cli": "^5.6.3",
+    "imagemin": "^9.0.1",
+    "imagemin-gifsicle": "^7.0.0",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "sharp": "^0.34.5",
+    "terser": "^5.44.1"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.3",
+    "html-pdf": "^3.0.1",
+    "puppeteer": "^24.35.0",
+    "puppeteer-core": "^24.35.0",
+    "three": "^0.182.0"
+  }
+}
