@@ -1,0 +1,3114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Árnilsen Arthur Portfolio</title>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="/img/icon.png"/>
+    <meta name="language" content="en">
+    <meta name="description" content="Árnilsen Arthur&#39;s portfolio. Game developer and full stack developer creating multiplayer worlds and scalable software solutions.">
+    <meta name="robots" content="all">
+    <meta name="author" content="Árnilsen Arthur">
+    <meta name="keywords" content="portfolio,developer,gamedev,fullstack,webdevelopment,systems,multiplayer,games">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="@">
+    <meta name="twitter:title" content="Árnilsen Arthur - Game &amp; Full Stack Developer">
+    <meta name="twitter:description" content="Árnilsen Arthur&#39;s portfolio. See game development projects, web applications, and technical expertise.">
+    <meta name="twitter:image" content="https://avatars.githubusercontent.com/u/13054390?v=4">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Critical CSS - Load immediately -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/window.css">
+
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@200;400&family=Source+Sans+3:wght@400;700&family=Unica+One&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Fallback font styles for FOIT prevention -->
+    <style>
+        .window { font-family: 'Readex Pro', 'Segoe UI', Tahoma, sans-serif; }
+        .game { font-family: 'Unica One', 'Impact', Arial, sans-serif; }
+    </style>
+
+    <!-- Load non-critical CSS asynchronously -->
+    <link rel="preload" href="/css/game.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/game.css"></noscript>
+
+    <!-- Load essential external dependencies synchronously -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <!-- Load other external scripts asynchronously -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="print" onload="this.media='all'">
+
+    <!-- Critical scripts - load immediately -->
+    <script src="/js/animations.js"></script>
+    <script src="/js/background.js"></script>
+    <script src="/js/landing.js"></script>
+    <script src="/js/pagesystem.js"></script>
+
+    <!-- Game scripts - lazy loaded when game is accessed -->
+    <script>
+        window.lazyLoadGameScripts = function() {
+            if (window.gameScriptsLoaded) return;
+
+            // Load PixiJS
+            const pixiScript = document.createElement('script');
+            pixiScript.src = 'https://cdn.jsdelivr.net/npm/pixi.js-legacy@5.0.2/dist/pixi-legacy.min.js';
+            pixiScript.defer = true;
+            document.head.appendChild(pixiScript);
+
+            // Load Tone.js
+            const toneScript = document.createElement('script');
+            toneScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.34/Tone.min.js';
+            toneScript.defer = true;
+            document.head.appendChild(toneScript);
+
+            // Load game.js after PixiJS and Tone.js
+            const gameScript = document.createElement('script');
+            gameScript.src = '/js/game.js';
+            gameScript.defer = true;
+            document.head.appendChild(gameScript);
+
+            window.gameScriptsLoaded = true;
+        };
+    </script>
+</head>
+
+<body>
+    <div class="persona-toggle-overlay">
+        <div class="sliding-toggle">
+            <div class="toggle-track" onclick="togglePersona()">
+                <div class="toggle-slider">
+                    <div class="toggle-icon game-icon">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="toggle-icon dev-icon">
+                        <i data-lucide="code"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="back">
+    </div>
+    <div class="window">
+        <div class="header">
+            <div class="dot red"></div>
+            <div class="dot amber"></div>
+            <div class="dot green"></div>
+            <a class="link" href="/arnilsen_arthur.pdf">CV</a>
+            <a class="link" href="#timeline">Timeline</a>
+            <a class="link" href="#feed">Feed</a>
+            <a class="link" href="#projects">Projects</a>
+            <a class="link" href="#skills">Skills</a>
+            <a class="link" href="#contact">Contact</a>
+            <a class="link" href="#">Home</a>
+            <a class="link return" href="#">Back</a>
+            <a class="link return-feed" href="#feed" onclick="reopenFeed()">Back</a>
+        </div>
+        <div class="canvas">
+            <div class="menubar">
+                <a class="link return-feed" href="#feed" onclick="reopenFeed()">Back</a>
+                <a class="link" href="/arnilsen_arthur.pdf">CV</a>
+                <a class="link" href="#timeline">Timeline</a>
+                <a class="link" href="#feed">Feed</a>
+                <a class="link" href="#projects">Projects</a>
+                <a class="link" href="#skills">Skills</a>
+                <a class="link" href="#contact">Contact</a>
+                <a class="link" href="#">Home</a>
+            </div>
+            
+<!--Home-->
+<div class="content" page="">
+    <div class="landing-section">
+        <div class="landing-header">
+            <div class="landing-avatar">
+                <img src="https://avatars.githubusercontent.com/u/13054390?v=4" class="landing-profile-image" alt="Árnilsen Arthur">
+            </div>
+            <div class="landing-text-content">
+                <div class="landing-title-group">
+                    <h1 class="landing-title">Hi, I'm <span class="highlight">Árnilsen Arthur</span></h1>
+                    <p class="landing-subtitle">Choose your path and explore my work</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="persona-choice">
+            <h2 class="choice-title">Choose Your Path</h2>
+            <p class="choice-subtitle">Explore my work through different lenses</p>
+
+            <div class="persona-cards">
+                <div class="persona-card game-dev" onclick="switchToGames()">
+                    <div class="persona-icon">
+                        <i data-lucide="gamepad-2"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3>🎮 Game Developer</h3>
+                        <p>Multiplayer games, Unity development, networking systems, and interactive experiences</p>
+                        <div class="persona-highlights">
+                            <span class="highlight-tag">Unity</span>
+                            <span class="highlight-tag">C#</span>
+                            <span class="highlight-tag">Multiplayer</span>
+                            <span class="highlight-tag">Game Design</span>
+                        </div>
+                    </div>
+                    <div class="persona-arrow">
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+
+                <div class="persona-card dev-fullstack" onclick="switchToDevelopment()">
+                    <div class="persona-icon">
+                        <i data-lucide="code"></i>
+                    </div>
+                    <div class="persona-content">
+                        <h3>💻 Full Stack Developer</h3>
+                        <p>Web applications, system architecture, APIs, and scalable software solutions</p>
+                        <div class="persona-highlights">
+                            <span class="highlight-tag">Full-Stack</span>
+                            <span class="highlight-tag">Node.js</span>
+                            <span class="highlight-tag">System Design</span>
+                            <span class="highlight-tag">APIs</span>
+                        </div>
+                    </div>
+                    <div class="persona-arrow">
+                        <i data-lucide="chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Contacts-->
+<div class="content" page="contact">
+    <div class="contact-section">
+        <div class="contact-header">
+            <h2 class="contact-title">Let&#39;s Build Something Amazing Together</h2>
+            <p class="contact-subtitle">I&#39;m always open to discussing new opportunities, collaborations, or interesting projects</p>
+        </div>
+
+        <div class="contact-links">
+            
+            <div class="contact-card" onclick="window.open('https://github.com/arnilsenarthur','_blank')">
+                <div class="contact-icon">
+                    <i class="fa fa-github"></i>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-text">View My Code</div>
+                    <div class="contact-description">Open source projects &amp; contributions</div>
+                </div>
+                <div class="contact-arrow">
+                    <i data-lucide="external-link"></i>
+                </div>
+            </div>
+            
+            <div class="contact-card" onclick="window.open('https://www.linkedin.com/in/arnilsen-arthur-aa0b04150/','_blank')">
+                <div class="contact-icon">
+                    <i class="fa fa-linkedin"></i>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-text">Connect on LinkedIn</div>
+                    <div class="contact-description">Professional network &amp; experience</div>
+                </div>
+                <div class="contact-arrow">
+                    <i data-lucide="external-link"></i>
+                </div>
+            </div>
+            
+            <div class="contact-card" onclick="window.open('mailto:arnilsenarthur@gmail.com','_self')">
+                <div class="contact-icon">
+                    <i class="fa fa-envelope"></i>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-text">Send an Email</div>
+                    <div class="contact-description">Direct communication</div>
+                </div>
+                <div class="contact-arrow">
+                    <i data-lucide="external-link"></i>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="contact-footer">
+            <button class="red full" onclick="location.href='#'">
+                <i data-lucide="arrow-left" class="side"></i>
+                Back to Portfolio
+            </button>
+        </div>
+    </div>
+</div>
+
+<!--Skills-->
+<div class="content" page="skills">
+    <div class="skills-section">
+        <div class="skills-header">
+            <h2 class="skills-title">Technical Expertise</h2>
+            <p class="skills-subtitle">A comprehensive overview of my technical skills and proficiency levels</p>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="globe"></i>
+                    Networking & Multiplayer
+                </h3>
+                <div class="skill-list">
+                    
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="code"></i>
+                    Game Development
+                </h3>
+                <div class="skill-list">
+                    
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="languages"></i>
+                    Programming Languages
+                </h3>
+                <div class="skill-list">
+                    
+                </div>
+            </div>
+
+            <div class="skill-category">
+                <h3 class="category-title">
+                    <i data-lucide="message-circle"></i>
+                    Communication
+                </h3>
+                <div class="skill-list">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Timeline-->
+<div class="content" page="timeline" id="timeline">
+
+<div id="timeline-wrapper">
+    <div id="timeline-canvas-container" style="color: white; text-align: center;"></div>
+</div>
+
+<script>
+    // Pass data to global scope for the module
+    window.timelineData = [{"date":"2002","text":"I was born","left":"My parents say I fell in love with numbers from the first time they taught me how to count. I always liked logic and math. As I grew up,I started to fall in love with games too.","right":"I wasn't just passionate about playing the games, I was passionate about how they were made. It felt like magic to me, and to be honest, there is a kind of magic behind games","leftFirst":false},{"date":"2008","text":"My First PC","left":"My parents bought a computer. As I didn't have internet, I spent the days having fun with <b>Microsoft Office</b> applications. I loved doing PowerPoint animations and trying to make systems in Microsoft Access.<br><img src=\"/img/microsoft_access.png\" class=\"smallimg\"></img>","right":"Having played some games at my cousins ​​house, I kept thinking about how games were made and started trying with what I had to make some kind of game. I scribbled dozens of notebooks with ideas for games I wanted to make, even though I didn't even know how to start.","leftFirst":true},{"date":"2012","text":"The Turning Point","left":"Because of the school, we put internet at home. I remember like it was yesterday, when I was asked to test the internet and I did my first search: Game. The first result that appeared was Minecraft. That was the turning point","right":"So I ran to download, and that's when it all started. From this point I started to spend more and more hours in gaming...<br><br><img src=\"https://cdn.icon-icons.com/icons2/2699/PNG/512/minecraft_logo_icon_168974.png\" class=\"smallimg\"></img>","leftFirst":true},{"date":"2013","text":"A New Developer Has Born","left":"<img src=\"/img/timeline_0.png\" class=\"bigimg\"></img>","right":"Playing minecraft, I found that people were able to make mods/plugins to add what they wanted to the game. So I found a way to learn it. Since that day I started to learn java.","leftFirst":false},{"date":"2017","text":"Information Technology Course","left":"After a few years of practice in <b>Java</b>, mainly focused on <b>LWJGL</b> (Which helped me to learn many programming/rendering concepts) I entered an IT course, where I learned Web/Android Apps development. My dream of being a game developer was interrupted","right":"I finished the course in 2018 and I started to develop some systems for companies in the region, and some websites (like this one)<br><br><img src=\"/img/hda_logo.png\" class=\"mediumimg\"></img>","leftFirst":true},{"date":"2020","text":"Game Development College","left":"Everything changed again at the end of 2019. I found out that a university near where I lived had a game development course, and I joined, and I'm still taking it right now. My childhood dream seemed to get closer and closer.","right":"During the course I'm producing some games that you can find in the <a class=\"innerlink\" href=\"#projects\">Projects</a> tab.<b><img src=\"/img/sketch_fleets_0.png\" class=\"bigimg\"></img>","leftFirst":true},{"date":"2021","text":"Joined LionSpoon","right":"In 2021 I was appointed by a college friend to work at <b>LionSpoon Dream Game Technology</b>, a Chinese game company. Since then I'm working online as a game developer.","left":"<img src=\"/img/lion_spoon.png\" class=\"bigimg\"></img>","leftFirst":false},{"date":"2022","text":"Improving Skills","right":"<img src=\"/img/chess_0.webp\" class=\"bigimg\"></img>","left":"While studying I keep doing side projects to improve my skills and build up portifolio. The biggest side project I made this year was <a href=\"https://github.com/arnilsenarthur/unitychessgame\"><b>UnityChessGame</b><i data-lucide=\"external-link\" class=\"linkicon\"></i></a>","leftFirst":false},{"date":"2023","text":"Joined Monomyto / FCL","right":"In 2023 I joined <b>Fried Chicken Labs</b>, a game company that is part of <b>Snackclub</b>. I developed multiplayer projects using Photon's Quantum Engine</i></a>","left":"<img src=\"/img/fried_chicken_labs_logo.png\" class=\"bigimg\"></img>","leftFirst":false},{"date":"2025","text":"Joined Triplo Z","right":"In 2025 I joined <b>Triplo Studios</b>, where I work as Tech Artist and Software Engineer</a>","left":"<img src=\"/img/triploz_logo.png\" class=\"bigimg\"></img>","leftFirst":false},{"date":"Now","text":"Developing Games and Systems<br><img src=\"/img/heart.png\" class=\"tinyimg\"></img>","right":"As a full-stack developer, I create both immersive gaming experiences and robust web systems, combining my passion for interactive entertainment with enterprise-grade software development.","left":"Currently working on multiplayer games and scalable web applications, delivering end-to-end solutions from concept to deployment.","leftFirst":false}];
+</script>
+
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.169.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.169.0/examples/jsm/"
+    }
+  }
+</script>
+
+<script type="module">
+    import { init3DTimeline } from '/js/timeline-3d.js';
+
+    let instance = null;
+
+    window.ensureTimeline3D = () => {
+        if (instance) return;
+        instance = init3DTimeline(window.timelineData);
+        window.timeline3D = instance;
+    };
+
+    window.destroyTimeline3D = () => {
+        if (!instance) return;
+        if (instance.destroy) instance.destroy();
+        instance = null;
+        window.timeline3D = null;
+    };
+
+    if (window.location.hash === '#timeline' && !document.hidden) {
+        setTimeout(() => {
+            window.ensureTimeline3D();
+        }, 1000);
+    }
+</script>
+
+</div>
+
+<!--Projects-->
+<div class="content" page="projects">
+    <h2>Projects</h2>
+
+    <!-- Filter Buttons -->
+    <div class="project-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+            
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+                    
+                        
+                            
+                        
+                    
+                
+            
+        
+        
+        
+            
+                
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+        
+        <button class="filter-btn" data-filter=""></button>
+        
+    </div>
+
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://netbuff.buffbuffstudios.com/" target="_blank">NetBuff
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">High-Performance Unity Networking Library</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/net_buff_0.png"
+                     class="project-image"
+                     alt="NetBuff"
+                     loading="lazy">
+                
+                <img src="/img/net_buff_1.png"
+                     class="project-image"
+                     alt="NetBuff"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">A lightweight, high-performance networking library for Unity that simplifies multiplayer game development. Built from the ground up to provide better performance and easier implementation than existing solutions.</p>
+                
+                <p class="project-description">Features include automatic synchronization, latency compensation, and a clean API that integrates seamlessly with Unity's component system. Used in production games serving thousands of concurrent players.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Reduced network latency by 40%</li>
+                        
+                        <li>Simplified multiplayer implementation</li>
+                        
+                        <li>Production-ready for commercial games</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://www.youtube.com/watch?v=NRYfg8nKe-Q" target="_blank">Visual Effects Portifolio
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">College-time (2022) VFX showcase</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/vfx_0.png"
+                     class="project-image"
+                     alt="Visual Effects Portifolio"
+                     loading="lazy">
+                
+                <img src="/img/vfx_1.png"
+                     class="project-image"
+                     alt="Visual Effects Portifolio"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                <p class="project-description"></p>
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        Lighting System
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Advanced lighting system for Unity</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/light_0.png"
+                     class="project-image"
+                     alt="Lighting System"
+                     loading="lazy">
+                
+                <img src="/img/light_1.png"
+                     class="project-image"
+                     alt="Lighting System"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Implementation of a URP Lighting System that handles thousands of lights with a low impact on performance.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>9000+ lights handled with a low impact on performance</li>
+                        
+                        <li>Realist volumetric lighting support</li>
+                        
+                        <li>Baked and real-time shadows support</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://x.com/TakedownLegends" target="_blank">Takedown Legends
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Multplayer arena-like shooter</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/takedown_legends.png"
+                     class="project-image"
+                     alt="Takedown Legends"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Takedown Legends is a multiplayer arena-like shooter where you can choose from a variety of characters and fight in a 3v3 arena. It was created with the Photon's Quantum Engine and is a tech-art project.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://buff-buff-studios.itch.io/solis" target="_blank">Solis
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Cooperative Puzzle Platformer</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/solis_0.png"
+                     class="project-image"
+                     alt="Solis"
+                     loading="lazy">
+                
+                <img src="/img/solis_1.png"
+                     class="project-image"
+                     alt="Solis"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">A beautifully crafted cooperative puzzle platformer where two players control siblings on a journey through a post-apocalyptic world. The game emphasizes communication, trust, and creative problem-solving.</p>
+                
+                <p class="project-description">Features unique mechanics where players must coordinate actions, share abilities, and solve environmental puzzles together. The art style combines hand-drawn aesthetics with dynamic lighting effects.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Won &#39;Best Game Design&#39; in college showcase</li>
+                        
+                        <li>Featured in local game development community</li>
+                        
+                        <li>Developed in 6 months by 3-person team</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://buff-buff-studios.itch.io/sketch-fleets" target="_blank">Sketch Fleets
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Multiplatform Space Shooter</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/sketch_fleets_0.png"
+                     class="project-image"
+                     alt="Sketch Fleets"
+                     loading="lazy">
+                
+                <img src="/img/sketch_fleets_1.png"
+                     class="project-image"
+                     alt="Sketch Fleets"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Created with 5 friends as a college project, <b>Sketch Fleets</b> is a starship shooter, where you can summon allies using the drop of dead enemies, forming a fleet. The game has an artistic style based on sketches, hence the name of the game.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>5-person team collaboration</li>
+                        
+                        <li>Implemented multiplayer mechanics</li>
+                        
+                        <li>Unique sketch-based art style</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://buff-buff-studios.itch.io/between-death" target="_blank">Between Death
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Dark Gothic RPG</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Genre">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/between_death_0.png"
+                     class="project-image"
+                     alt="Between Death"
+                     loading="lazy">
+                
+                <img src="/img/between_death_1.png"
+                     class="project-image"
+                     alt="Between Death"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">In <b>Between Death</b>, immerse yourself in a dark and gothic RPG that pushes the boundaries of the supernatural. Dive into a universe where the line between life and death blurs, and uncover a world steeped in mystery and darkness.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Explored dark fantasy genre</li>
+                        
+                        <li>Implemented RPG mechanics</li>
+                        
+                        <li>Atmospheric world-building</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://www.artstation.com/artwork/g2XynK" target="_blank">Amica Run
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Multiplayer Mobile Runner</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/amica_run_1.png"
+                     class="project-image"
+                     alt="Amica Run"
+                     loading="lazy">
+                
+                <img src="/img/amica_run_0.png"
+                     class="project-image"
+                     alt="Amica Run"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Amica Run is a mobile runner made with my friend <b>Júlia Moraes</b> for a college project. It was the first game that I applied my networking skills to create a multiplayer game in just six months.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>First multiplayer game implementation</li>
+                        
+                        <li>6-month development timeline</li>
+                        
+                        <li>Cross-platform mobile deployment</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://jubabibou.itch.io/terminal-lost" target="_blank">Terminal Lost
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Paper&#39;s Please based game</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Event">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/terminal_lost.png"
+                     class="project-image"
+                     alt="Terminal Lost"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Terminal Lost is a Paper's Please based game where you have to manage a terminal and fix the problems that appear. It was created with my friend <b>Júlia Moraes</b> for a college project.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags="," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/Minecraft-IGT" target="_blank">Árnilsen&#39;s Minecraft In-Game Timer
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                <img src="https://github.com/arnilsenarthur/Minecraft-IGT/raw/master/img/1.png"
+                     class="project-image"
+                     alt="Árnilsen&#39;s Minecraft In-Game Timer"
+                     loading="lazy">
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">As the name implies, In-Game Timer is a timer for speedruns with layout customization,screen recognition and auto-updated splits (For now only works 1.12+). Created by Árnilsen Arthur/Infobros2000 with Java using java-json api</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags="," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://sites.google.com/view/factory-engine-mod/home" target="_blank">Factory Engine Mod
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/factory_engine.png"
+                     class="project-image"
+                     alt="Factory Engine Mod"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Factory Engine is a Minecraft 1.7.10 mod that adds a plenty of tools and machines to your journey.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/ProjectRuleChecker" target="_blank">Project Rule Checker
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">C# Rule Validation System</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Project Rule Checker is a flexible C# rule validation system designed for validating project structures and configurations. It provides a modular architecture for defining and executing validation rules across different project types.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://buff-buff-studios.itch.io/sketch-fleets" target="_blank">Unity Chess Project
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">3D Chess Engine with AI</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Engine">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/chess_0.webp"
+                     class="project-image"
+                     alt="Unity Chess Project"
+                     loading="lazy">
+                
+                <img src="/img/chess_1.png"
+                     class="project-image"
+                     alt="Unity Chess Project"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Created in Unity 3D by Árnilsen Arthur as a small college project. Has animations, move generation, simple AI and Stockfish support. Supports <b>PGN</b> and <b>FEN</b> notations.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Implemented chess engine from scratch</li>
+                        
+                        <li>Integrated Stockfish AI</li>
+                        
+                        <li>3D animations and visual effects</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://diario.sesisenaibetim.com.br" target="_blank">sCool
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Educational Management System</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/sCool_0.png"
+                     class="project-image"
+                     alt="sCool"
+                     loading="lazy">
+                
+                <img src="/img/sCool_1.png"
+                     class="project-image"
+                     alt="sCool"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">sCool is a school management system created as a <b>Final Paper</b> for the IT course. With it you can manage student grades and warnings, separate them by class and send notes to students and their parents. You can also create events in the class calendar to let students know about upcoming tasks and any other kind of event.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Final paper project for IT course</li>
+                        
+                        <li>Used by multiple educational institutions</li>
+                        
+                        <li>Full-stack web application</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,,,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://hdasistemas.com.br" target="_blank">HDA Sistemas
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Business Systems Development</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/hda_sistemas_0.png"
+                     class="project-image"
+                     alt="HDA Sistemas"
+                     loading="lazy">
+                
+                <img src="/img/hda_sistemas_1.png"
+                     class="project-image"
+                     alt="HDA Sistemas"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">After the course, together with my professor and another friend, we created <b>HDA Sistemas</b>, a company that develops the most diverse systems and websites for local companies. It's one of my current jobs, along with the game developer job.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Founded software development company</li>
+                        
+                        <li>Served 50+ local businesses</li>
+                        
+                        <li>Current active business venture</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags="," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/aacl_serialization_lib" target="_blank">AACL Serialization Lib
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Created by <b>Árnilsen Arthur</b>, AACL Serialization Lib is a better alternative for C# serialization system. Useful for Network Packets or any another byte-object conversions</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,,,,,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://arnilsenarthur.github.io" target="_blank">Arnilsen Arthur Portfolio
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">My personal portfolio</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/portfolio.png"
+                     class="project-image"
+                     alt="Arnilsen Arthur Portfolio"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">My personal portfolio built with HTML, CSS and JavaScript. It's a simple portfolio that showcases my projects and skills.</p>
+                
+                
+
+                
+                <div class="project-achievements">
+                    <h4>Key Achievements:</h4>
+                    <ul>
+                        
+                        <li>Built with HTML, CSS and JavaScript (Using Node.JS for static generation)</li>
+                        
+                        <li>Simple portfolio that showcases my projects and skills</li>
+                        
+                        <li>Deployed on GitHub Pages</li>
+                        
+                    </ul>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://arnilsenarthur.github.io/lap-code-ui/" target="_blank">Lapcode UI Toolkit
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/lapcode_ui_0.png"
+                     class="project-image"
+                     alt="Lapcode UI Toolkit"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">Lapcode UI Toolkit is a pure CSS / JavaScript UI toolkit that provides a set of reusable UI components for web development.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/arnilsen-csharp-i18n" target="_blank">Árnilsen C# I18n Library
+                        </a>
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Internationalization Library for C#</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">A powerful C# internationalization (i18n) library with dynamic syntax, precompiled language files for optimal performance, and a section system for memory-efficient loading. Supports multiple value randomization, path-based key structures, and provides significant file size reduction through compilation.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags="," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/c-simple-utf16" target="_blank">C Simple UTF-16
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Concept">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">A simple library to deal/support UTF16 strings in pure C. Supports Emoticons and special chars. You can get length, convert, concat, insert and even get UTF16 substrings</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags="," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        <a href="https://github.com/arnilsenarthur/Minecraft-IGT" target="_blank">Árnilsen&#39;s Minecraft In-Game Timer
+                        </a>
+                        
+                    </h3>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Platform">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">As the name implies, In-Game Timer is a timer for speedruns with layout customization,screen recognition and auto-updated splits (For now only works 1.12+). Created by Árnilsen Arthur/Infobros2000 with Java using java-json api</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+    <div class="project-item" data-tags=",,,," style="display: block;">
+        <div class="project-card">
+            <div class="project-header">
+                <div class="project-title-section">
+                    <h3 class="project-title">
+                        
+                        AACL 3D Painter
+                        
+                    </h3>
+                    
+                    <p class="project-subtitle">Node.js Three.js 3D Painting Application</p>
+                    
+                </div>
+                
+                <div class="project-tech">
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Framework">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Language">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                    
+                    <span class="tech-tag Technology">
+                        
+                            
+                        
+                    </span>
+                    
+                    
+                </div>
+                
+            </div>
+
+            
+            <div class="project-gallery">
+                
+                <img src="/img/aacl_3d_painter.png"
+                     class="project-image"
+                     alt="AACL 3D Painter"
+                     loading="lazy">
+                
+            </div>
+            
+
+            <div class="project-content">
+                
+                
+                <p class="project-description">AACL 3D Painter is a powerful <b>3D painting application</b> built with Node.js and Three.js. Features include advanced <b>translation controls</b>, multiple <b>theming options</b>, sophisticated <b>layering system</b>, and intuitive 3D manipulation tools. Perfect for 3D artists and designers looking for a web-based painting solution.</p>
+                
+                
+
+                
+            </div>
+        </div>
+    </div>
+    
+</div>
+        </div>
+
+        <!--Game-->
+        <div class="content" page="game">
+            <div class="minwidthwarn">
+                <div class="minwidthwarninner">
+                    Your screen is too small to show this content
+                    <div class="tilt">
+                        You can try to tilt your device sideways
+                    </div>
+                </div>
+            </div>
+            <div class="game minwidth">
+                <div id="hudbg"></div>
+                <div id="score">
+                    0000
+                </div>
+                <div id="lives">
+
+                </div>
+
+                <div class="viewport" id="gamecanvas"></div>
+                <div class="gamefooter">Click to jump/double jump</div>
+                <button class="red pausegame" onclick="pauseGame()"><i data-lucide="pause"></i></button>
+                <div class="menu">
+                    <div class="page" id="pagecollection">
+                        <h2 class="titlecollection">Collection</h2>
+                        <div id="collectioncontent">
+                        </div>
+                        <button class="red" onclick="closeCollection()">Back</button>
+                    </div>
+                    <div class="page" id="pagepause">
+                        <button class="audiobtn" onclick="game.setAudio(!game.getAudio()); playEffect('audioToggle')"><i
+                                data-lucide="volume-2"></i></button>
+                        <div class="highscore">HI 2500</div>
+                        <div class="title currentscore">0201</div>
+                        <button class="yellow full inverse" onclick="resumeGame(true)">Continue</button>
+                    </div>
+                    <div class="page" id="pageplay">
+                        <button class="collectionbtn" onclick="openCollection()"><i data-lucide="book-open"></i></button>
+                        <button class="audiobtn" onclick="game.setAudio(!game.getAudio()); playEffect('audioToggle')"><i
+                                data-lucide="volume-2"></i></button>
+                        <div class="highscore">HI 2500</div>
+                        <div class="title">JumpX</div>
+                        <button class="green full inverse" onclick="resumeGame()">Play</button>
+                    </div>
+                    <div class="page" id="pageover">
+                        <button class="collectionbtn" onclick="openCollectionFromGameOver()"><i data-lucide="book-open"></i></button>
+                        <button class="audiobtn" onclick="game.setAudio(!game.getAudio()); playEffect('audioToggle')"><i
+                                data-lucide="volume-2"></i></button>
+                        <div class="highscore">HI 2500</div>
+                        <div class="title gameover">Game Over</div>
+                        <button class="red full inverse" onclick="playAgain()">Play Again</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Papers-->
+        <div class="content" page="feed" id="papers">
+            <h2>Feed</h2>
+            <div id="paperscontent">
+                <center>
+                <div class="loadingitem"></div>
+                <div class="loadingitem"></div>
+                <div class="loadingitem"></div>
+                </center>
+            </div>
+        </div>
+
+        <div class="content" page="post" id="post">
+            <div id="postcontent"></div>
+        </div>
+    </div>
+    </div>
+    <div class="footer">
+        Created by Árnilsen Arthur
+    </div>
+    <script>
+        // Load secondary font asynchronously
+        if (typeof WebFont !== 'undefined') {
+            WebFont.load({
+                google: {
+                    families: ['Share Tech Mono']
+                },
+                active: e => {
+                    console.log("font loaded!");
+                }
+            });
+        }
+    </script>
+    <script>
+        // Initialize persona sliding toggle
+        function initPersonaToggle() {
+            const path = window.location.pathname;
+            const toggleTrack = $('.toggle-track');
+            const toggleSlider = $('.toggle-slider');
+
+            const lastPersonaPage = localStorage.getItem('lastPersonaPage');
+
+            // Detect current page type
+            const currentPageType = path.includes('/gamedev/')
+                ? 'gamedev'
+                : path.includes('/dev/')
+                ? 'dev'
+                : null; // home page - no persona
+
+            const shouldAnimate =
+                lastPersonaPage !== null && lastPersonaPage !== currentPageType;
+
+            const applyState = (type) => {
+                if (type === null) {
+                    // Home page - remove all persona classes
+                    document.body.classList.remove('game-mode', 'dev-mode');
+                    toggleTrack.removeClass('game-active dev-active');
+                    toggleSlider.removeClass('game-active dev-active');
+                } else {
+                    const isGame = type === 'gamedev';
+                    document.body.classList.toggle('game-mode', isGame);
+                    document.body.classList.toggle('dev-mode', !isGame);
+
+                    toggleTrack
+                        .toggleClass('game-active', isGame)
+                        .toggleClass('dev-active', !isGame);
+
+                    toggleSlider
+                        .toggleClass('game-active', isGame)
+                        .toggleClass('dev-active', !isGame);
+                }
+            };
+
+            if (shouldAnimate) {
+                // Temporarily disable all transitions
+                toggleSlider.css({
+                    'transition': 'none',
+                    'transform': 'none'
+                });
+                applyState(lastPersonaPage);
+
+                // Force reflow and allow time for DOM to update
+                toggleSlider[0].offsetHeight;
+
+                // Re-enable transitions and animate
+                setTimeout(() => {
+                    toggleSlider.css({
+                        'transition': 'all 0.3s ease',
+                        'transform': ''
+                    });
+                    applyState(currentPageType);
+                }, 10); 
+            } else {
+                // Ensure no transitions for instant positioning
+                toggleSlider.css('transition', 'none');
+                applyState(currentPageType);
+
+                // Re-enable transitions for future interactions
+                setTimeout(() => {
+                    toggleSlider.css('transition', 'all 0.3s ease');
+                }, 50);
+            }
+
+            // Persist current page
+            localStorage.setItem('lastPersonaPage', currentPageType);
+        }
+
+
+        // Function to toggle between personas
+        function togglePersona() {
+            const currentPath = window.location.pathname;
+
+            if (currentPath.includes('/gamedev/')) {
+                // Mark that we're navigating via toggle and save current page
+                localStorage.setItem('navigatingViaToggle', 'true');
+                localStorage.setItem('lastPersonaPage', 'gamedev');
+                // Navigate to dev page
+                window.location.href = '/dev/';
+            } else {
+                // Mark that we're navigating via toggle and save current page
+                localStorage.setItem('navigatingViaToggle', 'true');
+                localStorage.setItem('lastPersonaPage', 'dev');
+                // Navigate to gamedev page
+                window.location.href = '/gamedev/';
+            }
+        }
+
+        // Initialize Lucide icons
+        function initLucideIcons() {
+            lucide.createIcons();
+        }
+
+        initAnimations();
+        initBackground();
+        initPersonaToggle();
+        initLucideIcons();
+
+        // Initialize navigation visibility based on current persona
+        const currentPath = window.location.pathname;
+        const currentPersona = currentPath.includes('/gamedev/')
+            ? 'gamedev'
+            : currentPath.includes('/dev/')
+            ? 'dev'
+            : null;
+        updateNavigationVisibility(currentPersona);
+
+        // Default to home page if no hash is present
+        const initialPage = window.location.hash.substring(1) || '';
+        onOpenPage(initialPage);
+
+        $("#score").on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd",
+            function () {
+                $(this).removeClass("blink");
+            }
+        );
+
+        $(".canvas").scroll(function () {
+            updateView();
+        });
+
+        $(window).resize(function () {
+            updateView();
+        });
+
+        function updateView() {
+            let h = $(window).height();
+            let n = $(".timeline.data");
+            n.each(function (i) {
+                let dso = Math.abs($(this).position().top) / 2;
+
+                if (i > 1)
+                    dso = 99999;
+                if (i >= n.length - 2)
+                    dso = 0;
+
+                let center = h / 3;
+
+                let ds = Math.abs($(this).offset().top - center);
+                let l = ((ds < dso ? ds : dso) - 100) / (h / 4);
+
+                l = l > 1 ? 1 : (l < 0 ? 0 : l);
+
+                if ($(this).hasClass('left'))
+                    $(this).attr('style', `opacity: ${(1 - l)};transform:translate(${l * -400}px,-50%)`);
+                else
+                    $(this).attr('style', `opacity: ${(1 - l)};transform:translate(${l * 400}px,-50%)`);
+            });
+
+            let discount = $(".menubar").height() + $(".header").height();
+
+            let amount = ($(window).height() - discount) * 0.8 - 50;
+            $("#papers").css('max-height', `${amount}px`);
+            $("#post").css('max-height', `${amount}px`);
+        }
+
+        $(window).on('orientationchange', () => {
+            updateOrientation();
+        })
+
+        function updateOrientation() {
+            console.log(window.orientation);
+            $(".tilt").css('display', window.orientation == 0 ? 'block' : 'none');
+            // Only call pauseGame if it's available (game is loaded)
+            if (typeof pauseGame === 'function') {
+                pauseGame();
+            }
+        }
+
+        $(window).on('hashchange', function () {
+            if (window.location.hash == '#bozzivagabundo') {
+                setTimeout(function () {
+                    window.location.replace('https://drive.google.com/drive/folders/1xw5u30Z8he7C2rHt1hPRFx7383l3vYei?usp=sharing');
+                }, 5000);
+            }
+        });
+
+        updateOrientation();
+        updateView();
+    </script>
+
+    <!-- Full Screen Image Viewer -->
+    <div id="fullscreen-image-viewer" class="fullscreen-image-viewer" style="display: none;">
+        <div class="fullscreen-overlay" onclick="closeFullscreenImage()"></div>
+        <div class="fullscreen-content">
+            <img id="fullscreen-image" class="fullscreen-image" src="" alt="">
+            <button class="fullscreen-close" onclick="closeFullscreenImage()">×</button>
+        </div>
+    </div>
+</body>
+</html>
