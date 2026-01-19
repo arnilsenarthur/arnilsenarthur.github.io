@@ -21,7 +21,6 @@ module.exports = {
       subtitle: "Educational Management System",
       url: "https://diario.sesisenaibetim.com.br",
       externalLink: true,
-      onCv: true,
       images: ["/img/sCool_0.png", "/img/sCool_1.png"],
       tags: [
         { name: "PHP", type: "Language" },
@@ -41,7 +40,6 @@ module.exports = {
       subtitle: "Business Systems Development",
       url: "https://hdasistemas.com.br",
       externalLink: true,
-      onCv: true,
       images: ["/img/hda_sistemas_0.png", "/img/hda_sistemas_1.png"],
       tags: [
         { name: "Full-Stack", type: "Concept" },
@@ -73,7 +71,6 @@ module.exports = {
       subtitle: "My personal portfolio",
       url: "https://arnilsenarthur.github.io",
       externalLink: true,
-      onCv: true,
       tags: [
         { name: "HTML", type: "Language" },
         { name: "CSS", type: "Language" },
@@ -133,6 +130,10 @@ module.exports = {
       title: "Árnilsen's Minecraft In-Game Timer",
       url: "https://github.com/arnilsenarthur/Minecraft-IGT",
       externalLink: true,
+      disclaimer: {
+        type: "legacy",
+        message: "Created to demonstrate capabilities from my early programming years (2015-2019)."
+      },
       tags: [
         { name: "Java", type: "Language" },
         { name: "Minecraft", type: "Platform" }

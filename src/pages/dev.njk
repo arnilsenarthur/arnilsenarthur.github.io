@@ -263,6 +263,20 @@ permalink: /dev/
                     {% if project.subtitle %}
                     <p class="project-subtitle">{{ project.subtitle }}</p>
                     {% endif %}
+                    {% if project.disclaimer %}
+                    <div class="project-disclaimer">
+                        {% if project.disclaimer.message %}
+                        <div class="disclaimer-message {{ project.disclaimer.type }}">
+                            <span class="disclaimer-icon">
+                                {% if project.disclaimer.type == 'legacy' %}⏰{% elif project.disclaimer.type == 'poc' %}🧪{% elif project.disclaimer.type == 'showcase' %}✨{% else %}📦{% endif %}
+                            </span>
+                            <span class="disclaimer-text">{{ project.disclaimer.message }}</span>
+                        </div>
+                        {% else %}
+                        <span class="disclaimer-badge {{ project.disclaimer }}">{{ project.disclaimer | upper }}</span>
+                        {% endif %}
+                    </div>
+                    {% endif %}
                 </div>
                 {% if project.tags %}
                 <div class="project-tech">

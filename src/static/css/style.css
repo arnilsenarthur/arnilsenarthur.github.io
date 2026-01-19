@@ -3113,3 +3113,157 @@ b, strong
         font-size: 2.5rem;
     }
 }
+
+/* Project Disclaimer Tags */
+.project-disclaimer {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
+.disclaimer-message {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    border: 1px solid;
+    backdrop-filter: blur(10px);
+    position: relative;
+}
+
+.disclaimer-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 8px;
+    opacity: 0.05;
+}
+
+.disclaimer-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.disclaimer-text {
+    flex: 1;
+    font-style: italic;
+}
+
+.disclaimer-message.legacy {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: #ffffff;
+    border-color: #9ca3af;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-message.legacy::before {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+
+.disclaimer-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Legacy/Showcase Disclaimer */
+.disclaimer-badge.legacy {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+    color: #f9fafb;
+    border-color: #9ca3af;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-badge.legacy::before {
+    content: "⏰";
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
+
+.disclaimer-message.poc {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #ffffff;
+    border-color: #60a5fa;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-message.poc::before {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+/* POC (Proof of Concept) Disclaimer */
+.disclaimer-badge.poc {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: #dbeafe;
+    border-color: #60a5fa;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-badge.poc::before {
+    content: "🧪";
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
+
+.disclaimer-message.showcase {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #ffffff;
+    border-color: #34d399;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-message.showcase::before {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Showcase Disclaimer */
+.disclaimer-badge.showcase {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #d1fae5;
+    border-color: #34d399;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-badge.showcase::before {
+    content: "✨";
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
+
+.disclaimer-message.archive {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #ffffff;
+    border-color: #fca5a5;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-message.archive::before {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+/* Archive Disclaimer */
+.disclaimer-badge.archive {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fef2f2;
+    border-color: #fca5a5;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.disclaimer-badge.archive::before {
+    content: "📦";
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
