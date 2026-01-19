@@ -5,12 +5,15 @@ module.exports = {
   bio: [
     "I'm a passionate <b>full-stack developer</b> and <b>software engineer</b> with over 8 years of experience creating digital solutions that matter. My expertise spans from web applications to enterprise systems, always focusing on scalable and maintainable code.",
     "I excel in <b>full-stack development</b>, <b>system architecture</b>, and <b>technical leadership</b>. I've built everything from educational platforms to enterprise management systems, with a proven track record of delivering high-performance, user-centric solutions.",
-    "My technical expertise includes <b>Node.js</b>, <b>Java</b>, <b>C#</b>, <b>database design</b>, and <b>API development</b>. I have extensive experience in both front-end and back-end development, with a strong focus on clean architecture and best practices."
+    "My technical expertise includes <b>Node.js</b>, <b>Java</b>, <b>C#</b>, <b>database design</b>, and <b>API development</b>. I have extensive experience in both front-end and back-end development, with a strong focus on clean architecture and best practices.",
+    "I started learning to code young and have always loved exploring new technologies and domains. My curiosity-driven approach means <b>learning fast is never a problem for me</b> - whether it's mastering new programming languages, frameworks, or diving into data science and AI technologies."
   ],
   highlights: [
     "8+ Years of Software Development",
     "4+ Enterprise Systems Built",
-    "15+ Technologies Mastered"
+    "15+ Technologies Mastered",
+    "Data Science & AI Ready",
+    "Frontend Engineering Expertise"
   ],
   projects: [
     {
@@ -172,6 +175,14 @@ module.exports = {
       {
         title: "AI API Integration",
         level: 4
+      },
+      {
+        title: "Data Modeling & Analysis",
+        level: 4
+      },
+      {
+        title: "SQL Database Design",
+        level: 4
       }
     ],
     development: [
@@ -215,6 +226,10 @@ module.exports = {
         color: "green"
       },
       {
+        title: "TypeScript",
+        level: 4,
+      },
+      {
         title: "C# (.NET Development)",
         level: 4,
       },
@@ -227,9 +242,8 @@ module.exports = {
         level: 4,
       },
       {
-        title: "Python (Scripting & Automation)",
-        level: 3,
-        color: "yellow"
+        title: "Python (Data Science & Development)",
+        level: 4
       },
       {
         title: "SQL (Database Management)",
@@ -306,6 +320,41 @@ module.exports = {
       {
         title: "Spanish",
         level: 3,
+      }
+    ]
+  },
+  careerInterests: {
+    title: "My Journey & What's Next",
+    subtitle: "A peek into where I've been and where I'm going in this crazy tech world",
+    currentFocus: "Right now, I'm diving deep into data science and AI while keeping my frontend skills sharp. I'm also really focused on building genuine connections in the tech community and learning from amazing people.",
+    focusAreas: [
+      {
+        title: "🤖 AI & Data Adventures",
+        description: "I'm genuinely excited about using data to solve real problems. Whether it's building recommendation systems, predictive models, or chatbots that actually help people - I love seeing how machine learning can make technology more human. Python feels like a natural extension of my programming journey, and I'm having fun exploring what AI can really do for everyday users.",
+        skills: ["Python & Data Science", "Machine Learning", "SQL & Databases", "AI Model Integration"],
+        theme: "ai",
+        icon: "brain"
+      },
+      {
+        title: "🎨 Frontend Magic",
+        description: "There's something magical about turning ideas into beautiful, functional interfaces that people actually enjoy using. I love the challenge of understanding what users really need and figuring out how to make complex things feel simple. React and TypeScript have become my go-to tools for creating experiences that feel right.",
+        skills: ["React & Modern JS", "TypeScript", "UI/UX Design", "Performance & Accessibility"],
+        theme: "frontend",
+        icon: "palette"
+      },
+      {
+        title: "🏗️ System Building",
+        description: "I get a real kick out of taking messy, complex systems and making them reliable and scalable. Whether it's designing APIs that other developers love to use, optimizing databases for speed, or building tools that make everyone's life easier - I enjoy the puzzle of making technology work better behind the scenes.",
+        skills: ["System Architecture", "API Design", "Database Optimization", "DevOps & Tools"],
+        theme: "systems",
+        icon: "settings"
+      },
+      {
+        title: "🌱 Personal Growth & Impact",
+        description: "At the end of the day, I want to build a career that keeps me excited about learning while making a positive difference. I'm passionate about mentoring others, contributing to open source, and working on projects that genuinely improve people's lives. Work-life balance isn't just a buzzword to me - it's essential for doing great work.",
+        skills: ["Continuous Learning", "Mentorship & Teaching", "Open Source", "Ethical Tech"],
+        theme: "growth",
+        icon: "sprout"
       }
     ]
   },

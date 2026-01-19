@@ -2614,3 +2614,502 @@ b, strong
         transform: translateY(0) rotateX(0deg);
     }
 }
+
+/* Career Interests Section - Custom Fluid Design */
+.career-section {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 60px 20px;
+    text-align: center;
+    position: relative;
+}
+
+.career-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    opacity: 0.3;
+}
+
+.career-header {
+    margin-bottom: 80px;
+    position: relative;
+}
+
+.career-title {
+    font-size: 2.5rem;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+.career-subtitle {
+    font-size: 1.3rem;
+    color: #ccc;
+    max-width: 900px;
+    margin: 0 auto 30px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+.career-current-focus {
+    font-size: 1.15rem;
+    color: #aaa;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-style: italic;
+    line-height: 1.7;
+    padding: 30px 40px;
+    background: linear-gradient(135deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.08);
+    backdrop-filter: blur(20px);
+    position: relative;
+}
+
+.career-current-focus::before {
+    content: '"';
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    font-size: 4rem;
+    color: rgba(255,255,255,.1);
+    font-family: serif;
+    line-height: 1;
+}
+
+.career-current-focus::after {
+    content: '"';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    font-size: 4rem;
+    color: rgba(255,255,255,.1);
+    font-family: serif;
+    line-height: 1;
+}
+
+.career-focus-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 70px;
+    perspective: 1000px;
+}
+
+.focus-area-card {
+    background: linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+    border-radius: 24px;
+    padding: 40px 35px;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transform-style: preserve-3d;
+}
+
+.focus-area-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,.05) 0%, transparent 50%);
+    opacity: 0;
+    transition: all 0.6s ease;
+    z-index: 0;
+}
+
+.focus-area-card::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,255,255,.05), transparent);
+    opacity: 0;
+    transition: all 0.8s ease;
+    transform: rotate(0deg);
+    z-index: 0;
+}
+
+.focus-area-card:hover {
+    transform:
+        translateY(-12px)
+        rotateX(5deg)
+        rotateY(-2deg)
+        scale(1.02);
+}
+
+.focus-area-card:hover::before {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.focus-area-card:hover::after {
+    opacity: 1;
+    transform: rotate(180deg);
+}
+
+.focus-icon {
+    font-size: 3.5rem;
+    margin-bottom: 25px;
+    z-index: 2;
+    position: relative;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.focus-emoji {
+    transition: all 0.5s ease;
+}
+
+.focus-area-card:hover .focus-emoji {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.focus-content {
+    z-index: 2;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.focus-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.focus-description {
+    color: #ddd;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    flex: 1;
+    font-size: 1rem;
+    transition: all 0.4s ease;
+}
+
+.focus-area-card:hover .focus-description {
+    color: #f0f0f0;
+}
+
+.focus-skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    transition: all 0.4s ease;
+}
+
+.skill-badge {
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* AI Theme - Fluid Organic Feel */
+.focus-area-card.ai {
+    background:
+        linear-gradient(135deg, rgba(16,185,129,.12), rgba(5,150,105,.06)),
+        radial-gradient(circle at 30% 70%, rgba(16,185,129,.08) 0%, transparent 50%);
+    position: relative;
+}
+
+.focus-area-card.ai::before {
+    background:
+        radial-gradient(circle at 20% 80%, rgba(16,185,129,.15) 0%, transparent 60%),
+        radial-gradient(circle at 80% 20%, rgba(16,185,129,.08) 0%, transparent 60%);
+}
+
+.focus-area-card.ai:hover {
+    background:
+        linear-gradient(135deg, rgba(16,185,129,.18), rgba(5,150,105,.09)),
+        radial-gradient(circle at 30% 70%, rgba(16,185,129,.12) 0%, transparent 50%);
+}
+
+.focus-area-card.ai .focus-title {
+    color: #10b981;
+    background: linear-gradient(135deg, #10b981, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.focus-area-card.ai .skill-badge {
+    background: linear-gradient(135deg, rgba(16,185,129,.2), rgba(5,150,105,.15));
+    color: #10b981;
+    border: 1px solid rgba(16,185,129,.3);
+}
+
+.focus-area-card.ai:hover .skill-badge {
+    background: linear-gradient(135deg, rgba(16,185,129,.3), rgba(5,150,105,.2));
+    transform: translateY(-2px);
+}
+
+/* Frontend Theme - Dynamic Digital Feel */
+.focus-area-card.frontend {
+    background:
+        linear-gradient(135deg, rgba(59,130,246,.12), rgba(37,99,235,.06)),
+        linear-gradient(45deg, rgba(59,130,246,.05) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(59,130,246,.05) 25%, transparent 25%);
+    background-size: 20px 20px;
+    border-color: rgba(59,130,246,.25);
+}
+
+.focus-area-card.frontend::before {
+    background:
+        linear-gradient(45deg, rgba(59,130,246,.1) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(59,130,246,.1) 25%, transparent 25%),
+        radial-gradient(circle at 50% 50%, rgba(59,130,246,.08) 0%, transparent 70%);
+    background-size: 30px 30px;
+}
+
+.focus-area-card.frontend:hover {
+    background:
+        linear-gradient(135deg, rgba(59,130,246,.18), rgba(37,99,235,.09)),
+        linear-gradient(45deg, rgba(59,130,246,.08) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(59,130,246,.08) 25%, transparent 25%);
+    background-size: 25px 25px;
+}
+
+.focus-area-card.frontend .focus-title {
+    color: #3b82f6;
+    background: linear-gradient(135deg, #3b82f6, #60a5fa);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.focus-area-card.frontend .skill-badge {
+    background: linear-gradient(135deg, rgba(59,130,246,.2), rgba(37,99,235,.15));
+    color: #3b82f6;
+    border: 1px solid rgba(59,130,246,.3);
+}
+
+.focus-area-card.frontend:hover .skill-badge {
+    background: linear-gradient(135deg, rgba(59,130,246,.3), rgba(37,99,235,.2));
+    transform: translateY(-2px);
+}
+
+/* Systems Theme - Geometric Industrial Feel */
+.focus-area-card.systems {
+    background:
+        linear-gradient(135deg, rgba(245,101,101,.12), rgba(220,38,38,.06)),
+        repeating-linear-gradient(
+            45deg,
+            rgba(245,101,101,.03) 0px,
+            rgba(245,101,101,.03) 2px,
+            transparent 2px,
+            transparent 10px
+        );
+    border-color: rgba(245,101,101,.25);
+}
+
+.focus-area-card.systems::before {
+    background:
+        repeating-linear-gradient(
+            45deg,
+            rgba(245,101,101,.08) 0px,
+            rgba(245,101,101,.08) 3px,
+            transparent 3px,
+            transparent 15px
+        ),
+        radial-gradient(circle at 50% 50%, rgba(245,101,101,.06) 0%, transparent 70%);
+}
+
+.focus-area-card.systems:hover {
+    background:
+        linear-gradient(135deg, rgba(245,101,101,.18), rgba(220,38,38,.09)),
+        repeating-linear-gradient(
+            45deg,
+            rgba(245,101,101,.05) 0px,
+            rgba(245,101,101,.05) 2px,
+            transparent 2px,
+            transparent 12px
+        );
+}
+
+.focus-area-card.systems .focus-title {
+    color: #f56565;
+    background: linear-gradient(135deg, #f56565, #fca5a5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.focus-area-card.systems .skill-badge {
+    background: linear-gradient(135deg, rgba(245,101,101,.2), rgba(220,38,38,.15));
+    color: #f56565;
+    border: 1px solid rgba(245,101,101,.3);
+}
+
+.focus-area-card.systems:hover .skill-badge {
+    background: linear-gradient(135deg, rgba(245,101,101,.3), rgba(220,38,38,.2));
+    transform: translateY(-2px);
+}
+
+/* Growth Theme - Mystical Flowing Feel */
+.focus-area-card.growth {
+    background:
+        linear-gradient(135deg, rgba(168,85,247,.12), rgba(139,69,227,.06)),
+        radial-gradient(ellipse 200% 100% at 50% 100%, rgba(168,85,247,.08) 0%, transparent 50%),
+        radial-gradient(ellipse 150% 80% at 100% 0%, rgba(139,69,227,.06) 0%, transparent 50%);
+    border-color: rgba(168,85,247,.25);
+}
+
+.focus-area-card.growth::before {
+    background:
+        radial-gradient(ellipse 180% 120% at 40% 80%, rgba(168,85,247,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 160% 100% at 90% 20%, rgba(139,69,227,.08) 0%, transparent 60%),
+        conic-gradient(from 45deg, rgba(168,85,247,.05), transparent, rgba(168,85,247,.05));
+}
+
+.focus-area-card.growth:hover {
+    background:
+        linear-gradient(135deg, rgba(168,85,247,.18), rgba(139,69,227,.09)),
+        radial-gradient(ellipse 220% 110% at 50% 100%, rgba(168,85,247,.12) 0%, transparent 50%),
+        radial-gradient(ellipse 170% 90% at 100% 0%, rgba(139,69,227,.08) 0%, transparent 50%);
+}
+
+.focus-area-card.growth .focus-title {
+    color: #a855f7;
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.focus-area-card.growth .skill-badge {
+    background: linear-gradient(135deg, rgba(168,85,247,.2), rgba(139,69,227,.15));
+    color: #a855f7;
+    border: 1px solid rgba(168,85,247,.3);
+}
+
+.focus-area-card.growth:hover .skill-badge {
+    background: linear-gradient(135deg, rgba(168,85,247,.3), rgba(139,69,227,.2));
+    transform: translateY(-2px);
+}
+
+/* Fluid animations and stagger effect */
+.focus-area-card:nth-child(1) { animation-delay: 0.1s; }
+.focus-area-card:nth-child(2) { animation-delay: 0.2s; }
+.focus-area-card:nth-child(3) { animation-delay: 0.3s; }
+.focus-area-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes cardFloat {
+    0%, 100% {
+        transform: translateY(0px) rotateX(0deg);
+    }
+    50% {
+        transform: translateY(-5px) rotateX(1deg);
+    }
+}
+
+.focus-area-card {
+    animation: cardFloat 8s ease-in-out infinite;
+}
+
+.focus-area-card:nth-child(2) {
+    animation-delay: -2s;
+}
+
+.focus-area-card:nth-child(3) {
+    animation-delay: -4s;
+}
+
+.focus-area-card:nth-child(4) {
+    animation-delay: -6s;
+}
+
+.focus-area-card:hover {
+    animation-play-state: paused;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .career-section {
+        padding: 40px 15px;
+    }
+
+    .career-title {
+        font-size: 2.2rem;
+    }
+
+    .career-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .career-current-focus {
+        padding: 25px 20px;
+        font-size: 1rem;
+    }
+
+    .career-current-focus::before,
+    .career-current-focus::after {
+        display: none;
+    }
+
+    .career-focus-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin-top: 50px;
+    }
+
+    .focus-area-card {
+        padding: 30px 25px;
+        border-radius: 20px;
+    }
+
+    .focus-icon {
+        font-size: 2.8rem;
+        margin-bottom: 20px;
+    }
+
+    .focus-title {
+        font-size: 1.3rem;
+    }
+
+    .focus-description {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    .skill-badge {
+        font-size: 0.8rem;
+        padding: 6px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .focus-area-card {
+        padding: 25px 20px;
+    }
+
+    .career-title {
+        font-size: 1.8rem;
+    }
+
+    .focus-icon {
+        font-size: 2.5rem;
+    }
+}

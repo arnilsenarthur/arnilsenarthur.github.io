@@ -7,6 +7,8 @@ module.exports = {
     "8+ years of experience",
     "Multiplayer game development",
     "Full-stack web development",
+    "Data Science & AI ready",
+    "Frontend engineering expertise",
     "Enterprise software solutions"
   ]
 };

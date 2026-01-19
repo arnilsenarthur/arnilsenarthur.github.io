@@ -43,6 +43,38 @@ permalink: /dev/
     </div>
 </div>
 
+<!--Career Interests-->
+<div class="content" page="career">
+    <div class="career-section">
+        <div class="career-header">
+            <h2 class="career-title">{{ dev.careerInterests.title }}</h2>
+            <p class="career-subtitle">{{ dev.careerInterests.subtitle }}</p>
+            {% if dev.careerInterests.currentFocus %}
+            <p class="career-current-focus">{{ dev.careerInterests.currentFocus }}</p>
+            {% endif %}
+        </div>
+
+        <div class="career-focus-grid">
+            {% for area in dev.careerInterests.focusAreas %}
+            <div class="focus-area-card {{ area.theme }}">
+                <div class="focus-icon">
+                    <span class="focus-emoji">{{ area.title.split(' ')[0] }}</span>
+                </div>
+                <div class="focus-content">
+                    <h3 class="focus-title">{{ area.title.substring(area.title.indexOf(' ') + 1) }}</h3>
+                    <p class="focus-description">{{ area.description }}</p>
+                    <div class="focus-skills">
+                        {% for skill in area.skills %}
+                        <span class="skill-badge">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
 <!--Contacts-->
 <div class="content" page="contact">
     <div class="contact-section">
