@@ -132,7 +132,7 @@ module.exports = {
       externalLink: true,
       disclaimer: {
         type: "legacy",
-        message: "Created to demonstrate capabilities from my early programming years (2015-2019)."
+        message: "Project created to show the capabilities I got since my early dev days."
       },
       tags: [
         { name: "Java", type: "Language" },
@@ -153,6 +153,79 @@ module.exports = {
         { name: "WebGL", type: "Technology" }
       ],
       description: ["AACL 3D Painter is a powerful <b>3D painting application</b> built with Node.js and Three.js. Features include advanced <b>translation controls</b>, multiple <b>theming options</b>, sophisticated <b>layering system</b>, and intuitive 3D manipulation tools. Perfect for 3D artists and designers looking for a web-based painting solution."]
+    },
+    {
+      title: "AI Content Intelligence Platform",
+      subtitle: "AI-Powered Content Analysis & Intelligence",
+      url: "https://github.com/arnilsenarthur/exercise-ai-analyzer",
+      externalLink: true,
+      images: ["/img/ai_analyzer.png"],
+      disclaimer: {
+        type: "legacy",
+        message: "Project created to show the capabilities I got since my early dev days."
+      },
+      tags: [
+        { name: "TypeScript", type: "Language" },
+        { name: "React", type: "Framework" },
+        { name: "Node.js", type: "Framework" },
+        { name: "AI Integration", type: "Technology" },
+        { name: "FastAPI", type: "Framework" },
+        { name: "PostgreSQL", type: "Technology" },
+        { name: "Edge Computing", type: "Concept" }
+      ],
+      description: ["A comprehensive <b>AI-powered content analysis platform</b> showcasing expertise in modern web technologies and AI integration. Features React/TypeScript frontend, Node.js backend, SDK development, and edge computing patterns. Demonstrates <b>7+ years of experience</b> building customer-facing products with focus on developer experience and business metrics."],
+      achievements: [
+        "Multiple AI provider integrations (OpenAI, Anthropic, Google Gemini)",
+        "Real-time analytics dashboard with data visualization",
+        "Type-safe SDK with comprehensive error handling",
+        "Edge computing optimization for global CDN delivery",
+        "Enterprise-grade security with device fingerprinting"
+      ]
+    },
+    {
+      title: "Network Scanner Utility",
+      subtitle: "Rust Network Administration Tool",
+      url: "https://github.com/arnilsenarthur/exercise-rust-net-scanner",
+      externalLink: true,
+      images: ["/img/network_scanner.png"],
+      disclaimer: {
+        type: "legacy",
+        message: "Project created to show the capabilities I got since my early dev days."
+      },
+      tags: [
+        { name: "Rust", type: "Language" },
+        { name: "Systems Programming", type: "Concept" },
+        { name: "Network Programming", type: "Concept" },
+        { name: "CLI Tool", type: "Concept" }
+      ],
+      description: ["A <b>network scanner utility</b> built with Rust for legitimate network administration purposes. Demonstrates low-level systems programming, network protocol handling, and command-line interface development. Features comprehensive scanning capabilities with proper error handling and security considerations."]
+    },
+    {
+      title: "Simple Text Analyzer",
+      subtitle: "Python + React Full-Stack Application",
+      url: "https://github.com/arnilsenarthur/exercise-python-react-analyzer",
+      externalLink: true,
+      images: ["/img/text_analyzer.png"],
+      disclaimer: {
+        type: "legacy",
+        message: "Project created to show the capabilities I got since my early dev days."
+      },
+      tags: [
+        { name: "Python", type: "Language" },
+        { name: "FastAPI", type: "Framework" },
+        { name: "React", type: "Framework" },
+        { name: "TypeScript", type: "Language" },
+        { name: "Data Analysis", type: "Concept" },
+        { name: "Statistics", type: "Technology" }
+      ],
+      description: ["A <b>full-stack web application</b> demonstrating data analysis capabilities with Python FastAPI backend and React TypeScript frontend. Features <b>text analysis</b> (word count, character count, most common words) and <b>statistical analysis</b> (mean, median, mode, standard deviation) with real-time results and responsive design."],
+      achievements: [
+        "FastAPI backend with automatic API documentation",
+        "React TypeScript frontend with modern UI/UX",
+        "Comprehensive statistical computations using Python",
+        "Responsive design working on all devices",
+        "RESTful API with proper input validation"
+      ]
     }
   ],
   skills: {

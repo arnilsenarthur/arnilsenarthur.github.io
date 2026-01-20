@@ -1,1 +1,285 @@
-.game,.minwidthwarn{margin-top:25px;height:155px;width:100%}.game #lives,.game #score{left:6px;pointer-events:none}.game,.game .menu,.minwidthwarn{border-radius:8px;user-select:none}.disabled,.game #hudbg,.game #lives,.game #lives img,.game #score{pointer-events:none}.game,.game #hudbg,.game #lives,.game #lives img,.game #score,.game .menu,.game .menu .page,.game .menu .page .highscore,.game .pausegame,.gamefooter,.minwidthwarn,.viewport{user-select:none}.game{background-color:transparent;transform:translate3d(0,0,0);font-family:'Unica One',cursive}.game .menu,.minwidthwarn{background-color:rgba(0,0,0,.75)}.minwidthwarn{transform:translate3d(0,0,0) translate(0,15px)}.viewport{width:100%;height:100%;clip-path:polygon(0% 55px,70px 55px,70px 0%,calc(100% - 55px) 0%,calc(100% - 55px) 55px,100% 55px,100% 100%,0% 100%)}.audiobtn,.collectionbtn{top:-24px;padding:6px;--bd:2px dashed;--bg:wheat;--text:black;width:40px;position:absolute}.game #hudbg{background-color:rgba(0,0,0,.25);position:absolute;width:68px;height:55px;border-radius:7px}.game #score{font-size:28px;position:absolute}.game #lives{position:absolute;top:30px}.game #lives img{width:19px;height:19px;transition:opacity .25s ease-in-out}.game .pausegame{position:absolute;top:0;right:0;padding:8px}.game .menu{position:absolute;width:calc(100% + 30px);height:calc(100% + 30px);top:-15px;left:-15px;overflow:hidden;display:none}.game .menu .page.active,.game .menu.open{display:block;user-select:none}.game .menu .page{width:200px;max-width:calc(100% - 20px);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:none}.game .menu .page .highscore{width:100%;text-align:center;font-size:18px;font-weight:700;color:#fff}.collectionbtn{left:0}.audiobtn{right:0}.game .menu .page .title{width:100%;text-align:center;font-size:48px;font-weight:700;color:wheat;width:100%px}#pagecollection{position:absolute;height:calc(100% - 20px);overflow-y:auto}.game .menu .page .title.gameover{color:tomato;font-size:32px}.letter{color:rgba(255,255,255,.5);text-align:center;width:20px;height:20px;margin-left:-3px;margin-right:-3px;font-size:20;display:inline-block;font-family:'Share Tech Mono',monospace}.projectdesc{text-align:justify}.disabled{opacity:.25!important}.gamefooter,.miscprojectcontent p{pointer-events:none!important}.letter.found{color:#0f0}#collectioncontent{width:100%;transform:translate(0,-10px);text-align:center;margin-bottom:5px}.titlecollection{width:100%;text-align:center;font-size:28px;font-weight:700;color:wheat;width:100%px}#pagecollection button{width:calc(100% - 50px);left:25px;position:relative}.blink{animation:.6s linear 3 blinker}@keyframes blinker{50%{color:red}}.gamefooter{z-index:999;position:relative;width:100%;text-align:center;font-size:14px;transform:translate(0,-4px)}.minwidthwarn{font-family:'Readex Pro',sans-serif;display:none}.minwidthwarninner{position:absolute;width:calc(100% - 20px);left:10px;text-align:center;top:50%;transform:translate(0,-50%);font-weight:700;color:#f08080}.tilt{margin-top:10px;font-size:14px;color:#fff}@media only screen and (max-width:550px){.minwidth{display:none}.minwidthwarn{display:block;margin-left:-15px;margin-top:0;width:calc(100% + 30px)}}
+/* Game fonts are now loaded in the main layout */
+
+.game {
+    background-color: transparent;
+    width: 100%;
+    margin-top: 25px;
+    height: 155px;
+    border-radius: 8px;
+    transform: translate3d(0,0,0);
+    font-family: 'Unica One', cursive;
+    user-select: none;
+}
+
+.minwidthwarn {
+    background-color: transparent;
+    width: 100%;
+    margin-top: 25px;
+    height: 155px;
+    border-radius: 8px;
+    transform: translate3d(0,0,0) translate(0px,15px);
+    font-family: 'Unica One', cursive;
+    user-select: none;
+}
+
+.viewport
+{
+    user-select: none;
+    width: 100%;
+    height: 100%;
+    clip-path: polygon(0% 55px,70px 55px,70px 0%,calc(100% - 55px) 0%,calc(100% - 55px) 55px,100% 55px,100% 100%,0% 100%);
+}
+
+.game #hudbg {
+    background-color: rgba(0, 0, 0, 0.25);
+    position: absolute;
+    width: 68px;
+    height: 55px;
+    border-radius: 7px;
+    pointer-events:none;
+    user-select: none;
+}
+
+.game #score {
+    font-size: 28px;
+    position: absolute;
+    left: 6px;
+    pointer-events:none;
+    user-select: none;
+}
+
+.game #lives {
+    position: absolute;
+    /*left: 100px;*/
+    top: 30px;
+    left: 6px;
+    pointer-events:none;
+    user-select: none;
+}
+
+.game #lives img {
+    width: 19px;
+    height: 19px;
+    pointer-events:none;
+    transition: opacity 0.25s ease-in-out;
+    user-select: none;
+}
+
+.game .pausegame {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 8px;
+    user-select: none;
+}
+
+.game .menu
+{
+    position: absolute;
+    width: calc(100% + 30px);
+    height: calc(100% + 30px);
+    background-color: rgba(0,0,0,0.75);
+    top: -15px;
+    left: -15px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: none;
+    user-select: none;
+}
+
+.game .menu.open
+{
+    display: block;
+    user-select: none;
+}
+
+.game .menu .page
+{
+    width: 200px;
+    max-width: calc(100% - 20px);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    display: none;
+    user-select: none;
+}
+
+.game .menu .page.active
+{
+    display: block;
+    user-select: none;
+}
+
+.game .menu .page .highscore
+{
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    user-select: none;
+}
+
+.collectionbtn
+{
+    top: -24px;
+    left: 0px;
+    padding: 6px;
+    position: absolute;
+    --bd: 2px dashed;
+    --bg: wheat;
+    --text: black;
+    width: 40px;
+    
+}
+
+.audiobtn
+{
+    top: -24px;
+    right: 0px;
+    padding: 6px;
+    position: absolute;
+    --bd: 2px dashed;
+    --bg: wheat;
+    --text: black;
+    width: 40px;
+}
+
+.game .menu .page .title
+{
+    width: 100%;
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: wheat;
+    width: 100%px;
+}
+
+
+#pagecollection {
+    position: absolute;
+    height: calc(100% - 20px);
+    overflow-y: auto;
+}
+
+.game .menu .page .title.gameover
+{
+    color: tomato;
+    font-size: 32px;
+}
+
+.letter
+{
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    margin-left: -3px;
+    margin-right: -3px;
+    font-size: 20;
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.projectdesc
+{
+    text-align: justify;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.25 !important;
+}
+
+.letter.found {
+    color: rgba(0, 255, 0, 1);
+}
+
+#collectioncontent
+{
+    width: 100%;
+    transform: translate(0px,-10px);
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.titlecollection
+{
+    width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    color: wheat;
+    width: 100%px;
+}
+
+.miscprojectcontent p {
+    pointer-events: none !important;
+}
+
+#pagecollection button
+{
+    width: calc(100% - 50px);
+    left: 25px;
+    position: relative;
+}
+
+.blink {
+    animation: blinker 0.6s linear 3;
+}
+
+@keyframes blinker {
+    50% {
+        color: red;
+    }
+}
+
+.gamefooter {
+    z-index: 999;
+    position: relative;
+    width: 100%;
+    text-align: center;
+    pointer-events: none !important;
+    user-select: none;
+    font-size: 14px;
+    transform: translate(0px,-4px)
+}
+
+.minwidthwarn {
+    font-family: 'Readex Pro', sans-serif;
+    display: none;
+    background-color: rgba(0,0,0,0.75); 
+}
+
+
+
+.minwidthwarninner {
+    position: absolute;
+    width: calc(100% - 20px);
+    left: 10px;
+    text-align: center;
+    top: 50%;
+    transform: translate(0px,-50%);
+    font-weight: bold;
+    color: lightcoral;
+}
+
+.tilt {
+    margin-top: 10px;
+    font-size: 14px;
+    color: white;
+}
+
+@media only screen and (max-width: 550px) {
+    .minwidth {
+        display: none;
+    }
+
+    .minwidthwarn {
+        display: block;
+        margin-left: -15px;
+        margin-top: 0px;
+        width: calc(100% + 30px);
+    }
+}

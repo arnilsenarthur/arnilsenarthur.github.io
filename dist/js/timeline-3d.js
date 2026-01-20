@@ -1,1 +1,2454 @@
-import*as THREE from"https://unpkg.com/three@0.169.0/build/three.module.js";import{GLTFLoader}from"https://unpkg.com/three@0.169.0/examples/jsm/loaders/GLTFLoader.js";export function init3DTimeline(e){const t=document.getElementById("timeline-canvas-container"),a=document.querySelector(".canvas");if(!t||!a)return console.error("Timeline containers not found"),null;if(!e||!Array.isArray(e))return console.error("Invalid timeline data"),t.innerHTML="Error loading timeline data.",null;try{t.innerHTML="";const o=document.createElement("div");o.className="timeline-loader",o.innerHTML='<div class="timeline-loader-inner"><div class="timeline-loader-text">Loading...</div><div class="timeline-loader-bar" aria-hidden="true"><div class="timeline-loader-bar-fill"></div></div><div class="timeline-loader-percent" aria-hidden="true">0%</div></div>',t.appendChild(o);const s=o.querySelector(".timeline-loader-bar-fill"),i=o.querySelector(".timeline-loader-percent");let l=0;const c=e=>Math.max(0,Math.min(1,e)),d=()=>{if(!s)return;const e=c(l>0?(l-ge)/l:0);s.style.transform=`scaleX(${e})`,i&&(i.textContent=`${Math.floor(100*e)}%`)};let m=null,p=null,h="",u=0,f=0,E=!1;const g=()=>{if(E)return;("undefined"!=typeof performance?performance.now():Date.now())<f||(E=!0,m&&m.classList.add("is-hidden"))},y=Date.now()%1e4;let M=y;const w={w:!1,a:!1,s:!1,d:!1,arrowup:!1,arrowdown:!1,arrowleft:!1,arrowright:!1};let v=!1,T=!0,x=!1,R=new THREE.Vector3,H=0,D=0,S=0;const b=1,V=.02,z=.95;let A=new THREE.Vector3,C=!1,P=new THREE.Vector3(0,1,0);const L=.4;let F=0,W=!1,k=!1;const q=new THREE.Vector3,j=new THREE.Vector3(0,0,-1),O=.25,N=new THREE.Raycaster,B=new THREE.Vector3(0,-1,0),_=new THREE.Vector3,$=new THREE.Vector3,G=new THREE.Vector3,I=new THREE.Vector3,U=new THREE.Vector3,X=new THREE.Vector3,Y=new THREE.Vector3,Q=new THREE.Vector3,J=new THREE.Vector3,K=new THREE.Vector3,Z=new THREE.Vector3,ee=new THREE.Vector3,te=new THREE.Vector3,ae=new THREE.Vector3,ne=new THREE.Vector3,re=new THREE.Vector3,oe=new THREE.Vector3(0,0,-1),se=()=>(M=(9301*M+49297)%233280,M/233280),ie=({create:e,onAcquire:t,onRelease:a,initialSize:n=0})=>{const r=[];for(let t=0;t<n;t++){const t=e();t&&(a&&a(t),r.push(t))}return{acquire:()=>{const a=r.pop()??e();return a?(t&&t(a),a):null},release:e=>{e&&(a&&a(e),r.push(e))}}},le=new THREE.Scene,ce=Math.max(1,t.clientWidth),de=Math.max(1,t.clientHeight),me=new THREE.PerspectiveCamera(60,ce/de,.1,1e3),pe=window.matchMedia("(max-width: 768px)").matches,he=new THREE.WebGLRenderer({antialias:!pe,alpha:!0,powerPreference:"high-performance"});he.setSize(ce,de),he.setPixelRatio(Math.min(window.devicePixelRatio||1,pe?1.5:2)),he.domElement.style.opacity="0",he.domElement.style.transition="opacity 600ms ease",he.domElement.style.position="absolute",he.domElement.style.top="0",he.domElement.style.left="0",t.appendChild(he.domElement);let ue=!1,fe=0,Ee=!1,ge=0,ye=!1,Me=0;const we=()=>{const e=t.clientWidth,a=t.clientHeight;return!(e<=0||a<=0)&&(me.aspect=e/a,me.updateProjectionMatrix(),he.setSize(e,a),he.setPixelRatio(Math.min(window.devicePixelRatio||1,pe?1.5:2)),!0)},ve=()=>{ue||Ee||(Ee=!0,Me&&(clearTimeout(Me),Me=0),requestAnimationFrame(()=>{ue||(we(),he.domElement.style.opacity="1",s&&(s.style.transform="scaleX(1)"),i&&(i.textContent="100%"),o.style.opacity="0",setTimeout(()=>{ue||o.parentNode&&o.parentNode.removeChild(o)},350),Et(),m&&!E&&m.classList.remove("is-hidden"))}))},Te=()=>{ue||Ee||(we()?ve():requestAnimationFrame(Te))},xe=()=>{ye=!0,ge++,l++,d();let e=!1;return()=>{e||(e=!0,ge=Math.max(0,ge-1),d(),ye&&0===ge&&Te())}};Me=window.setTimeout(()=>{Te()},4e3);const Re=e=>{const t=e.key.toLowerCase();w.hasOwnProperty(t)&&(w[t]=!0,g(),e.preventDefault())},He=e=>{const t=e.key.toLowerCase();w.hasOwnProperty(t)&&(w[t]=!1,e.preventDefault())};window.addEventListener("keydown",Re),window.addEventListener("keyup",He),le.add(me);const De=[],Se=80;let be=new THREE.Vector3(0,0,10);De.push(be.clone());const Ve=e.length,ze=10,Ae=Ve/(Ve+ze-1),Ce=document.createElement("div");Ce.className="timeline-ui-overlay",t.parentNode?.appendChild(Ce);const Pe=document.createElement("div");Pe.className="timeline-drag-layer",Ce.appendChild(Pe);const Le=document.createElement("div");Le.className="timeline-progress is-hidden";const Fe=document.createElement("div");Fe.className="timeline-progress-viewport";const We=document.createElement("div");We.className="timeline-progress-inner";const ke=document.createElement("div");ke.className="timeline-progress-track";const qe=document.createElement("div");qe.className="timeline-progress-fill",ke.appendChild(qe);const je=document.createElement("div");je.className="timeline-progress-markers",We.appendChild(ke),We.appendChild(je),Fe.appendChild(We),Le.appendChild(Fe),Ce.appendChild(Le);const Oe=document.createElement("div");Oe.className="timeline-endless-hud is-hidden",Oe.innerHTML='<div class="timeline-endless-pill timeline-endless-lives" aria-label="Lives"><img class="timeline-endless-heart" src="/img/heart.png" alt=""><img class="timeline-endless-heart" src="/img/heart.png" alt=""><img class="timeline-endless-heart" src="/img/heart.png" alt=""></div><div class="timeline-endless-pill timeline-endless-distance"><span class="timeline-endless-distance-value">0m</span></div>',Ce.appendChild(Oe);const Ne=Oe.querySelector(".timeline-endless-distance-value"),Be=Array.from(Oe.querySelectorAll(".timeline-endless-heart"));let _e=3;const $e=()=>{for(let e=0;e<Be.length;e++)e<_e?Be[e].classList.remove("is-dead"):Be[e].classList.add("is-dead")};$e();const Ge=()=>{Le.classList.remove("is-hidden")},Ie=()=>{Le.classList.add("is-hidden")},Ue=()=>{Oe.classList.remove("is-hidden")},Xe=()=>{Oe.classList.add("is-hidden")};m=document.createElement("div"),m.className="timeline-hint is-hidden",m.innerHTML='<div class="timeline-hint-text">Scroll to auto-move • WASD to steer</div><div class="timeline-hint-swipe" aria-hidden="true"><div class="timeline-hint-swipe-track"></div><div class="timeline-hint-swipe-hand"><svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false"><path d="M7 12V7.5a1.5 1.5 0 0 1 3 0V11h1V6.5a1.5 1.5 0 0 1 3 0V11h1V7.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 6.5-6.5 6.5H12c-3.7 0-5.5-2.6-5.5-5.5V12a1.5 1.5 0 0 1 3 0v2h-1.5V12"/></svg></div></div>',E&&m.classList.add("is-hidden"),Ce.appendChild(m),p=m.querySelector(".timeline-hint-text"),h=p?.textContent??"";const Ye=(e,t=2e3)=>{if(!m||!p)return;u&&(clearTimeout(u),u=0);const a="undefined"!=typeof performance?performance.now():Date.now();f=a+t,p.textContent=e,m.classList.remove("is-hidden"),u=window.setTimeout(()=>{u=0,f=0,m&&p&&(window.setTimeout(()=>{p.textContent=h},500),(E||ft)&&m.classList.add("is-hidden"))},t)},Qe=document.createElement("div");Qe.className="timeline-marker-info is-hidden",Qe.innerHTML='<div class="timeline-marker-info-inner"><div class="timeline-marker-info-date"></div><div class="timeline-marker-info-title"></div><div class="timeline-marker-info-desc"></div></div>',Ce.appendChild(Qe);const Je=Qe.querySelector(".timeline-marker-info-date"),Ke=Qe.querySelector(".timeline-marker-info-title"),Ze=Qe.querySelector(".timeline-marker-info-desc");let et=-1;const tt=[];let at=0;const nt=e=>{if(null==e||e<0||e>=tt.length)return et=-1,Qe.classList.add("is-hidden"),Qe.classList.remove("is-animating"),void(at&&(clearTimeout(at),at=0));if(et===e)return;et=e;const t=tt[e];Je&&(Je.textContent=t.date),Ke&&(Ke.textContent=t.title),Ze&&(Ze.textContent=t.desc),Qe.classList.remove("is-hidden"),Qe.classList.remove("is-animating"),Qe.offsetWidth,Qe.classList.add("is-animating"),at&&clearTimeout(at),at=window.setTimeout(()=>{at=0,Qe.classList.remove("is-animating")},280)},rt=[],ot=e=>{const t=a.scrollHeight-a.clientHeight,n=Math.max(0,Math.min(t,e*t));try{a.scrollTo({top:n,behavior:"smooth"})}catch{a.scrollTop=n}r()},st=()=>{const e=Fe.clientWidth||0,t=Math.max(e,120+90*Ve);We.style.width=`${t}px`};let it=!1,lt=null,ct=0,dt=0;const mt=e=>{e.isPrimary&&(g(),it=!0,lt=e.pointerId,ct=e.clientY,dt=a.scrollTop,Pe.setPointerCapture(e.pointerId),e.preventDefault())},pt=e=>{if(!it||e.pointerId!==lt)return;const t=e.clientY-ct;a.scrollTop=dt-3*t,e.preventDefault()},ht=e=>{it&&e.pointerId===lt&&(it=!1,lt=null,e.preventDefault())},ut=e=>{if(it)return;g();let t=e.deltaY;1===e.deltaMode?t*=16:2===e.deltaMode&&(t*=window.innerHeight),a.scrollTop+=t,e.preventDefault()};Pe.addEventListener("pointerdown",mt),Pe.addEventListener("pointermove",pt),Pe.addEventListener("pointerup",ht),Pe.addEventListener("pointercancel",ht),Pe.addEventListener("wheel",ut,{passive:!1});for(let jn=0;jn<Ve;jn++){const On=document.createElement("div");On.className="timeline-progress-marker-wrap";const Nn=document.createElement("div");Nn.className="timeline-progress-marker",Nn.style.setProperty("--scale","1");const Bn=document.createElement("div");Bn.className="timeline-progress-label",Bn.textContent=String(e[jn]?.date??""),On.appendChild(Nn),On.appendChild(Bn),je.appendChild(On);const _n=(jn+1)/(Ve+ze),$n=Ae>1e-8?THREE.MathUtils.clamp(_n/Ae,0,1):0;On.style.setProperty("--pos",String($n)),On.addEventListener("pointerdown",e=>{e.preventDefault(),g(),ft&&gt(!1),v=!1,T=!0;let t=$n;try{const e=Rt.getLength(),a=e>1e-6?Ht/e:0,n=THREE.MathUtils.clamp(_n-a,0,Ae);t=Ae>1e-8?THREE.MathUtils.clamp(n/Ae,0,1):0}catch{}ot(t)}),rt.push({marker:Nn,label:Bn,pos:$n})}queueMicrotask(st);let ft=!1;const Et=()=>{Ee&&(ft?(Ie(),m&&m.classList.add("is-hidden"),Ue()):(Ge(),Xe()))},gt=e=>{const t=!!e;t!==ft&&(ft=t,Et())},yt=new THREE.Vector3;let Mt=!1;const wt=()=>{if(!Ne||!Xt)return;Mt||(yt.copy(Xt.position),Mt=!0);const e=Xt.position.x-yt.x,t=Xt.position.z-yt.z;Ne.textContent=`${Math.floor(Math.sqrt(e*e+t*t)/10)}m`};let vt=0,Tt=0;const xt=se()*Math.PI*2;for(let Gn=0;Gn<Ve+ze;Gn++){const In=-(Gn+1)*Se,Un=.08*(3*Math.sin(.035*(Gn+1)+xt)-Tt)+.1*(se()-.5)-.0016*vt;Tt=THREE.MathUtils.clamp(Tt+Un,-.9,.9),vt+=Math.sin(Tt)*Se*.9,vt*=.995;const Xn=vt+3*(se()-.5),Yn=5*Math.sin(1*Gn)+5*(se()-.5);be=new THREE.Vector3(Xn,Yn,In),De.push(be)}const Rt=new THREE.CatmullRomCurve3(De);Rt.tension=.5,Rt.type="catmullrom";const Ht=15,Dt=12,St=200,bt=createRoadGeometry(Rt,St,Dt),Vt=createRoadTexture();Vt.wrapS=THREE.RepeatWrapping,Vt.wrapT=THREE.RepeatWrapping,Vt.repeat.set(1,20),Vt.anisotropy=16,Vt.generateMipmaps=!1,Vt.minFilter=THREE.LinearFilter,Vt.magFilter=THREE.LinearFilter;const zt=new THREE.MeshBasicMaterial({map:Vt,color:16777215,side:THREE.DoubleSide});applyRoadShader(zt);const At=new THREE.Mesh(bt,zt);At.position.y=-2,le.add(At);const Ct=new THREE.Vector3,Pt=new THREE.Vector3,Lt=De.length,Ft=St;let Wt=Lt-1,kt=St,qt=2*kt,jt=new Float32Array(qt+1),Ot=new Float32Array(qt+1),Nt=new Float32Array(qt+1);const Bt=(e=null)=>{Rt.points=De,Rt.updateArcLengths(),kt=e??Math.min(2e3,Math.max(200,Math.floor(6*(De.length-1))));const t=createRoadGeometry(Rt,kt,Dt);At.geometry.dispose(),At.geometry=t,qt=2*kt,jt=new Float32Array(qt+1),Ot=new Float32Array(qt+1),Nt=new Float32Array(qt+1);for(let e=0;e<=qt;e++){const t=e/qt;Rt.getPointAt(t,Ct),jt[e]=Ct.x,Ot[e]=Ct.y,Nt[e]=Ct.z}},_t=(e,t)=>{const a=43758.5453*Math.sin(12.9898*e+78.233*t+y);return a-Math.floor(a)};let $t=vt,Gt=Tt;const It=_t(Wt,9)*Math.PI*2,Ut=e=>{for(let t=0;t<e;t++){const e=++Wt,t=-(e+1)*Se,a=_t(e,3),n=_t(e,4),r=.08*(.65*Math.sin(.035*(e+1)+It)-Gt)+.05*(a-.5)-.0016*$t;Gt=THREE.MathUtils.clamp(Gt+r,-.9,.9),$t+=Math.sin(Gt)*Se*.9,$t*=.995;const o=$t+3*(_t(e,8)-.5),s=5*Math.sin(1*e)+2*(n-.5);De.push(new THREE.Vector3(o,s,t))}};Bt(Ft);let Xt=null;const Yt=new GLTFLoader,Qt=xe();Yt.load("/3d/car.glb",e=>{try{Xt=e.scene,Xt.scale.set(6,6,6),Xt.rotateY(Math.PI),Xt.traverse(e=>{if(e.isMesh&&(e.castShadow=!1,e.receiveShadow=!1,e.material)){const t=e.material,a=new THREE.MeshBasicMaterial({color:t.color,map:t.map,side:t.side,transparent:t.transparent,opacity:t.opacity});e.material=a}}),le.add(Xt)}catch(e){console.error("Error applying car model:",e)}finally{Qt()}},void 0,e=>{console.error("Error loading car:",e),Qt()});const Jt=20,Kt=new THREE.SphereGeometry(.3,7,5),Zt=new THREE.MeshBasicMaterial({color:14540253,flatShading:!0}),ea=[],ta=ie({create:()=>{const e=new THREE.Mesh(Kt,Zt.clone());return le.add(e),{mesh:e,life:0,maxLife:1,velocity:new THREE.Vector3}},onAcquire:e=>{e.mesh.visible=!0,e.life=0},onRelease:e=>{e.mesh.visible=!1,e.life=0},initialSize:Jt}),aa=[],na=new THREE.Group;le.add(na);const ra=new THREE.Group;ra.visible=!0,na.add(ra);let oa=null,sa=null;const ia=ie({create:()=>oa?oa.clone():null,onAcquire:e=>{e.parent||ra.add(e),e.visible=!1},onRelease:e=>{e.visible=!1}}),la=ie({create:()=>sa?sa.clone():null,onAcquire:e=>{e.parent||ra.add(e),e.visible=!1},onRelease:e=>{e.visible=!1}}),ca=[],da=new Set;let ma=0,pa=0,ha=0,ua=!1;const fa=e=>{if(e.userData&&e.userData.vegMaterialCache)return e.userData.vegMaterialCache;const t=[];e.traverse(e=>{if(!e.isMesh)return;if(e.userData=e.userData||{},!e.userData.vegMaterialCloned){const t=e.material;Array.isArray(t)?e.material=t.map(e=>e?e.clone():e):t&&(e.material=t.clone()),e.userData.vegMaterialCloned=!0}const a=e.material;if(Array.isArray(a))for(const e of a)e&&t.push(e);else a&&t.push(a)});for(const e of t)e.userData=e.userData||{},null==e.userData.vegBaseOpacity&&(e.userData.vegBaseOpacity=null==e.opacity?1:e.opacity),e.transparent=!0;return e.userData=e.userData||{},e.userData.vegMaterialCache=t,t},Ea=(e,t)=>{const a=fa(e),n=THREE.MathUtils.clamp(t,0,1);for(const e of a){const t=e.userData?.vegBaseOpacity??1;e.opacity=t*n}},ga=e=>{e.visible=!1,e.userData=e.userData||{},e.userData.vegAppear=0,e.userData.vegAppearDir=1,e.userData.vegTargetScale=1,Ea(e,0)},ya=(e,t)=>{e.userData=e.userData||{},e.userData.vegAppear=0,e.userData.vegAppearDir=1,e.userData.vegTargetScale=t,e.visible=!0,Ea(e,0),e.scale.setScalar(Math.max(.001,.15*t))},Ma=new THREE.Raycaster,wa=new THREE.Vector3(0,-1,0),va=e=>{const t=43758.5453*Math.sin(e);return t-Math.floor(t)},Ta=e=>("tree"===e?ia:la).acquire(),xa=(e,t)=>{("tree"===e?ia:la).release(t)},Ra=()=>{for(const e of ca)da.delete(e.key),xa(e.type,e.obj);ca.length=0,ma=0,pa=0},Ha=520,Da=90,Sa=220,ba=260,Va=260,za=4,Aa=7,Ca=40,Pa=14,La=900,Fa=La*La,Wa=24,ka=50,qa=90,ja=(e,t,a)=>{const n=THREE.MathUtils.clamp((a-e)/(t-e),0,1);return n*n*(3-2*n)},Oa=(e,t)=>{for(let a=ca.length-1;a>=0;a--){const n=ca[a],r=n.obj.position.x-e,o=n.obj.position.z-t;r*r+o*o>Fa&&(n.obj.userData=n.obj.userData||{},n.obj.userData.vegAppearDir=-1)}},Na=e=>{const t=.08*e,a=.12*e;for(let e=ca.length-1;e>=0;e--){const n=ca[e];n.obj.userData=n.obj.userData||{};const r=n.obj.userData.vegAppearDir??1,o=n.obj.userData.vegTargetScale??1;let s=n.obj.userData.vegAppear??0;s=THREE.MathUtils.clamp(s+(r>=0?t:-a),0,1),n.obj.userData.vegAppear=s;const i=s*s*(3-2*s),l=me.position.x-n.obj.position.x,c=me.position.y-n.obj.position.y,d=me.position.z-n.obj.position.z,m=Math.sqrt(l*l+c*c+d*d),p=1-ja(ka,qa,m);Ea(n.obj,i*p),n.obj.scale.setScalar(Math.max(.001,o*(.15+.85*i))),r<0&&s<=1e-4&&(da.delete(n.key),xa(n.type,n.obj),ca.splice(e,1))}},Ba=(e,t,a)=>{if(!oa&&!sa)return e;if(t===e)return e;const n=Math.max(0,Math.min(qt,e)),r=Math.max(0,Math.min(qt,t)),o=r>=n?1:-1;let s=0,i=n;for(;o>0?i<=r:i>=r;i+=o*Wa){const e=Math.floor((va(17.71*i+y)-.5)*(.6*Wa)),t=Math.max(0,Math.min(qt,i+e));for(let e=0;e<3;e++){const a=Math.max(0,Math.min(qt,t+e*za)),n=a/qt;Rt.getPointAt(n,J),Rt.getTangentAt(n,K).normalize(),Z.crossVectors(K,vn).normalize();const r=va(78.233*a+y)>.5?1:-1,o=va(41.17*a+y),i=Ua+6+38*o,l=J.x+Z.x*(r*i),c=J.z+Z.z*(r*i)+18*(va(19.19*a+y)-.5),d=`${Math.round(l/Pa)},${Math.round(c/Pa)}`;if(da.has(d))continue;const m="grass"===_a(l,c)?"tree":"cactus",p=Ta(m);if(!p)continue;ga(p),Ma.set(_.set(l,50,c),wa);const h=Ma.intersectObjects([an,nn],!1);let u=-2;h.length>0&&(u=h[0].point.y);let f=1;"tree"===m?(p.position.set(l,u+4.25,c),f=4+5*va(3.11*a+y)):(p.position.set(l,u,c),f=4+2*va(3.11*a+y)),p.rotation.y=va(2.71*a+y)*Math.PI*2,ya(p,f),da.add(d),ca.push({type:m,obj:p,key:d}),s++;break}if(s>=a)break}return i},_a=(e,t)=>Math.sin(.025*(e+y))+Math.cos(.025*(t+y)*.7)+(.1*Math.sin(.05*(e+y))+.1*Math.cos(.05*(t+y)))>.2?"grass":"desert",$a=(e,t)=>"grass"===_a(e,t)?10207788:16436245,Ga=100,Ia=100,Ua=Dt/2,Xa=10,Ya=(e,t,a,n)=>{const r=new THREE.BufferGeometry,o=[],s=[],i=[],l=new THREE.Vector3(0,1,0),c=Xa;for(let r=0;r<=t;r++){const i=r/t,d=e.getPointAt(i),m=e.getTangentAt(i).normalize(),p=(new THREE.Vector3).crossVectors(m,l).normalize();for(let e=0;e<=c;e++){const t=e/c,i=a+(n-a)*t,l=(new THREE.Vector3).copy(d).add(p.clone().multiplyScalar(i)),m=_a(l.x,l.z),h=$a(l.x,l.z),u=new THREE.Color(h);let f=0;if(t>.1){const a=(t-.1)/.9,n=5*Math.sin(.1*r+.5*e+y),o=10*Math.cos(.3*r+.2*e+y),s=20*Math.sin(.05*r+y);let i=Math.abs(n+o+s);"desert"===m?(i*=.8,i=Math.abs(15*Math.sin(.2*r+1*e+y))):i*=1.2,f=i*a}l.y+=f,o.push(l.x,l.y,l.z);const E=43758.5453*Math.sin(12.9898*r+78.233*e+y),g=.01*(E-Math.floor(E)-.5);u.addScalar(g),s.push(u.r,u.g,u.b)}}const d=c+1;for(let e=0;e<t;e++)for(let t=0;t<c;t++){const a=e*d+t,n=e*d+t+1,r=(e+1)*d+t,o=(e+1)*d+t+1;i.push(a,n,o),i.push(a,o,r)}return r.setAttribute("position",new THREE.Float32BufferAttribute(o,3)),r.setAttribute("color",new THREE.Float32BufferAttribute(s,3)),r.setIndex(i),r.computeVertexNormals(),r},Qa=Ya(Rt,St,-Ua,-(Ua+Ia)),Ja=Ya(Rt,St,Ua,Ua+Ia),Ka=new THREE.MeshBasicMaterial({vertexColors:!0,side:THREE.DoubleSide}),Za=64,en=Array.from({length:Za},()=>new THREE.Vector3(1e9,0,1e9));let tn=0;Ka.userData=Ka.userData||{},Ka.userData.signShadowMax=Za,Ka.userData.signShadowPositions=en,Ka.userData.uniforms=Ka.userData.uniforms||{},Ka.userData.uniforms.signCount={value:0},Ka.userData.uniforms.signPos={value:en},applyFadeToMaterial(Ka);const an=new THREE.Mesh(Qa,Ka),nn=new THREE.Mesh(Ja,Ka);an.position.y=-2.1,nn.position.y=-2.1,le.add(an),le.add(nn);const rn=(e=null)=>{const t=e??kt,a=Ya(Rt,t,-Ua,-(Ua+Ia)),n=Ya(Rt,t,Ua,Ua+Ia);an.geometry.dispose(),nn.geometry.dispose(),an.geometry=a,nn.geometry=n},on=e=>new Promise(t=>{const a=xe();Yt.load(e,n=>{try{const e=n.scene;e.traverse(e=>{if(e.isMesh&&e.material){const t=e.material,a=new THREE.MeshBasicMaterial({color:t.color,map:t.map,side:t.side,transparent:!0});applyFadeToMaterial(a),e.material=a}}),t(e)}catch(a){console.error(`Error applying ${e}`,a),t(null)}finally{a()}},void 0,n=>{console.error(`Error loading ${e}`,n),t(null),a()})});function n(e,t){e.traverse(e=>{if((e.isMesh||e.isSprite)&&e.material)if(Array.isArray(e.material))for(const a of e.material){if(!a)continue;a.userData||(a.userData={}),null==a.userData.baseOpacity&&(a.userData.baseOpacity=a.opacity??1),null==a.userData.baseTransparent&&(a.userData.baseTransparent=!!a.transparent),null==a.userData.baseDepthWrite&&(a.userData.baseDepthWrite=a.depthWrite??!0);const e=a.userData.baseOpacity*t;a.opacity=e,t<.999?(a.transparent=!0,a.depthWrite=!1):(a.transparent=a.userData.baseTransparent,a.depthWrite=a.userData.baseDepthWrite)}else{const a=e.material;a.userData||(a.userData={}),null==a.userData.baseOpacity&&(a.userData.baseOpacity=a.opacity??1),null==a.userData.baseTransparent&&(a.userData.baseTransparent=!!a.transparent),null==a.userData.baseDepthWrite&&(a.userData.baseDepthWrite=a.depthWrite??!0);const n=a.userData.baseOpacity*t;a.opacity=n,t<.999?(a.transparent=!0,a.depthWrite=!1):(a.transparent=a.userData.baseTransparent,a.depthWrite=a.userData.baseDepthWrite)}})}Promise.all([on("/3d/tree.glb"),on("/3d/cactus.glb")]).then(([e,t])=>{oa=e,sa=t,an.updateMatrixWorld(),nn.updateMatrixWorld(),Ra();const a=new THREE.Raycaster,n=new THREE.Vector3(0,-1,0);for(let e=0;e<Ga;e++){const t=e/Ga,r=Rt.getPointAt(t),o=1;for(let e=0;e<o;e++){const e=Ua+5,t=Ua+40,o=e+se()*(t-e),s=se()>.5?1:-1,i=r.x+s*o,l=r.z+20*(se()-.5);a.set(new THREE.Vector3(i,50,l),n);const c=a.intersectObjects([an,nn]);let d=-2;c.length>0&&(d=c[0].point.y);const m=_a(i,l);if("grass"===m&&oa){if(se()>.6){const e=oa.clone();e.position.set(i,d+4.25,l),e.rotation.y=se()*Math.PI*2;const t=4+5*se();e.scale.setScalar(t),na.add(e)}}else if("desert"===m&&sa&&se()>.5){const e=sa.clone();e.position.set(i,d,l),e.rotation.y=se()*Math.PI*2;const t=4+2*se();e.scale.setScalar(t),na.add(e)}}}});const sn=e=>{const t=String(e??"");try{return(new DOMParser).parseFromString(t,"text/html").body.textContent||""}catch{return t.replace(/<[^>]*>/g,"")}};e.forEach((e,t)=>{const a=(t+1)/(De.length-1),r=Rt.getPointAt(a),o=Rt.getTangentAt(a).normalize(),s=new THREE.Vector3(0,1,0);let i=(new THREE.Vector3).crossVectors(o,s).normalize();const l=Math.min(1,a+.05),c=Rt.getTangentAt(l).normalize(),d=o.x*c.z-o.z*c.x;let m=d>0?1:-1;Math.abs(d)<.01&&(m=t%2==0?1:-1);const p=m*(.5*Dt+.8),h=r.clone().add(i.multiplyScalar(p));_.set(h.x,50,h.z),N.set(_,B);let u=-2;const f=N.intersectObjects([an,nn,At],!1);f.length>0&&(u=f[0].point.y),h.y=u,tn<en.length&&(en[tn].set(h.x,u,h.z),tn+=1);const E=new THREE.Group;var g;E.position.copy(h),le.add(E),aa.push(E),(g=E).userData&&g.userData.fadePrepared||(g.userData||(g.userData={}),g.userData.fadePrepared=!0,g.traverse(e=>{if(!e.isMesh&&!e.isSprite)return;const t=e.material;if(t)if(Array.isArray(t)){const a=t.map(e=>{if(!e)return e;const t=e.clone();return t.userData||(t.userData={}),null==t.userData.baseOpacity&&(t.userData.baseOpacity=t.opacity??1),t.transparent=!0,t.depthWrite=!1,t});e.material=a}else{const a=t.clone();a.userData||(a.userData={}),null==a.userData.baseOpacity&&(a.userData.baseOpacity=a.opacity??1),a.transparent=!0,a.depthWrite=!1,e.material=a}})),n(E,1);const M=e=>2*((e=>{const t=43758.5453*Math.sin(e);return t-Math.floor(t)})(97.31*(t+1)+e+y)-.5),w=new THREE.Group;w.position.set(0,0,0),G.copy(r),G.y=h.y,w.lookAt(G),w.rotateY(Math.PI),w.scale.setScalar(1.5),E.add(w);const v=new THREE.CylinderGeometry(.08,.1,3,8),T=new THREE.MeshBasicMaterial({color:10265519}),x=new THREE.Mesh(v,T);x.position.y=-1.5,x.position.z=-.1,w.add(x);const R=1.6,H=sn(e.text).replace(/\s+/g," ").trim(),D=createMileMarkerTexture(String(e.date??""),H,{width:360}),S=R*(D?.image?.width&&D?.image?.height?D.image.height/D.image.width:2.2),b=D?.userData?.cornerRadius01,V=createRoundedRectShape(R,S,"number"==typeof b&&Number.isFinite(b)?R*b:Math.min(.288,.09*S)),z=new THREE.ExtrudeGeometry(V,{depth:.1,bevelEnabled:!1,steps:1});z.translate(0,0,-.05);const A=new THREE.MeshBasicMaterial({color:744734,side:THREE.DoubleSide}),C=new THREE.Mesh(z,A);C.renderOrder=1;const P=new THREE.ShapeGeometry(V);normalizeShapeUvs(P);const L=new THREE.MeshBasicMaterial({map:D,transparent:!0,alphaTest:.05,side:THREE.DoubleSide}),F=new THREE.Mesh(P,L);F.position.z=.05+.001,F.renderOrder=2;const W=new THREE.Group;W.add(C),W.add(F),W.position.set(0,.5*S+.06,.18),W.rotation.z=.03*M(5.55),W.rotation.x=.02*M(6.66),w.add(W);const k=sn(`${e.left??""} ${e.right??""}`).replace(/\s+/g," ").trim();tt.push({t:a,date:String(e.date??""),title:H,desc:k})}),Ka.userData.uniforms&&Ka.userData.uniforms.signCount&&(Ka.userData.uniforms.signCount.value=tn);let ln=0,cn=-1,dn=!1,mn=0;function r(){const e=a.scrollTop,t=cn>=0?Math.abs(e-cn):0;t>3&&(mn=30),t>3&&g(),Math.abs(e-cn)>1&&(cn=e);const n=a.scrollHeight-a.clientHeight,r=n>0?Math.max(0,Math.min(1,e/n)):0;dn=n>0&&e>=n-2,ln=r*Ae}a.addEventListener("scroll",r),r();const pn=new THREE.Clock,hn=new THREE.Vector3,un=new THREE.Vector3,fn=new THREE.Vector3,En=new THREE.Vector3,gn=new THREE.Vector3,yn=new THREE.Quaternion,Mn=new THREE.Matrix4,wn=new THREE.Vector3,vn=new THREE.Vector3(0,1,0),Tn=new THREE.Vector3,xn=new THREE.Vector3,Rn=new THREE.Vector3,Hn=new THREE.Vector3,Dn=new THREE.Vector3,Sn=new THREE.Vector3,bn=new THREE.Vector3,Vn=new THREE.Vector3,zn=new THREE.Vector3,An=new THREE.Vector3,Cn=new THREE.Vector3,Pn=new THREE.Vector3,Ln=new THREE.Vector3(0,1,0);let Fn=1,Wn=!1,kn=0;!function e(){if(ue)return;fe=requestAnimationFrame(e);const t=pn.getDelta(),a=60*t;mn>0&&mn--;const r=.05*(ln-kn);kn+=r;const o=Rt.getLength();let s=0;const i=Ht/o,l=Math.min(1,kn+i);if(Xt){let e=Math.floor(l*qt);const t=w.w||w.a||w.s||w.d||w.arrowup||w.arrowdown||w.arrowleft||w.arrowright;t||(T=!0),!v&&t&&T&&(v=!0,T=!1),v&&!ft&&mn>0&&!t&&(v=!1);const n=v&&!Wn;if(n&&(R.copy(Xt.position),A.set(0,0,0),S=0,D=0,ha=45,x=!0,W=!0,k=!1,q.copy(R),q.y=0,Xt.getWorldDirection(te),te.y=0,te.lengthSq()>1e-8&&(te.normalize(),H=Math.atan2(-te.x,-te.z))),v){Ln.set(0,1,0);let t=R.y,r=!1,o=1/0,i=0,l=0;const c=R.x,d=R.z;for(let e=0;e<qt;e++){const t=jt[e],a=Nt[e],n=jt[e+1]-t,r=Nt[e+1]-a,s=n*n+r*r;if(s<1e-8)continue;let m=((c-t)*n+(d-a)*r)/s;m<0?m=0:m>1&&(m=1);const p=c-(t+n*m),h=d-(a+r*m),u=p*p+h*h;u<o&&(o=u,i=e,l=m)}const m=jt[i],p=Nt[i],h=Ot[i],u=jt[i+1],f=Nt[i+1],E=Ot[i+1],g=u-m,y=f-p;F=(i+l)/qt,e=i,G.set(m+g*l,h+(E-h)*l,p+y*l),U.set(g,0,y),U.lengthSq()<1e-8?U.set(0,0,-1):U.normalize(),n&&W&&(j.copy(U),k=!0),I.copy(U),te.set(0,0,-1).applyAxisAngle(vn,H),te.y=0,te.lengthSq()>1e-8?te.normalize():te.set(0,0,-1),I.dot(te)<0&&I.negate(),X.crossVectors(I,vn).normalize(),n?oe.copy(I):(re.copy(I),re.dot(oe)<0&&re.negate(),oe.lerp(re,Math.min(1,.25*a)).normalize()),Y.copy(R).sub(G);const M=.5*Dt-1.5,v=Y.dot(X),T=THREE.MathUtils.clamp(v,-M,M);if((!n||Math.abs(v)>M)&&(R.x=G.x+X.x*T,R.z=G.z+X.z*T),k){Q.copy(R).sub(q),Q.y=0;const e=Q.dot(j);if(e<0){R.addScaledVector(j,-e);const t=A.dot(j);t<0&&A.addScaledVector(j,-t)}}if(v>M){const e=A.dot(X);e>0&&A.addScaledVector(X,-e)}else if(v<-M){const e=A.dot(X);e<0&&A.addScaledVector(X,-e)}{const e=A.dot(I);if(F>.82&&e>.02){Ut(30);const e=De.length-Lt;if(e>Ha&&F>.45){const t=Math.floor(F*(De.length-1)),a=Math.max(0,t-Lt),n=e-(Da+6),r=Math.max(0,Math.min(a-Da,n));r>0&&De.splice(Lt,r)}Bt(),rn(),ha=45,ua=!0}}_.set(R.x,50,R.z),N.set(_,B);const J=N.intersectObject(At);if(J.length>0&&(r=!0,t=J[0].point.y+O,J[0].face&&($.copy(J[0].face.normal).transformDirection(J[0].object.matrixWorld),Ln.copy($))),Ln.y<0&&Ln.negate(),P.lerp(Ln,Math.min(1,.08*a)).normalize(),x&&r&&(R.y=t,A.y=0,x=!1),r){const e=t-R.y;if(e>0){const t=.35*a;R.y+=Math.min(e,t),A.y<0&&(A.y=0)}}const K=V*a,Z=w.w||w.arrowup,ee=w.s||w.arrowdown;if(ft)S=Math.min(S+K,b);else if(Z&&!ee)S=Math.min(S+K,b);else if(ee&&!Z)S=Math.max(S-K,-b);else{const e=Math.pow(z,a);S*=e,Math.abs(S)<1e-4&&(S=0)}{const e=Math.PI/6,t=Math.hypot(A.x,A.z),n=Math.min(1,t/1.2),r=(w.a||w.arrowleft?1:0)+(w.d||w.arrowright?-1:0);D+=r*(.12*(.35+.65*n)*a),0===r&&(D*=Math.pow(.85,a)),D=THREE.MathUtils.clamp(D,-e,e);H+=D*(.08*n*a)*(S<0?-1:1)}te.set(0,0,-1).applyAxisAngle(vn,H).normalize();const se=te,ie=r&&R.y<=t+.05;if(ie&&se.projectOnPlane(P).normalize(),A.addScaledVector(se,.12*S*a),ie){const e=Math.hypot(A.x,A.z);if(e>1e-4){const t=Math.min(1,e/1.2);if(ae.set(A.x,0,A.z).multiplyScalar(1/e),ne.copy(se),S<0&&ne.negate(),ne.y=0,ne.lengthSq()>1e-8){ne.normalize();const n=(.12+.45*t)*a;ae.lerp(ne,Math.min(1,n)).normalize(),A.x=ae.x*e,A.z=ae.z*e}}}const le=Math.pow(.87,a);if(A.x*=le,A.z*=le,A.y*=Math.pow(.99,a),A.y-=L*a,R.addScaledVector(A,a),r&&R.y<t&&(R.y=t,A.y<0&&(A.y=0),A.dot(P)<0&&A.projectOnPlane(P)),C=r&&R.y<=t+.05,C){A.y<0&&(A.y=0);const e=P.angleTo(vn);e>.05&&(Tn.copy(B).projectOnPlane(P).normalize(),A.addScaledVector(Tn,.01*e*a))}Xt.position.copy(R);const ce=C?P:vn;wn.copy(R).addScaledVector(se,-1),Mn.lookAt(R,wn,ce),yn.setFromRotationMatrix(Mn),Xt.quaternion.slerp(yn,Math.min(1,.15*a)),xn.copy(R),s=A.length()}else{Rt.getPointAt(l,Ct),Rt.getTangentAt(l,Pt).normalize(),Hn.crossVectors(Pt,vn).normalize();const t=60,a=3,n=Math.sin(l*t)*a;xn.copy(Ct).addScaledVector(Hn,n),_.set(xn.x,50,xn.z),N.set(_,B);const i=N.intersectObject(At);i.length>0?xn.y=i[0].point.y+O:xn.y-=1.3,S=0,A.set(0,0,0),F=l,s=Math.abs(r)*o;const c=Math.min(1,l+.005),d=Math.sin(c*t)*a;Rt.getPointAt(c,Rn),Rt.getTangentAt(c,Dn).normalize(),Sn.crossVectors(Dn,vn).normalize(),Rn.addScaledVector(Sn,d),_.set(Rn.x,50,Rn.z),N.set(_,B);const m=N.intersectObject(At);m.length>0?Rn.y=m[0].point.y+O:Rn.y-=1.5,R.copy(xn),e=Math.floor(l*qt),Rn.distanceToSquared(xn)>1e-4&&(Xt.position.copy(xn),Xt.lookAt(Rn)),Xt.getWorldDirection(te),te.y=0,te.lengthSq()>1e-8&&(te.normalize(),H=Math.atan2(te.x,-te.z))}const i=Ae>1e-8?F/Ae:0;if(!ft&&v&&i>=.9999&&(gt(!0),_e=3,$e(),Ye("Endless Mode",1800)),!ft){const e=THREE.MathUtils.clamp(i,0,1);qe.style.transform=`scaleX(${e})`;{const t=Fe.clientWidth,a=We.scrollWidth;if(a>t+1){const n=a-t,r=THREE.MathUtils.clamp(e*n,0,n);We.style.transform=`translateX(-${r}px)`}else We.style.transform="translateX(0)"}for(const t of rt){const a=Math.abs(e-t.pos),n=Math.max(0,1-10*a),r=1+1.4*n;t.marker.style.setProperty("--scale",String(r)),t.label.style.opacity=String(.65+.35*n)}}{const t=Math.max(0,e-Sa),n=Math.min(qt,e+ba),r=Math.min(qt,n+Va);if(ee.copy(Xt.position),Oa(ee.x,ee.z),Na(a),ca.length||0!==ma||0!==pa||(ma=e,pa=e),ua&&(ma=e,pa=e,ua=!1),ma=Math.max(e,Math.min(r,ma)),pa=Math.max(t,Math.min(e,pa)),oa||sa){const a=Math.max(0,(r-ma)/Wa),n=Math.min(55,Math.floor(.4*a)),o=Aa+n+(ha>0?28:0),s=ha>0?Math.min(r,e+ba+Ca):r;ma<=s&&(ma=Ba(ma,s,o));const i=Math.max(0,(pa-t)/Wa),l=Math.min(18,Math.floor(.25*i));pa>=t&&(pa=Ba(pa,t,(ha>0?2:4)+l)),ha>0&&ha--}}const c=Math.min(1.5*s,2),d=.001*Date.now();Vn.copy(xn),Xt.position.copy(Vn),wt(),v||(Rt.getTangentAt(l,Pt).normalize(),Hn.crossVectors(Pt,vn).normalize(),bn.crossVectors(Hn,Pt).normalize(),bn.y<0&&bn.negate(),Xt.up.copy(bn));const m=10,p=.1*c,h=1-Math.sin(d*m)*(.5*p),u=(Math.random()-.5)*p,f=(Math.random()-.5)*p,E=6;Xt.scale.set(E*(h+u),E,E*(h+f)),zt.userData.uniforms&&(zt.userData.uniforms.carPos.value.copy(Vn),zt.userData.uniforms.carDir&&(Xt.getWorldDirection(te),te.y=0,te.lengthSq()>1e-8?te.normalize():te.set(0,0,-1),zt.userData.uniforms.carDir.value.set(te.x,te.z)));const g=ne.set(0,0,1).applyQuaternion(Xt.quaternion);let y=0;if(y=(v?A.dot(oe)>.01:r>1e-4)&&s>.01?.1+.5*s:0,Math.random()<y){const e=ta.acquire();if(e){e.maxLife=1+.5*Math.random(),e.life=e.maxLife,Pn.copy(Vn).addScaledVector(g,2.5),e.mesh.position.copy(Pn),e.mesh.position.x+=.3*(Math.random()-.5),e.mesh.position.z+=.3*(Math.random()-.5),e.mesh.scale.set(1,1,1);const t=.5+.5*Math.random();e.mesh.material.color.setScalar(t),ea.push(e)}}for(let e=ea.length-1;e>=0;e--){const t=ea[e];if(t.life-=.03*a,t.life<=0)ea.splice(e,1),ta.release(t);else{t.mesh.position.y+=.02*a;const e=t.life/t.maxLife,n=2.5*(3*e*(1-e));t.mesh.scale.set(n,n,n)}}}if(v)zn.copy(oe),zn.y=0,zn.lengthSq()>1e-8?zn.normalize():zn.set(0,0,-1),An.copy(zn).multiplyScalar(-15),An.y+=5,En.copy(R).add(An),Cn.copy(zn).multiplyScalar(20),gn.copy(R).add(Cn);else{const e=Rt.getPointAt(kn),t=Rt.getPointAt(Math.min(1,kn+.05));En.copy(e),En.y+=2.5,gn.set(t.x,t.y-2+1,t.z)}if(v&&!Wn&&(Fn=0,un.copy(me.position),fn.copy(hn)),v?(Fn=Math.min(1,Fn+3*t),me.position.lerpVectors(un,En,Fn),hn.lerpVectors(fn,gn,Fn)):(Fn=1,me.position.copy(En),hn.copy(gn)),me.lookAt(hn),Wn=v,!ft&&tt.length>0){const e=Xt?F:kn;let t=0,a=1/0;for(let n=0;n<tt.length;n++){const r=Math.abs(tt[n].t-e);r<a&&(a=r,t=n)}nt(t)}else nt(null);aa.forEach(e=>{const t=e.position.distanceTo(me.position);let a=1;t>50&&(a=1-(t-50)/40,a=Math.max(0,Math.min(1,a))),n(e,a)}),he.render(le,me)}();const qn=new ResizeObserver(e=>{for(let t of e)we();st()});qn.observe(t),queueMicrotask(()=>{ye||ue||Te()});return{destroy:()=>{ue||(ue=!0,window.removeEventListener("keydown",Re),window.removeEventListener("keyup",He),a.removeEventListener("scroll",r),Pe.removeEventListener("pointerdown",mt),Pe.removeEventListener("pointermove",pt),Pe.removeEventListener("pointerup",ht),Pe.removeEventListener("pointercancel",ht),Pe.removeEventListener("wheel",ut),qn.disconnect(),Me&&(clearTimeout(Me),Me=0),fe&&cancelAnimationFrame(fe),le.traverse(e=>{if(e.isMesh){e.geometry&&e.geometry.dispose();const t=e.material;if(Array.isArray(t))for(const e of t)e&&e.map&&e.map.dispose(),e&&e.dispose();else t&&(t.map&&t.map.dispose(),t.dispose())}}),Vt&&Vt.dispose(),he.dispose(),he.domElement&&he.domElement.parentNode&&he.domElement.parentNode.removeChild(he.domElement),Ce&&Ce.parentNode&&Ce.parentNode.removeChild(Ce),t.innerHTML="")}}}catch(Qn){return console.error("Error initializing 3D timeline:",Qn),t.innerHTML="Error initializing 3D view: "+Qn.message,t.style.opacity="1",null}}function createRoadGeometry(e,t,a){const n=new THREE.BufferGeometry,r=[],o=[],s=[],i=new THREE.Vector3(0,1,0);for(let n=0;n<=t;n++){const s=n/t,l=e.getPointAt(s),c=e.getTangentAt(s).normalize(),d=(new THREE.Vector3).crossVectors(c,i).normalize().multiplyScalar(a/2),m=(new THREE.Vector3).copy(l).add(d),p=(new THREE.Vector3).copy(l).sub(d);r.push(m.x,m.y,m.z),r.push(p.x,p.y,p.z);const h=n/t;o.push(0,h),o.push(1,h)}for(let e=0;e<t;e++){const t=2*e;s.push(t,t+1,t+2),s.push(t+1,t+3,t+2)}return n.setAttribute("position",new THREE.Float32BufferAttribute(r,3)),n.setAttribute("uv",new THREE.Float32BufferAttribute(o,2)),n.setIndex(s),n.computeVertexNormals(),n}function createRoadTexture(){const e=document.createElement("canvas");e.width=2048,e.height=2048;const t=e.getContext("2d");t.fillStyle="#333333",t.fillRect(0,0,2048,2048),t.fillStyle="#ffffff",t.fillRect(40,0,40,2048),t.fillRect(1968,0,40,2048),t.strokeStyle="#facc15",t.lineWidth=32,t.setLineDash([128,128]),t.beginPath(),t.moveTo(1024,0),t.lineTo(1024,2048),t.stroke();return new THREE.CanvasTexture(e)}function wrapText(e,t,a,n,r,o){const s=t.split(" ");let i="";for(let t=0;t<s.length;t++){const l=i+s[t]+" ";e.measureText(l).width>r&&t>0?(e.fillText(i,a,n),i=s[t]+" ",n+=o):i=l}e.fillText(i,a,n)}function createTextTexture(e,t={}){const a=document.createElement("canvas"),n=a.getContext("2d"),r=t.width||256,o=t.height||128;return a.width=r,a.height=o,n.font=`bold ${t.fontSize||40}px Arial`,n.fillStyle=t.color||"white",n.textAlign="center",n.textBaseline="middle",n.fillText(e,r/2,o/2),new THREE.CanvasTexture(a)}function createMileMarkerTexture(e,t,a={}){const n=a.width??360,r=String(e??"").trim(),o=String(t??"").replace(/\s+/g," ").trim(),s=document.createElement("canvas").getContext("2d"),i=Math.max(20,Math.round(.12*n)),l=Math.max(18,Math.round(.08*n)),c=Math.max(1,n-2*i);let d=Math.max(34,Math.round(.24*n));for(s.font=`800 ${d}px Arial`;d>34&&s.measureText(r).width>c;)d-=2,s.font=`800 ${d}px Arial`;const m=Math.max(10,Math.round(.06*n)),p=1.15*d;let h=0,u=[];o&&(h=Math.max(48,Math.round(.11*n)),s.font=`700 ${h}px Arial`,u=((e,t,a)=>{const n=String(t??"").trim();if(!n)return[];const r=n.split(" "),o=[];let s="";const i=e=>{const t=e.trim();t&&o.push(t)},l=t=>{let n="";for(const r of t){const t=n+r;e.measureText(t).width>a&&n?(i(n),n=r):n=t}i(n)};for(const t of r){const n=s?`${s} ${t}`:t;e.measureText(n).width<=a?s=n:(s&&i(s),s="",e.measureText(t).width<=a?s=t:l(t))}return s&&i(s),o})(s,o,c));const f=h?1.16*h:0,E=u.length?u.length*f:0,g=Math.max(l,Math.round(.35*(d+(h||0)))),y=o?p+m+E:p,M=Math.round(2*g+y),w=document.createElement("canvas"),v=w.getContext("2d");w.width=n,w.height=M,v.clearRect(0,0,n,M),v.fillStyle="#0b5d1e",v.strokeStyle="rgba(255, 255, 255, 0.95)";const T=Math.max(5,Math.round(.03*n)),x=Math.max(10,Math.round(.12*n)),R=.5*T,H=.5*T,D=n-T,S=M-T,b=Math.min(x,.5*D,.5*S);v.beginPath(),v.moveTo(R+b,H),v.arcTo(R+D,H,R+D,H+S,b),v.arcTo(R+D,H+S,R,H+S,b),v.arcTo(R,H+S,R,H,b),v.arcTo(R,H,R+D,H,b),v.closePath(),v.fill(),v.lineWidth=T,v.lineJoin="round",v.lineCap="round",v.stroke(),v.fillStyle="#ffffff",v.textAlign="center",v.textBaseline="alphabetic";const V=.5*n,z=g+d;if(v.font=`800 ${d}px Arial`,v.fillText(r,V,z),o&&u.length){v.font=`700 ${h}px Arial`;let e=z+m+h;for(let t=0;t<u.length;t++)v.fillText(u[t],V,e),e+=f}const A=new THREE.CanvasTexture(w);return A.userData=A.userData||{},A.userData.cornerRadius01=n>0?b/n:0,A.generateMipmaps=!1,A.minFilter=THREE.LinearFilter,A.magFilter=THREE.LinearFilter,A.wrapS=THREE.ClampToEdgeWrapping,A.wrapT=THREE.ClampToEdgeWrapping,A.needsUpdate=!0,A}function createRoundedRectShape(e,t,a){const n=e,r=t,o=Math.max(0,Math.min(a,.5*n,.5*r)),s=.5*-n,i=.5*-r,l=new THREE.Shape;return l.moveTo(s+o,i),l.lineTo(s+n-o,i),l.quadraticCurveTo(s+n,i,s+n,i+o),l.lineTo(s+n,i+r-o),l.quadraticCurveTo(s+n,i+r,s+n-o,i+r),l.lineTo(s+o,i+r),l.quadraticCurveTo(s,i+r,s,i+r-o),l.lineTo(s,i+o),l.quadraticCurveTo(s,i,s+o,i),l}function normalizeShapeUvs(e){e.computeBoundingBox();const t=e.boundingBox;if(!t)return;const a=t.min.x,n=t.min.y,r=Math.max(1e-8,t.max.x-t.min.x),o=Math.max(1e-8,t.max.y-t.min.y),s=e.getAttribute("position");if(!s)return;const i=new Float32Array(2*s.count);for(let e=0;e<s.count;e++){const t=s.getX(e),l=s.getY(e);i[2*e]=(t-a)/r,i[2*e+1]=(l-n)/o}e.setAttribute("uv",new THREE.BufferAttribute(i,2))}function applyFadeToMaterial(e){e.transparent=!0;const t=e.userData?.signShadowMax,a="number"==typeof t&&Number.isFinite(t)&&t>0;a&&(e.defines=e.defines||{},e.defines.SIGN_SHADOW_MAX=Math.max(1,Math.floor(t)),e.userData.uniforms=e.userData.uniforms||{},e.userData.uniforms.signCount||(e.userData.uniforms.signCount={value:0}),e.userData.uniforms.signPos||(e.userData.uniforms.signPos={value:e.userData.signShadowPositions||[]})),e.onBeforeCompile=t=>{a&&(t.uniforms.signCount=e.userData.uniforms.signCount,t.uniforms.signPos=e.userData.uniforms.signPos,t.vertexShader=`\n                varying vec3 vWorldPosition;\n                ${t.vertexShader}\n            `,t.vertexShader=t.vertexShader.replace("#include <project_vertex>","\n                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n                vWorldPosition = worldPosition.xyz;\n                #include <project_vertex>\n                "),t.fragmentShader=`\n                uniform int signCount;\n                uniform vec3 signPos[SIGN_SHADOW_MAX];\n                varying vec3 vWorldPosition;\n                ${t.fragmentShader}\n            `),t.fragmentShader=t.fragmentShader.replace("#include <dithering_fragment>",`\n            #include <dithering_fragment>\n            ${a?"\n            float signShadow = 0.0;\n            for (int i = 0; i < SIGN_SHADOW_MAX; i++) {\n                if (i < signCount) {\n                    vec2 rel = vWorldPosition.xz - signPos[i].xz;\n                    float d = length(rel);\n                    float radius = 0.525;\n                    float soft = 0.35;\n                    float s = 1.0 - smoothstep(radius, radius + soft, d);\n                    signShadow = max(signShadow, s);\n                }\n            }\n            gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * 0.55, signShadow * 0.6);\n            ":""}\n            float dist = gl_FragCoord.z / gl_FragCoord.w;\n            float fadeStart = 50.0;\n            float fadeEnd = 90.0;\n            float alpha = 1.0 - smoothstep(fadeStart, fadeEnd, dist);\n            gl_FragColor.a *= alpha;\n            `)}}function applyRoadShader(e){e.transparent=!0,e.userData.uniforms={carPos:{value:new THREE.Vector3},carDir:{value:new THREE.Vector2(0,-1)}},e.onBeforeCompile=t=>{t.uniforms.carPos=e.userData.uniforms.carPos,t.uniforms.carDir=e.userData.uniforms.carDir,t.vertexShader=`\n            varying vec3 vWorldPosition;\n            ${t.vertexShader}\n        `,t.vertexShader=t.vertexShader.replace("#include <project_vertex>","\n            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n            vWorldPosition = worldPosition.xyz;\n            #include <project_vertex>\n            "),t.fragmentShader=`\n            uniform vec3 carPos;\n            uniform vec2 carDir;\n            varying vec3 vWorldPosition;\n            ${t.fragmentShader}\n        `,t.fragmentShader=t.fragmentShader.replace("#include <dithering_fragment>","\n            #include <dithering_fragment>\n            \n            vec2 rel = vWorldPosition.xz - carPos.xz;\n            vec2 f = normalize(carDir);\n            vec2 r = vec2(f.y, -f.x);\n            vec2 local = vec2(dot(rel, r), dot(rel, f));\n\n            vec2 halfSize = vec2(1.3, 2.2);\n            vec2 q = abs(local) - halfSize;\n            float outside = length(max(q, vec2(0.0)));\n            float inside = min(max(q.x, q.y), 0.0);\n            float boxDist = outside + inside;\n\n            float shadowSoft = 0.01;\n            float shadow = 1.0 - smoothstep(0.0, shadowSoft, max(boxDist, 0.0));\n            gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * 0.55, shadow * 0.85);\n            \n            float depth = gl_FragCoord.z / gl_FragCoord.w;\n            float fadeStart = 50.0;\n            float fadeEnd = 90.0;\n            float alpha = 1.0 - smoothstep(fadeStart, fadeEnd, depth);\n            gl_FragColor.a *= alpha;\n            ")}}
+import * as THREE from 'https://unpkg.com/three@0.169.0/build/three.module.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.169.0/examples/jsm/loaders/GLTFLoader.js';
+
+export function init3DTimeline(timelineData) {
+    const container = document.getElementById('timeline-canvas-container');
+    const scrollContainer = document.querySelector('.canvas');
+
+    if (!container || !scrollContainer) {
+        console.error("Timeline containers not found");
+        return null;
+    }
+
+    if (!timelineData || !Array.isArray(timelineData)) {
+        console.error("Invalid timeline data");
+        container.innerHTML = "Error loading timeline data.";
+        return null;
+    }
+
+    try {
+        container.innerHTML = ''; 
+        const loaderOverlay = document.createElement('div');
+        loaderOverlay.className = 'timeline-loader';
+        loaderOverlay.innerHTML = `<div class="timeline-loader-inner"><div class="timeline-loader-text">Loading...</div><div class="timeline-loader-bar" aria-hidden="true"><div class="timeline-loader-bar-fill"></div></div><div class="timeline-loader-percent" aria-hidden="true">0%</div></div>`;
+        container.appendChild(loaderOverlay);
+        const loaderBarFill = loaderOverlay.querySelector('.timeline-loader-bar-fill');
+        const loaderPercentEl = loaderOverlay.querySelector('.timeline-loader-percent');
+        let totalAssetsStarted = 0;
+        const clamp01 = (v) => Math.max(0, Math.min(1, v));
+        const updateLoaderProgress = () => {
+            if (!loaderBarFill) return;
+            const progress = totalAssetsStarted > 0 ? (totalAssetsStarted - pendingAssets) / totalAssetsStarted : 0;
+            const clamped = clamp01(progress);
+            loaderBarFill.style.transform = `scaleX(${clamped})`;
+            if (loaderPercentEl) loaderPercentEl.textContent = `${Math.floor(clamped * 100)}%`;
+        };
+
+        let hintOverlay = null;
+        let hintTextEl = null;
+        let hintDefaultText = '';
+        let hintHideTimer = 0;
+        let hintSuppressAutoHideUntil = 0;
+        let didUserInteract = false;
+        const markUserInteraction = () => {
+            if (didUserInteract) return;
+            const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+            if (now < hintSuppressAutoHideUntil) return;
+            didUserInteract = true;
+            if (hintOverlay) hintOverlay.classList.add('is-hidden');
+        };
+
+        const initialSeed = Date.now() % 10000;
+        let seed = initialSeed;
+
+        const keys = { w: false, a: false, s: false, d: false, arrowup: false, arrowdown: false, arrowleft: false, arrowright: false };
+        let isManualControl = false;
+        let manualEntryArmed = true;
+        let manualNeedsGroundSnap = false;
+        let manualPosition = new THREE.Vector3();
+        let manualRotation = 0; 
+        let manualSteerAngle = 0;
+        let carSpeed = 0;
+        const maxSpeed = 1.0;
+        const acceleration = 0.02;
+        const friction = 0.95;
+        let manualVelocity = new THREE.Vector3();
+        let onGround = false;
+        let groundNormalSmoothed = new THREE.Vector3(0, 1, 0);
+        const gravity = 0.4;
+        let manualRoadT = 0;
+        let manualStartLimitHasPos = false;
+        let manualStartLimitActive = false;
+        const manualStartLimitPos = new THREE.Vector3();
+        const manualStartLimitForward = new THREE.Vector3(0, 0, -1);
+        const chassisSkinWidth = 0.25;
+        
+        const raycaster = new THREE.Raycaster();
+        const downVector = new THREE.Vector3(0, -1, 0);
+        const tmpRayOrigin = new THREE.Vector3();
+        const tmpWorldNormal = new THREE.Vector3();
+        const tmpRoadCenter = new THREE.Vector3();
+        const tmpRoadTangent = new THREE.Vector3();
+        const tmpRoadForward = new THREE.Vector3();
+        const tmpRoadSide = new THREE.Vector3();
+        const tmpRoadDelta = new THREE.Vector3();
+        const tmpStartDelta = new THREE.Vector3();
+        const tmpVegCenter = new THREE.Vector3();
+        const tmpVegTangent = new THREE.Vector3();
+        const tmpVegSide = new THREE.Vector3();
+        const tmpVegCarPos = new THREE.Vector3();
+        const tmpForwardDir = new THREE.Vector3();
+        const tmpVelDir = new THREE.Vector3();
+        const tmpDesiredDir = new THREE.Vector3();
+        const tmpStreetForward = new THREE.Vector3();
+        const streetForwardSmoothed = new THREE.Vector3(0, 0, -1);
+
+        const seededRandom = () => {
+            seed = (seed * 9301 + 49297) % 233280;
+            return seed / 233280;
+        };
+
+        const createPool = ({ create, onAcquire, onRelease, initialSize = 0 }) => {
+            const free = [];
+            for (let i = 0; i < initialSize; i++) {
+                const item = create();
+                if (!item) continue;
+                if (onRelease) onRelease(item);
+                free.push(item);
+            }
+            return {
+                acquire: () => {
+                    const item = free.pop() ?? create();
+                    if (!item) return null;
+                    if (onAcquire) onAcquire(item);
+                    return item;
+                },
+                release: (item) => {
+                    if (!item) return;
+                    if (onRelease) onRelease(item);
+                    free.push(item);
+                }
+            };
+        };
+
+        const scene = new THREE.Scene();
+        const initialWidth = Math.max(1, container.clientWidth);
+        const initialHeight = Math.max(1, container.clientHeight);
+        const camera = new THREE.PerspectiveCamera(60, initialWidth / initialHeight, 0.1, 1000);
+
+        const isSmallScreen = window.matchMedia('(max-width: 768px)').matches;
+        const renderer = new THREE.WebGLRenderer({ antialias: !isSmallScreen, alpha: true, powerPreference: 'high-performance' });
+        renderer.setSize(initialWidth, initialHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1.5 : 2));
+        renderer.domElement.style.opacity = '0';
+        renderer.domElement.style.transition = 'opacity 600ms ease';
+        renderer.domElement.style.position = 'absolute';
+        renderer.domElement.style.top = '0';
+        renderer.domElement.style.left = '0';
+        container.appendChild(renderer.domElement);
+
+        let destroyed = false;
+        let rafId = 0;
+        let didReveal = false;
+        let pendingAssets = 0;
+        let loadingBegan = false;
+        let revealFallbackTimer = 0;
+
+        const updateRendererSize = () => {
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+            if (width <= 0 || height <= 0) return false;
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, isSmallScreen ? 1.5 : 2));
+            return true;
+        };
+
+        const revealCanvas = () => {
+            if (destroyed || didReveal) return;
+            didReveal = true;
+            if (revealFallbackTimer) {
+                clearTimeout(revealFallbackTimer);
+                revealFallbackTimer = 0;
+            }
+            requestAnimationFrame(() => {
+                if (destroyed) return;
+                updateRendererSize();
+                renderer.domElement.style.opacity = '1';
+                if (loaderBarFill) loaderBarFill.style.transform = 'scaleX(1)';
+                if (loaderPercentEl) loaderPercentEl.textContent = '100%';
+                loaderOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    if (destroyed) return;
+                    if (loaderOverlay.parentNode) loaderOverlay.parentNode.removeChild(loaderOverlay);
+                }, 350);
+                syncUiMode();
+                if (hintOverlay && !didUserInteract) hintOverlay.classList.remove('is-hidden');
+            });
+        };
+
+        const revealWhenReady = () => {
+            if (destroyed || didReveal) return;
+            if (!updateRendererSize()) {
+                requestAnimationFrame(revealWhenReady);
+                return;
+            }
+            revealCanvas();
+        };
+
+        const startAsset = () => {
+            loadingBegan = true;
+            pendingAssets++;
+            totalAssetsStarted++;
+            updateLoaderProgress();
+            let done = false;
+            return () => {
+                if (done) return;
+                done = true;
+                pendingAssets = Math.max(0, pendingAssets - 1);
+                updateLoaderProgress();
+                if (loadingBegan && pendingAssets === 0) revealWhenReady();
+            };
+        };
+        revealFallbackTimer = window.setTimeout(() => {
+            revealWhenReady();
+        }, 4000);
+
+        const onKeyDown = (e) => {
+            const k = e.key.toLowerCase();
+            if (keys.hasOwnProperty(k)) {
+                keys[k] = true;
+                markUserInteraction();
+                e.preventDefault();
+            }
+        };
+        const onKeyUp = (e) => {
+            const k = e.key.toLowerCase();
+            if (keys.hasOwnProperty(k)) {
+                keys[k] = false;
+                e.preventDefault();
+            }
+        };
+        window.addEventListener('keydown', onKeyDown);
+        window.addEventListener('keyup', onKeyUp);
+
+        scene.add(camera);
+
+        const points = [];
+        const spacing = 80; 
+        
+        let currentPos = new THREE.Vector3(0, 0, 10);
+        points.push(currentPos.clone());
+
+        const totalItems = timelineData.length;
+        const extraPoints = 10; 
+        const totalPoints = totalItems + extraPoints;
+        const maxT = (totalItems) / (totalPoints - 1);
+
+        const uiRoot = document.createElement('div');
+        uiRoot.className = 'timeline-ui-overlay';
+        container.parentNode?.appendChild(uiRoot);
+
+        const dragOverlay = document.createElement('div');
+        dragOverlay.className = 'timeline-drag-layer';
+        uiRoot.appendChild(dragOverlay);
+
+        const progressOverlay = document.createElement('div');
+        progressOverlay.className = 'timeline-progress is-hidden';
+        const progressViewport = document.createElement('div');
+        progressViewport.className = 'timeline-progress-viewport';
+        const progressInner = document.createElement('div');
+        progressInner.className = 'timeline-progress-inner';
+        const progressTrack = document.createElement('div');
+        progressTrack.className = 'timeline-progress-track';
+        const progressFill = document.createElement('div');
+        progressFill.className = 'timeline-progress-fill';
+        progressTrack.appendChild(progressFill);
+
+        const progressMarkers = document.createElement('div');
+        progressMarkers.className = 'timeline-progress-markers';
+        progressInner.appendChild(progressTrack);
+        progressInner.appendChild(progressMarkers);
+        progressViewport.appendChild(progressInner);
+        progressOverlay.appendChild(progressViewport);
+        uiRoot.appendChild(progressOverlay);
+
+        const endlessHud = document.createElement('div');
+        endlessHud.className = 'timeline-endless-hud is-hidden';
+        endlessHud.innerHTML = `<div class="timeline-endless-pill timeline-endless-lives" aria-label="Lives"><img class="timeline-endless-heart" src="/img/heart.png" alt=""><img class="timeline-endless-heart" src="/img/heart.png" alt=""><img class="timeline-endless-heart" src="/img/heart.png" alt=""></div><div class="timeline-endless-pill timeline-endless-distance"><span class="timeline-endless-distance-value">0m</span></div>`;
+        uiRoot.appendChild(endlessHud);
+        const endlessDistanceValueEl = endlessHud.querySelector('.timeline-endless-distance-value');
+        const heartEls = Array.from(endlessHud.querySelectorAll('.timeline-endless-heart'));
+        let endlessLives = 3;
+        const renderEndlessLives = () => {
+            for (let i = 0; i < heartEls.length; i++) {
+                if (i < endlessLives) heartEls[i].classList.remove('is-dead');
+                else heartEls[i].classList.add('is-dead');
+            }
+        };
+        renderEndlessLives();
+
+        const showProgressOverlay = () => {
+            progressOverlay.classList.remove('is-hidden');
+        };
+        const hideProgressOverlay = () => {
+            progressOverlay.classList.add('is-hidden');
+        };
+        const showEndlessHud = () => {
+            endlessHud.classList.remove('is-hidden');
+        };
+        const hideEndlessHud = () => {
+            endlessHud.classList.add('is-hidden');
+        };
+
+        hintOverlay = document.createElement('div');
+        hintOverlay.className = 'timeline-hint is-hidden';
+        hintOverlay.innerHTML = `<div class="timeline-hint-text">Scroll to auto-move • WASD to steer</div><div class="timeline-hint-swipe" aria-hidden="true"><div class="timeline-hint-swipe-track"></div><div class="timeline-hint-swipe-hand"><svg viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false"><path d="M7 12V7.5a1.5 1.5 0 0 1 3 0V11h1V6.5a1.5 1.5 0 0 1 3 0V11h1V7.5a1.5 1.5 0 0 1 3 0V14c0 4-2.5 6.5-6.5 6.5H12c-3.7 0-5.5-2.6-5.5-5.5V12a1.5 1.5 0 0 1 3 0v2h-1.5V12"/></svg></div></div>`;
+        if (didUserInteract) hintOverlay.classList.add('is-hidden');
+        uiRoot.appendChild(hintOverlay);
+        hintTextEl = hintOverlay.querySelector('.timeline-hint-text');
+        hintDefaultText = hintTextEl?.textContent ?? '';
+
+        const showHintTemporarily = (text, durationMs = 2000) => {
+            if (!hintOverlay || !hintTextEl) return;
+            if (hintHideTimer) {
+                clearTimeout(hintHideTimer);
+                hintHideTimer = 0;
+            }
+            const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+            hintSuppressAutoHideUntil = now + durationMs;
+            hintTextEl.textContent = text;
+            hintOverlay.classList.remove('is-hidden');
+            hintHideTimer = window.setTimeout(() => {
+                hintHideTimer = 0;
+                hintSuppressAutoHideUntil = 0;
+                if (!hintOverlay || !hintTextEl) return;
+
+                window.setTimeout(() => {
+                    hintTextEl.textContent = hintDefaultText;
+                }, 500);
+                if (didUserInteract || isEndlessRunner) hintOverlay.classList.add('is-hidden');
+            }, durationMs);
+        };
+
+        const infoOverlay = document.createElement('div');
+        infoOverlay.className = 'timeline-marker-info is-hidden';
+        infoOverlay.innerHTML = `<div class="timeline-marker-info-inner"><div class="timeline-marker-info-date"></div><div class="timeline-marker-info-title"></div><div class="timeline-marker-info-desc"></div></div>`;
+        uiRoot.appendChild(infoOverlay);
+        const infoDateEl = infoOverlay.querySelector('.timeline-marker-info-date');
+        const infoTitleEl = infoOverlay.querySelector('.timeline-marker-info-title');
+        const infoDescEl = infoOverlay.querySelector('.timeline-marker-info-desc');
+        let activeInfoIndex = -1;
+        const markerInfo = [];
+        let infoAnimTimer = 0;
+        const setActiveInfo = (index) => {
+            if (index == null || index < 0 || index >= markerInfo.length) {
+                activeInfoIndex = -1;
+                infoOverlay.classList.add('is-hidden');
+                infoOverlay.classList.remove('is-animating');
+                if (infoAnimTimer) {
+                    clearTimeout(infoAnimTimer);
+                    infoAnimTimer = 0;
+                }
+                return;
+            }
+            if (activeInfoIndex === index) return;
+            activeInfoIndex = index;
+            const info = markerInfo[index];
+            if (infoDateEl) infoDateEl.textContent = info.date;
+            if (infoTitleEl) infoTitleEl.textContent = info.title;
+            if (infoDescEl) infoDescEl.textContent = info.desc;
+            infoOverlay.classList.remove('is-hidden');
+            infoOverlay.classList.remove('is-animating');
+            void infoOverlay.offsetWidth;
+            infoOverlay.classList.add('is-animating');
+            if (infoAnimTimer) clearTimeout(infoAnimTimer);
+            infoAnimTimer = window.setTimeout(() => {
+                infoAnimTimer = 0;
+                infoOverlay.classList.remove('is-animating');
+            }, 280);
+        };
+
+        const markerEls = [];
+        const scrollToFraction = (fraction) => {
+            const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            const top = Math.max(0, Math.min(scrollHeight, fraction * scrollHeight));
+            try {
+                scrollContainer.scrollTo({ top, behavior: 'smooth' });
+            } catch {
+                scrollContainer.scrollTop = top;
+            }
+            updateScroll();
+        };
+
+        const updateProgressInnerLayout = () => {
+            const viewportWidth = progressViewport.clientWidth || 0;
+            const desiredInnerWidth = Math.max(viewportWidth, 120 + totalItems * 90);
+            progressInner.style.width = `${desiredInnerWidth}px`;
+        };
+
+        let isDraggingScroll = false;
+        let dragPointerId = null;
+        let dragStartY = 0;
+        let dragStartScrollTop = 0;
+
+        const onDragPointerDown = (e) => {
+            if (!e.isPrimary) return;
+            markUserInteraction();
+            isDraggingScroll = true;
+            dragPointerId = e.pointerId;
+            dragStartY = e.clientY;
+            dragStartScrollTop = scrollContainer.scrollTop;
+            dragOverlay.setPointerCapture(e.pointerId);
+            e.preventDefault();
+        };
+
+        const onDragPointerMove = (e) => {
+            if (!isDraggingScroll || e.pointerId !== dragPointerId) return;
+            const dy = e.clientY - dragStartY;
+            scrollContainer.scrollTop = dragStartScrollTop - dy * 3;
+            e.preventDefault();
+        };
+
+        const endDrag = (e) => {
+            if (!isDraggingScroll || e.pointerId !== dragPointerId) return;
+            isDraggingScroll = false;
+            dragPointerId = null;
+            e.preventDefault();
+        };
+
+        const onDragWheel = (e) => {
+            if (isDraggingScroll) return;
+            markUserInteraction();
+            let dy = e.deltaY;
+            if (e.deltaMode === 1) dy *= 16;
+            else if (e.deltaMode === 2) dy *= window.innerHeight;
+            scrollContainer.scrollTop += dy;
+            e.preventDefault();
+        };
+
+        dragOverlay.addEventListener('pointerdown', onDragPointerDown);
+        dragOverlay.addEventListener('pointermove', onDragPointerMove);
+        dragOverlay.addEventListener('pointerup', endDrag);
+        dragOverlay.addEventListener('pointercancel', endDrag);
+        dragOverlay.addEventListener('wheel', onDragWheel, { passive: false });
+
+        for (let i = 0; i < totalItems; i++) {
+            const markerWrap = document.createElement('div');
+            markerWrap.className = 'timeline-progress-marker-wrap';
+            const marker = document.createElement('div');
+            marker.className = 'timeline-progress-marker';
+            marker.style.setProperty('--scale', '1');
+            const label = document.createElement('div');
+            label.className = 'timeline-progress-label';
+            label.textContent = String(timelineData[i]?.date ?? '');
+            markerWrap.appendChild(marker);
+            markerWrap.appendChild(label);
+            progressMarkers.appendChild(markerWrap);
+            const pointIndex = i + 1;
+            const t = pointIndex / (totalItems + extraPoints);
+            const pos = maxT > 1e-8 ? THREE.MathUtils.clamp(t / maxT, 0, 1) : 0;
+            markerWrap.style.setProperty('--pos', String(pos));
+            markerWrap.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                markUserInteraction();
+                if (isEndlessRunner) {
+                    setEndlessRunnerMode(false);
+                }
+                isManualControl = false;
+                manualEntryArmed = true;
+                let desiredPos = pos;
+                try {
+                    const len = curve.getLength();
+                    const tAhead = len > 1e-6 ? (distanceAhead / len) : 0;
+                    const desiredT = THREE.MathUtils.clamp(t - tAhead, 0, maxT);
+                    desiredPos = maxT > 1e-8 ? THREE.MathUtils.clamp(desiredT / maxT, 0, 1) : 0;
+                } catch {}
+                scrollToFraction(desiredPos);
+            });
+            markerEls.push({ marker, label, pos });
+        }
+        queueMicrotask(updateProgressInnerLayout);
+
+        let isEndlessRunner = false;
+        const syncUiMode = () => {
+            if (!didReveal) return;
+            if (isEndlessRunner) {
+                hideProgressOverlay();
+                if (hintOverlay) hintOverlay.classList.add('is-hidden');
+                showEndlessHud();
+            } else {
+                showProgressOverlay();
+                hideEndlessHud();
+            }
+        };
+        const setEndlessRunnerMode = (next) => {
+            const v = !!next;
+            if (v === isEndlessRunner) return;
+            isEndlessRunner = v;
+            syncUiMode();
+        };
+        const hudStartPos = new THREE.Vector3();
+        let hudHasStartPos = false;
+        const updateHudDistance = () => {
+            if (!endlessDistanceValueEl || !carModel) return;
+            if (!hudHasStartPos) {
+                hudStartPos.copy(carModel.position);
+                hudHasStartPos = true;
+            }
+            const dx = carModel.position.x - hudStartPos.x;
+            const dz = carModel.position.z - hudStartPos.z;
+            endlessDistanceValueEl.textContent = `${Math.floor(Math.sqrt(dx * dx + dz * dz) / 10)}m`;
+        };
+        
+        let genX = 0;
+        let genHeading = 0;
+        const genPhase = seededRandom() * Math.PI * 2;
+        
+        for (let i = 0; i < totalItems + extraPoints; i++) {
+            const z = - (i + 1) * spacing; 
+
+            const targetHeading = Math.sin((i + 1) * 0.035 + genPhase) * 3;
+            const steer = (targetHeading - genHeading) * 0.08 + (seededRandom() - 0.5) * 0.1 - genX * 0.0016;
+            genHeading = THREE.MathUtils.clamp(genHeading + steer, -0.9, 0.9);
+            genX += Math.sin(genHeading) * spacing * 0.9;
+            genX *= 0.995;
+
+            const x = genX + (seededRandom() - 0.5) * 3.0;
+            const y = Math.sin(i * 1) * 5 + (seededRandom() - 0.5) * 5;
+            
+            currentPos = new THREE.Vector3(x, y, z);
+            points.push(currentPos);
+        }
+
+        const curve = new THREE.CatmullRomCurve3(points);
+        curve.tension = 0.5;
+        curve.type = 'catmullrom';
+
+        const distanceAhead = 15;
+
+        const roadWidth = 12;
+        const roadSegments = 200; 
+        const roadGeometry = createRoadGeometry(curve, roadSegments, roadWidth);
+        
+        const roadTexture = createRoadTexture();
+        roadTexture.wrapS = THREE.RepeatWrapping;
+        roadTexture.wrapT = THREE.RepeatWrapping;
+        roadTexture.repeat.set(1, 20); 
+        roadTexture.anisotropy = 16;
+        
+        roadTexture.generateMipmaps = false;
+        roadTexture.minFilter = THREE.LinearFilter;
+        roadTexture.magFilter = THREE.LinearFilter;
+
+        const roadMaterial = new THREE.MeshBasicMaterial({ 
+            map: roadTexture,
+            color: 0xffffff,
+            side: THREE.DoubleSide
+        });
+        applyRoadShader(roadMaterial);
+        
+        const road = new THREE.Mesh(roadGeometry, roadMaterial);
+        road.position.y = -2; 
+        scene.add(road);
+
+        const tmpCurvePoint = new THREE.Vector3();
+        const tmpCurveTangent = new THREE.Vector3();
+        
+        const basePointCount = points.length;
+        const baseRoadSegments = roadSegments;
+
+        let manualGenIndex = basePointCount - 1;
+        let manualRoadSegments = roadSegments;
+        let manualRoadSampleCount = manualRoadSegments * 2;
+        let manualRoadSampleX = new Float32Array(manualRoadSampleCount + 1);
+        let manualRoadSampleY = new Float32Array(manualRoadSampleCount + 1);
+        let manualRoadSampleZ = new Float32Array(manualRoadSampleCount + 1);
+
+        const rebuildManualRoad = (forcedSegments = null) => {
+            curve.points = points;
+            curve.updateArcLengths();
+
+            manualRoadSegments = forcedSegments ?? Math.min(2000, Math.max(200, Math.floor((points.length - 1) * 6)));
+            const newGeo = createRoadGeometry(curve, manualRoadSegments, roadWidth);
+            road.geometry.dispose();
+            road.geometry = newGeo;
+
+            manualRoadSampleCount = manualRoadSegments * 2;
+            manualRoadSampleX = new Float32Array(manualRoadSampleCount + 1);
+            manualRoadSampleY = new Float32Array(manualRoadSampleCount + 1);
+            manualRoadSampleZ = new Float32Array(manualRoadSampleCount + 1);
+            for (let i = 0; i <= manualRoadSampleCount; i++) {
+                const t = i / manualRoadSampleCount;
+                curve.getPointAt(t, tmpCurvePoint);
+                manualRoadSampleX[i] = tmpCurvePoint.x;
+                manualRoadSampleY[i] = tmpCurvePoint.y;
+                manualRoadSampleZ[i] = tmpCurvePoint.z;
+            }
+        };
+
+        const rand01 = (a, b) => {
+            const v = Math.sin(a * 12.9898 + b * 78.233 + initialSeed) * 43758.5453;
+            return v - Math.floor(v);
+        };
+
+        let genManualX = genX;
+        let genManualHeading = genHeading;
+        const genManualPhase = rand01(manualGenIndex, 9) * Math.PI * 2;
+
+        const appendManualPoints = (count) => {
+            for (let n = 0; n < count; n++) {
+                const i = ++manualGenIndex;
+                const z = - (i + 1) * spacing;
+
+                const r3 = rand01(i, 3);
+                const r4 = rand01(i, 4);
+
+                const targetHeading = Math.sin((i + 1) * 0.035 + genManualPhase) * 0.65;
+                const steer = (targetHeading - genManualHeading) * 0.08 + (r3 - 0.5) * 0.05 - genManualX * 0.0016;
+                genManualHeading = THREE.MathUtils.clamp(genManualHeading + steer, -0.9, 0.9);
+                genManualX += Math.sin(genManualHeading) * spacing * 0.9;
+                genManualX *= 0.995;
+
+                const x = genManualX + (rand01(i, 8) - 0.5) * 3.0;
+                const y = Math.sin(i * 1) * 5 + (r4 - 0.5) * 2;
+
+                points.push(new THREE.Vector3(x, y, z));
+            }
+        };
+
+        rebuildManualRoad(baseRoadSegments);
+
+        let carModel = null;
+        const gltfLoader = new GLTFLoader();
+        
+        const finishCarAsset = startAsset();
+        gltfLoader.load('/3d/car.glb', (gltf) => {
+            try {
+                carModel = gltf.scene;
+                carModel.scale.set(6, 6, 6); 
+                carModel.rotateY(Math.PI);
+                
+                carModel.traverse((child) => {
+                    if (child.isMesh) {
+                        child.castShadow = false;
+                        child.receiveShadow = false;
+                        
+                        if (child.material) {
+                             const oldMat = child.material;
+                             const newMat = new THREE.MeshBasicMaterial({
+                                 color: oldMat.color,
+                                 map: oldMat.map,
+                                 side: oldMat.side,
+                                 transparent: oldMat.transparent,
+                                 opacity: oldMat.opacity
+                             });
+                             child.material = newMat;
+                        }
+                    }
+                });
+                scene.add(carModel);
+            } catch (error) {
+                console.error("Error applying car model:", error);
+            } finally {
+                finishCarAsset();
+            }
+        }, undefined, (error) => {
+            console.error("Error loading car:", error);
+            finishCarAsset();
+        });
+
+        const particleCount = 20;
+        const particleGeo = new THREE.SphereGeometry(0.3, 7, 5); 
+        const particleMat = new THREE.MeshBasicMaterial({ 
+            color: 0xdddddd, 
+            flatShading: true 
+        });
+        const activeParticles = [];
+        const particlePool = createPool({
+            create: () => {
+                const mesh = new THREE.Mesh(particleGeo, particleMat.clone());
+                scene.add(mesh);
+                return {
+                    mesh,
+                    life: 0,
+                    maxLife: 1.0,
+                    velocity: new THREE.Vector3()
+                };
+            },
+            onAcquire: (p) => {
+                p.mesh.visible = true;
+                p.life = 0;
+            },
+            onRelease: (p) => {
+                p.mesh.visible = false;
+                p.life = 0;
+            },
+            initialSize: particleCount
+        });
+
+        const objects = [];
+
+        const envGroup = new THREE.Group();
+        scene.add(envGroup);
+        const proceduralEnvGroup = new THREE.Group();
+        proceduralEnvGroup.visible = true;
+        envGroup.add(proceduralEnvGroup);
+
+        let treeModel = null;
+        let cactusModel = null;
+        const treePool = createPool({
+            create: () => (treeModel ? treeModel.clone() : null),
+            onAcquire: (obj) => {
+                if (!obj.parent) proceduralEnvGroup.add(obj);
+                obj.visible = false;
+            },
+            onRelease: (obj) => {
+                obj.visible = false;
+            }
+        });
+        const cactusPool = createPool({
+            create: () => (cactusModel ? cactusModel.clone() : null),
+            onAcquire: (obj) => {
+                if (!obj.parent) proceduralEnvGroup.add(obj);
+                obj.visible = false;
+            },
+            onRelease: (obj) => {
+                obj.visible = false;
+            }
+        });
+        const activeManualVeg = [];
+        const activeVegKeys = new Set();
+        let manualVegAheadCursor = 0;
+        let manualVegBehindCursor = 0;
+        let vegWarmup = 0;
+        let vegNeedsResync = false;
+
+        const ensureVegMaterialCache = (obj) => {
+            if (obj.userData && obj.userData.vegMaterialCache) return obj.userData.vegMaterialCache;
+            const mats = [];
+            obj.traverse((child) => {
+                if (!child.isMesh) return;
+                child.userData = child.userData || {};
+                if (!child.userData.vegMaterialCloned) {
+                    const mat = child.material;
+                    if (Array.isArray(mat)) {
+                        child.material = mat.map((m) => (m ? m.clone() : m));
+                    } else if (mat) {
+                        child.material = mat.clone();
+                    }
+                    child.userData.vegMaterialCloned = true;
+                }
+                const mat = child.material;
+                if (Array.isArray(mat)) {
+                    for (const m of mat) if (m) mats.push(m);
+                } else if (mat) {
+                    mats.push(mat);
+                }
+            });
+            for (const m of mats) {
+                m.userData = m.userData || {};
+                if (m.userData.vegBaseOpacity == null) m.userData.vegBaseOpacity = (m.opacity == null ? 1 : m.opacity);
+                m.transparent = true;
+            }
+            obj.userData = obj.userData || {};
+            obj.userData.vegMaterialCache = mats;
+            return mats;
+        };
+        const setVegOpacity = (obj, opacity01) => {
+            const mats = ensureVegMaterialCache(obj);
+            const o = THREE.MathUtils.clamp(opacity01, 0, 1);
+            for (const m of mats) {
+                const base = m.userData?.vegBaseOpacity ?? 1;
+                m.opacity = base * o;
+            }
+        };
+        const primeVegObject = (obj) => {
+            obj.visible = false;
+            obj.userData = obj.userData || {};
+            obj.userData.vegAppear = 0;
+            obj.userData.vegAppearDir = 1;
+            obj.userData.vegTargetScale = 1;
+            setVegOpacity(obj, 0);
+        };
+        const activateVegObject = (obj, targetScale) => {
+            obj.userData = obj.userData || {};
+            obj.userData.vegAppear = 0;
+            obj.userData.vegAppearDir = 1;
+            obj.userData.vegTargetScale = targetScale;
+            obj.visible = true;
+            setVegOpacity(obj, 0);
+            obj.scale.setScalar(Math.max(0.001, targetScale * 0.15));
+        };
+
+        const vegRaycaster = new THREE.Raycaster();
+        const vegDown = new THREE.Vector3(0, -1, 0);
+        const hash01 = (x) => {
+            const v = Math.sin(x) * 43758.5453;
+            return v - Math.floor(v);
+        };
+        const acquireVeg = (type) => {
+            return (type === 'tree' ? treePool : cactusPool).acquire();
+        };
+        const releaseVeg = (type, obj) => {
+            (type === 'tree' ? treePool : cactusPool).release(obj);
+        };
+        const resetManualVegetation = () => {
+            for (const e of activeManualVeg) {
+                activeVegKeys.delete(e.key);
+                releaseVeg(e.type, e.obj);
+            }
+            activeManualVeg.length = 0;
+            manualVegAheadCursor = 0;
+            manualVegBehindCursor = 0;
+        };
+        const manualMaxPoints = 520;
+        const manualKeepBehindPoints = 90;
+        const manualVegBehindSamples = 220;
+        const manualVegAheadSamples = 260;
+        const manualVegPrefetchAheadSamples = 260;
+        const manualVegStep = 4;
+        const vegMaxPlacementsPerFrame = 7;
+        const vegWarmupMaxSampleOffset = 40;
+        const vegCellSize = 14;
+        const vegCullRadius = 900;
+        const vegCullRadiusSq = vegCullRadius * vegCullRadius;
+        const vegSpawnInterval = 24;
+        const vegFadeStart = 50;
+        const vegFadeEnd = 90;
+        const smoothstep01 = (edge0, edge1, x) => {
+            const t = THREE.MathUtils.clamp((x - edge0) / (edge1 - edge0), 0, 1);
+            return t * t * (3 - 2 * t);
+        };
+        const releaseOutOfRangeManualVeg = (carX, carZ) => {
+            for (let i = activeManualVeg.length - 1; i >= 0; i--) {
+                const e = activeManualVeg[i];
+                const dx = e.obj.position.x - carX;
+                const dz = e.obj.position.z - carZ;
+                if ((dx * dx + dz * dz) > vegCullRadiusSq) {
+                    e.obj.userData = e.obj.userData || {};
+                    e.obj.userData.vegAppearDir = -1;
+                }
+            }
+        };
+        const updateManualVegAppearances = (timeScale) => {
+            const speedIn = 0.08 * timeScale;
+            const speedOut = 0.12 * timeScale;
+            for (let i = activeManualVeg.length - 1; i >= 0; i--) {
+                const e = activeManualVeg[i];
+                e.obj.userData = e.obj.userData || {};
+                const dir = e.obj.userData.vegAppearDir ?? 1;
+                const targetScale = e.obj.userData.vegTargetScale ?? 1;
+                let a = e.obj.userData.vegAppear ?? 0;
+                a = THREE.MathUtils.clamp(a + (dir >= 0 ? speedIn : -speedOut), 0, 1);
+                e.obj.userData.vegAppear = a;
+                const eased = a * a * (3 - 2 * a);
+                const dx = camera.position.x - e.obj.position.x;
+                const dy = camera.position.y - e.obj.position.y;
+                const dz = camera.position.z - e.obj.position.z;
+                const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                const distAlpha = 1 - smoothstep01(vegFadeStart, vegFadeEnd, dist);
+                setVegOpacity(e.obj, eased * distAlpha);
+                e.obj.scale.setScalar(Math.max(0.001, targetScale * (0.15 + eased * 0.85)));
+                if (dir < 0 && a <= 0.0001) {
+                    activeVegKeys.delete(e.key);
+                    releaseVeg(e.type, e.obj);
+                    activeManualVeg.splice(i, 1);
+                }
+            }
+        };
+        const fillManualVegetation = (fromSample, toSample, maxPlacements) => {
+            if (!treeModel && !cactusModel) return fromSample;
+            if (toSample === fromSample) return fromSample;
+            const clampedFrom = Math.max(0, Math.min(manualRoadSampleCount, fromSample));
+            const clampedTo = Math.max(0, Math.min(manualRoadSampleCount, toSample));
+            const dir = clampedTo >= clampedFrom ? 1 : -1;
+            let placed = 0;
+            let i = clampedFrom;
+            for (; dir > 0 ? (i <= clampedTo) : (i >= clampedTo); i += dir * vegSpawnInterval) {
+                const jitter = Math.floor((hash01(i * 17.71 + initialSeed) - 0.5) * (vegSpawnInterval * 0.6));
+                const siBase = Math.max(0, Math.min(manualRoadSampleCount, i + jitter));
+                for (let attempt = 0; attempt < 3; attempt++) {
+                    const si = Math.max(0, Math.min(manualRoadSampleCount, siBase + attempt * manualVegStep));
+
+                    const t = si / manualRoadSampleCount;
+                    curve.getPointAt(t, tmpVegCenter);
+                    curve.getTangentAt(t, tmpVegTangent).normalize();
+                    tmpVegSide.crossVectors(tmpVegTangent, yAxis).normalize();
+
+                    const side = hash01(si * 78.233 + initialSeed) > 0.5 ? 1 : -1;
+                    const distRnd = hash01(si * 41.17 + initialSeed);
+                    const dist = (terrainStartOffset + 6) + distRnd * 38;
+
+                    const px = tmpVegCenter.x + tmpVegSide.x * (side * dist);
+                    const pz = tmpVegCenter.z + tmpVegSide.z * (side * dist) + (hash01(si * 19.19 + initialSeed) - 0.5) * 18;
+                    const key = `${Math.round(px / vegCellSize)},${Math.round(pz / vegCellSize)}`;
+                    if (activeVegKeys.has(key)) continue;
+
+                    const biome = getBiome(px, pz);
+                    const type = biome === 'grass' ? 'tree' : 'cactus';
+                    const obj = acquireVeg(type);
+                    if (!obj) continue;
+                    primeVegObject(obj);
+
+                    vegRaycaster.set(tmpRayOrigin.set(px, 50, pz), vegDown);
+                    const hits = vegRaycaster.intersectObjects([leftTerrain, rightTerrain], false);
+                    let py = -2;
+                    if (hits.length > 0) py = hits[0].point.y;
+
+                    let targetScale = 1;
+                    if (type === 'tree') {
+                        obj.position.set(px, py + 4.25, pz);
+                        targetScale = 4 + hash01(si * 3.11 + initialSeed) * 5;
+                    } else {
+                        obj.position.set(px, py, pz);
+                        targetScale = 4 + hash01(si * 3.11 + initialSeed) * 2;
+                    }
+                    obj.rotation.y = hash01(si * 2.71 + initialSeed) * Math.PI * 2;
+                    activateVegObject(obj, targetScale);
+
+                    activeVegKeys.add(key);
+                    activeManualVeg.push({ type, obj, key });
+                    placed++;
+                    break;
+                }
+                if (placed >= maxPlacements) break;
+            }
+            return i;
+        };
+
+        const getBiome = (x, z) => {
+            const scale = 0.025; 
+            const noise = Math.sin((x + initialSeed) * scale) + Math.cos((z + initialSeed) * scale * 0.7);
+            const detail = Math.sin((x + initialSeed) * 0.05) * 0.1 + Math.cos((z + initialSeed) * 0.05) * 0.1;
+            
+            const val = noise + detail;
+            
+            if (val > 0.2) return 'grass';
+            return 'desert';
+        };
+
+        const getBiomeColor = (x, z) => {
+            const biome = getBiome(x, z);
+            if (biome === 'grass') return 0x9bc22c; 
+            return 0xfacc15; 
+        };
+        
+        const terrainSteps = 100; 
+        
+        const terrainWidth = 100; 
+        const terrainStartOffset = roadWidth / 2; 
+        const widthSegments = 10; 
+        
+        const createSideGeometry = (curve, segments, offsetStart, offsetEnd) => {
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            const colors = [];
+            const indices = [];
+            const up = new THREE.Vector3(0, 1, 0);
+
+            const totalWidthSegments = widthSegments;
+            
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments ;
+                const point = curve.getPointAt(t);
+                const tangent = curve.getTangentAt(t).normalize();
+                const sideVec = new THREE.Vector3().crossVectors(tangent, up).normalize();
+                
+                for (let j = 0; j <= totalWidthSegments; j++) {
+                    const widthRatio = j / totalWidthSegments; 
+                    
+                    const currentOffset = offsetStart + (offsetEnd - offsetStart) * widthRatio;
+                    
+                    const pos = new THREE.Vector3().copy(point).add(sideVec.clone().multiplyScalar(currentOffset));
+                    
+                    const biome = getBiome(pos.x, pos.z);
+                    const colorHex = getBiomeColor(pos.x, pos.z);
+                    const biomeColor = new THREE.Color(colorHex);
+
+                    let height = 0;
+                    
+                    if (widthRatio > 0.1) {
+                        const distFactor = (widthRatio - 0.1) / 0.9; 
+                        
+                        const noise1 = Math.sin(i * 0.1 + j * 0.5 + initialSeed) * 5;
+                        const noise2 = Math.cos(i * 0.3 + j * 0.2 + initialSeed) * 10;
+                        const noise3 = Math.sin(i * 0.05 + initialSeed) * 20; 
+                        
+                        let baseHeight = Math.abs(noise1 + noise2 + noise3);
+                        
+                        if (biome === 'desert') {
+                            baseHeight *= 0.8; 
+                            baseHeight = Math.abs(Math.sin(i * 0.2 + j * 1.0 + initialSeed) * 15); 
+                        } else {
+                            baseHeight *= 1.2; 
+                        }
+                        
+                        height = baseHeight * distFactor; 
+                    }
+                    
+                    pos.y += height;
+                    
+                    vertices.push(pos.x, pos.y, pos.z);
+                    
+                    const noiseVal = Math.sin(i * 12.9898 + j * 78.233 + initialSeed) * 43758.5453;
+                    const brightnessNoise = ((noiseVal - Math.floor(noiseVal)) - 0.5) * 0.01;
+                    biomeColor.addScalar(brightnessNoise);
+                    
+                    colors.push(biomeColor.r, biomeColor.g, biomeColor.b);
+                }
+            }
+
+            const verticesPerRow = totalWidthSegments + 1;
+            for (let i = 0; i < segments; i++) {
+                for (let j = 0; j < totalWidthSegments; j++) {
+                    const a = i * verticesPerRow + j;
+                    const b = i * verticesPerRow + j + 1;
+                    const c = (i + 1) * verticesPerRow + j;
+                    const d = (i + 1) * verticesPerRow + j + 1;
+                    
+                    indices.push(a, b, d);
+                    indices.push(a, d, c);
+                }
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setIndex(indices);
+            geometry.computeVertexNormals();
+
+            return geometry;
+        };
+
+        const leftTerrainGeo = createSideGeometry(curve, roadSegments, -terrainStartOffset, -(terrainStartOffset + terrainWidth));
+        const rightTerrainGeo = createSideGeometry(curve, roadSegments, terrainStartOffset, terrainStartOffset + terrainWidth);
+        
+        const terrainMat = new THREE.MeshBasicMaterial({
+            vertexColors: true,
+            side: THREE.DoubleSide,
+        });
+        const signShadowMax = 64;
+        const signShadowPositions = Array.from({ length: signShadowMax }, () => new THREE.Vector3(1e9, 0, 1e9));
+        let signShadowCount = 0;
+        terrainMat.userData = terrainMat.userData || {};
+        terrainMat.userData.signShadowMax = signShadowMax;
+        terrainMat.userData.signShadowPositions = signShadowPositions;
+        terrainMat.userData.uniforms = terrainMat.userData.uniforms || {};
+        terrainMat.userData.uniforms.signCount = { value: 0 };
+        terrainMat.userData.uniforms.signPos = { value: signShadowPositions };
+        applyFadeToMaterial(terrainMat);
+
+        const leftTerrain = new THREE.Mesh(leftTerrainGeo, terrainMat);
+        const rightTerrain = new THREE.Mesh(rightTerrainGeo, terrainMat);
+        
+        leftTerrain.position.y = -2.1; 
+        rightTerrain.position.y = -2.1;
+        
+        scene.add(leftTerrain);
+        scene.add(rightTerrain);
+        
+        const rebuildManualTerrain = (forcedSegments = null) => {
+            const segs = forcedSegments ?? manualRoadSegments;
+            const newLeft = createSideGeometry(curve, segs, -terrainStartOffset, -(terrainStartOffset + terrainWidth));
+            const newRight = createSideGeometry(curve, segs, terrainStartOffset, terrainStartOffset + terrainWidth);
+            leftTerrain.geometry.dispose();
+            rightTerrain.geometry.dispose();
+            leftTerrain.geometry = newLeft;
+            rightTerrain.geometry = newRight;
+        };
+
+        const loadModel = (url) => {
+            return new Promise((resolve) => {
+                const finishModelAsset = startAsset();
+                gltfLoader.load(url, (gltf) => {
+                    try {
+                        const model = gltf.scene;
+                        model.traverse((child) => {
+                            if (child.isMesh) {
+                                if (child.material) {
+                                    const oldMat = child.material;
+                                    const newMat = new THREE.MeshBasicMaterial({
+                                        color: oldMat.color,
+                                        map: oldMat.map,
+                                        side: oldMat.side,
+                                        transparent: true
+                                    });
+                                    applyFadeToMaterial(newMat);
+                                    child.material = newMat;
+                                }
+                            }
+                        });
+                        resolve(model);
+                    } catch (error) {
+                        console.error(`Error applying ${url}`, error);
+                        resolve(null);
+                    } finally {
+                        finishModelAsset();
+                    }
+                }, undefined, (err) => {
+                    console.error(`Error loading ${url}`, err);
+                    resolve(null); 
+                    finishModelAsset();
+                });
+            });
+        };
+
+        Promise.all([
+            loadModel('/3d/tree.glb'),
+            loadModel('/3d/cactus.glb')
+        ]).then(([tree, cactus]) => {
+            treeModel = tree;
+            cactusModel = cactus;
+            leftTerrain.updateMatrixWorld();
+            rightTerrain.updateMatrixWorld();
+            resetManualVegetation();
+            
+            const raycaster = new THREE.Raycaster();
+            const down = new THREE.Vector3(0, -1, 0);
+
+            for (let i = 0; i < terrainSteps; i++) {
+                const curveT = i / terrainSteps;
+                const center = curve.getPointAt(curveT);
+                
+                const sideCount = 1; 
+                
+                for (let s = 0; s < sideCount; s++) {
+                    const minDist = terrainStartOffset + 5;
+                    const maxDist = terrainStartOffset + 40; 
+                    
+                    const dist = minDist + seededRandom() * (maxDist - minDist);
+                    const side = seededRandom() > 0.5 ? 1 : -1;
+                    
+                    const px = center.x + side * dist;
+                    const pz = center.z + (seededRandom() - 0.5) * 20;
+                    
+                    raycaster.set(new THREE.Vector3(px, 50, pz), down);
+                    const intersects = raycaster.intersectObjects([leftTerrain, rightTerrain]);
+                    
+                    let py = -2; 
+                    if (intersects.length > 0) {
+                        py = intersects[0].point.y;
+                    }
+                    
+                    const biome = getBiome(px, pz);
+                    
+                    if (biome === 'grass' && treeModel) {
+                        if (seededRandom() > 0.6) {
+                            const tree = treeModel.clone();
+                            tree.position.set(px, py + 4.25, pz);
+                            tree.rotation.y = seededRandom() * Math.PI * 2;
+                            const scale = 4 + seededRandom() * 5; 
+                            tree.scale.setScalar(scale);
+                            envGroup.add(tree);
+                        }
+                    } else if (biome === 'desert' && cactusModel) {
+                        if (seededRandom() > 0.5) {
+                            const cactus = cactusModel.clone();
+                            cactus.position.set(px, py, pz);
+                            cactus.rotation.y = seededRandom() * Math.PI * 2;
+                            const scale = 4 + seededRandom() * 2; 
+                            cactus.scale.setScalar(scale);
+                            envGroup.add(cactus);
+                        }
+                    }
+                }
+            }
+        });
+
+        function prepareFadeMaterials(obj) {
+            if (obj.userData && obj.userData.fadePrepared) return;
+            if (!obj.userData) obj.userData = {};
+            obj.userData.fadePrepared = true;
+
+            obj.traverse((child) => {
+                if (!(child.isMesh || child.isSprite)) return;
+                const mat = child.material;
+                if (!mat) return;
+
+                if (Array.isArray(mat)) {
+                    const next = mat.map((m) => {
+                        if (!m) return m;
+                        const c = m.clone();
+                        if (!c.userData) c.userData = {};
+                        if (c.userData.baseOpacity == null) c.userData.baseOpacity = c.opacity ?? 1;
+                        c.transparent = true;
+                        c.depthWrite = false;
+                        return c;
+                    });
+                    child.material = next;
+                } else {
+                    const c = mat.clone();
+                    if (!c.userData) c.userData = {};
+                    if (c.userData.baseOpacity == null) c.userData.baseOpacity = c.opacity ?? 1;
+                    c.transparent = true;
+                    c.depthWrite = false;
+                    child.material = c;
+                }
+            });
+        }
+
+        function setOpacity(obj, opacity) {
+            obj.traverse((child) => {
+                if (child.isMesh || child.isSprite) {
+                    if (child.material) {
+                        if (Array.isArray(child.material)) {
+                            for (const m of child.material) {
+                                if (!m) continue;
+                                if (!m.userData) m.userData = {};
+                                if (m.userData.baseOpacity == null) m.userData.baseOpacity = (m.opacity ?? 1);
+                                if (m.userData.baseTransparent == null) m.userData.baseTransparent = !!m.transparent;
+                                if (m.userData.baseDepthWrite == null) m.userData.baseDepthWrite = (m.depthWrite ?? true);
+                                const base = m.userData.baseOpacity;
+                                const nextOpacity = base * opacity;
+                                m.opacity = nextOpacity;
+                                if (opacity < 0.999) {
+                                    m.transparent = true;
+                                    m.depthWrite = false;
+                                } else {
+                                    m.transparent = m.userData.baseTransparent;
+                                    m.depthWrite = m.userData.baseDepthWrite;
+                                }
+                            }
+                        } else {
+                            const m = child.material;
+                            if (!m.userData) m.userData = {};
+                            if (m.userData.baseOpacity == null) m.userData.baseOpacity = (m.opacity ?? 1);
+                            if (m.userData.baseTransparent == null) m.userData.baseTransparent = !!m.transparent;
+                            if (m.userData.baseDepthWrite == null) m.userData.baseDepthWrite = (m.depthWrite ?? true);
+                            const base = m.userData.baseOpacity;
+                            const nextOpacity = base * opacity;
+                            m.opacity = nextOpacity;
+                            if (opacity < 0.999) {
+                                m.transparent = true;
+                                m.depthWrite = false;
+                            } else {
+                                m.transparent = m.userData.baseTransparent;
+                                m.depthWrite = m.userData.baseDepthWrite;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        const stripHtml = (html) => {
+            const raw = String(html ?? '');
+            try {
+                const doc = new DOMParser().parseFromString(raw, 'text/html');
+                return doc.body.textContent || "";
+            } catch {
+                return raw.replace(/<[^>]*>/g, '');
+            }
+        };
+
+        timelineData.forEach((item, index) => {
+            const pointIndex = index + 1;
+            const totalCurvePoints = points.length; 
+            const t = pointIndex / (totalCurvePoints - 1); 
+
+            const position = curve.getPointAt(t);
+            const tangent = curve.getTangentAt(t).normalize();
+            
+            const up = new THREE.Vector3(0, 1, 0);
+            let sideVector = new THREE.Vector3().crossVectors(tangent, up).normalize();
+            
+            const nextT = Math.min(1, t + 0.05);
+            
+            const tangent2 = curve.getTangentAt(nextT).normalize();
+            const turn = tangent.x * tangent2.z - tangent.z * tangent2.x; 
+            
+            let sideOffsetDir = turn > 0 ? 1 : -1;
+            
+            if (Math.abs(turn) < 0.01) {
+                sideOffsetDir = (index % 2 === 0) ? 1 : -1;
+            }
+
+            const sideOffset = sideOffsetDir * (roadWidth * 0.5 + 0.8);
+            const itemPos = position.clone().add(sideVector.multiplyScalar(sideOffset));
+            const signScale = 1.5;
+            const postHeight = 3;
+
+            tmpRayOrigin.set(itemPos.x, 50, itemPos.z);
+            raycaster.set(tmpRayOrigin, downVector);
+            let groundY = -2;
+            const groundHits = raycaster.intersectObjects([leftTerrain, rightTerrain, road], false);
+            if (groundHits.length > 0) {
+                groundY = groundHits[0].point.y;
+            }
+            itemPos.y = groundY;
+
+            if (signShadowCount < signShadowPositions.length) {
+                signShadowPositions[signShadowCount].set(itemPos.x, groundY, itemPos.z);
+                signShadowCount += 1;
+            }
+
+            const group = new THREE.Group();
+            group.position.copy(itemPos);
+            scene.add(group);
+            objects.push(group);
+            prepareFadeMaterials(group);
+            setOpacity(group, 1);
+
+            const hash01 = (x) => {
+                const v = Math.sin(x) * 43758.5453;
+                return v - Math.floor(v);
+            };
+            const randSigned = (k) => (hash01((index + 1) * 97.31 + k + initialSeed) - 0.5) * 2;
+
+            const signRoot = new THREE.Group();
+            signRoot.position.set(0, 0, 0);
+            tmpRoadCenter.copy(position);
+            tmpRoadCenter.y = itemPos.y;
+            signRoot.lookAt(tmpRoadCenter);
+            signRoot.rotateY(Math.PI);
+            signRoot.scale.setScalar(signScale);
+            group.add(signRoot);
+
+            const postGeo = new THREE.CylinderGeometry(0.08, 0.1, postHeight, 8);
+            const postMat = new THREE.MeshBasicMaterial({ color: 0x9ca3af });
+            const post = new THREE.Mesh(postGeo, postMat);
+            post.position.y = -postHeight / 2;
+            post.position.z = -0.1;
+            signRoot.add(post);
+
+            const boardWidth = 1.6;
+            const boardDepth = 0.1;
+            const titleText = stripHtml(item.text).replace(/\s+/g, ' ').trim();
+            const signTex = createMileMarkerTexture(String(item.date ?? ''), titleText, { width: 360 });
+            const signAspect = (signTex?.image?.width && signTex?.image?.height) ? (signTex.image.height / signTex.image.width) : 2.2;
+            const boardHeight = boardWidth * signAspect;
+
+            const cornerRadius01 = signTex?.userData?.cornerRadius01;
+            const cornerRadius = (typeof cornerRadius01 === 'number' && Number.isFinite(cornerRadius01))
+                ? (boardWidth * cornerRadius01)
+                : Math.min(boardWidth * 0.18, boardHeight * 0.09);
+            const signShape = createRoundedRectShape(boardWidth, boardHeight, cornerRadius);
+
+            const bodyGeo = new THREE.ExtrudeGeometry(signShape, { depth: boardDepth, bevelEnabled: false, steps: 1 });
+            bodyGeo.translate(0, 0, -boardDepth / 2);
+            const bodyMat = new THREE.MeshBasicMaterial({ color: 0x0b5d1e, side: THREE.DoubleSide });
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.renderOrder = 1;
+
+            const faceGeo = new THREE.ShapeGeometry(signShape);
+            normalizeShapeUvs(faceGeo);
+            const faceMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true, alphaTest: 0.05, side: THREE.DoubleSide });
+            const face = new THREE.Mesh(faceGeo, faceMat);
+            face.position.z = (boardDepth / 2) + 0.001;
+            face.renderOrder = 2;
+
+            const board = new THREE.Group();
+            board.add(body);
+            board.add(face);
+            board.position.set(0, (boardHeight * 0.5) + 0.06, 0.18);
+            board.rotation.z = randSigned(5.55) * 0.03;
+            board.rotation.x = randSigned(6.66) * 0.02;
+            signRoot.add(board);
+
+            const desc = stripHtml(`${item.left ?? ''} ${item.right ?? ''}`)
+                .replace(/\s+/g, ' ')
+                .trim();
+            markerInfo.push({ t, date: String(item.date ?? ''), title: titleText, desc });
+        });
+        if (terrainMat.userData.uniforms && terrainMat.userData.uniforms.signCount) {
+            terrainMat.userData.uniforms.signCount.value = signShadowCount;
+        }
+
+        let targetT = 0;
+        let lastScrollTop = -1;
+        let scrollAtEnd = false;
+        let scrollActivityFrames = 0;
+        
+        function updateScroll() {
+            const scrollTop = scrollContainer.scrollTop;
+            const scrollDelta = lastScrollTop >= 0 ? Math.abs(scrollTop - lastScrollTop) : 0;
+            if (scrollDelta > 3) scrollActivityFrames = 30;
+            if (scrollDelta > 3) markUserInteraction();
+            
+            if (Math.abs(scrollTop - lastScrollTop) > 1) {
+                lastScrollTop = scrollTop;
+            }
+
+            const scrollHeight = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+            const scrollFraction = scrollHeight > 0 ? Math.max(0, Math.min(1, scrollTop / scrollHeight)) : 0;
+            scrollAtEnd = scrollHeight > 0 && scrollTop >= (scrollHeight - 2);
+
+            targetT = scrollFraction * maxT; 
+        }
+        
+        scrollContainer.addEventListener('scroll', updateScroll);
+        updateScroll();
+
+        const clock = new THREE.Clock();
+        const cameraLookAtCurrent = new THREE.Vector3();
+        const cameraFromPos = new THREE.Vector3();
+        const cameraFromLookAt = new THREE.Vector3();
+        const cameraTargetPos = new THREE.Vector3();
+        const cameraTargetLookAt = new THREE.Vector3();
+        const carTargetQuat = new THREE.Quaternion();
+        const carTargetMatrix = new THREE.Matrix4();
+        const carLookAtTarget = new THREE.Vector3();
+        const yAxis = new THREE.Vector3(0, 1, 0);
+        const tmpSlopeDir = new THREE.Vector3();
+        const basePos = new THREE.Vector3();
+        const lookAheadPos = new THREE.Vector3();
+        const tmpScrollSide = new THREE.Vector3();
+        const tmpLookTangent = new THREE.Vector3();
+        const tmpLookSide = new THREE.Vector3();
+        const tmpRoadNormal = new THREE.Vector3();
+        const tmpFinalPos = new THREE.Vector3();
+        const tmpCamDir = new THREE.Vector3();
+        const tmpCamOffset = new THREE.Vector3();
+        const tmpCamLookOffset = new THREE.Vector3();
+        const tmpSpawnPos = new THREE.Vector3();
+        const tmpGroundNormal = new THREE.Vector3(0, 1, 0);
+        let cameraBlend = 1;
+        let wasManualControl = false;
+        let currentT = 0;
+        function animate() {
+            if (destroyed) return;
+            rafId = requestAnimationFrame(animate);
+            
+            const dt = clock.getDelta();
+            const timeScale = dt * 60;
+            if (scrollActivityFrames > 0) scrollActivityFrames--;
+
+            const deltaT = (targetT - currentT) * 0.05;
+            currentT += deltaT;
+            
+            const totalLen = curve.getLength();
+            
+            let realSpeed = 0;
+            const tAhead = distanceAhead / totalLen;
+            
+            const carT = Math.min(1, currentT + tAhead); 
+            
+            if (carModel) {
+                 let vegCarSampleIndex = Math.floor(carT * manualRoadSampleCount);
+                 const hasDrivingInput = (keys.w || keys.a || keys.s || keys.d || keys.arrowup || keys.arrowdown || keys.arrowleft || keys.arrowright);
+                 if (!hasDrivingInput) manualEntryArmed = true;
+                 if (!isManualControl && hasDrivingInput && manualEntryArmed) {
+                     isManualControl = true;
+                     manualEntryArmed = false;
+                 }
+                 if (isManualControl && !isEndlessRunner && scrollActivityFrames > 0 && !hasDrivingInput) {
+                     isManualControl = false;
+                 }
+
+                const justEnteredManual = isManualControl && !wasManualControl;
+                if (justEnteredManual) {
+                    manualPosition.copy(carModel.position);
+                    manualVelocity.set(0, 0, 0);
+                    carSpeed = 0;
+                    manualSteerAngle = 0;
+                    vegWarmup = 45;
+                    manualNeedsGroundSnap = true;
+                    manualStartLimitHasPos = true;
+                    manualStartLimitActive = false;
+                    manualStartLimitPos.copy(manualPosition);
+                    manualStartLimitPos.y = 0;
+                    carModel.getWorldDirection(tmpForwardDir);
+                    tmpForwardDir.y = 0;
+                    if (tmpForwardDir.lengthSq() > 1e-8) {
+                       tmpForwardDir.normalize();
+                       manualRotation = Math.atan2(-tmpForwardDir.x, -tmpForwardDir.z);
+                     }
+                }
+                 
+                 if (!isManualControl) {
+                     curve.getPointAt(carT, tmpCurvePoint);
+                     curve.getTangentAt(carT, tmpCurveTangent).normalize();
+                     tmpScrollSide.crossVectors(tmpCurveTangent, yAxis).normalize();
+                     const zigZagFreq = 60;
+                     const zigZagAmp = 3;
+                     const offset = Math.sin(carT * zigZagFreq) * zigZagAmp;
+
+                     basePos.copy(tmpCurvePoint).addScaledVector(tmpScrollSide, offset);
+                     tmpRayOrigin.set(basePos.x, 50, basePos.z);
+                     raycaster.set(tmpRayOrigin, downVector);
+                     const scrollHits = raycaster.intersectObject(road);
+                     if (scrollHits.length > 0) basePos.y = scrollHits[0].point.y + chassisSkinWidth;
+                     else basePos.y -= 1.3;
+                     
+                     carSpeed = 0;
+                     manualVelocity.set(0, 0, 0);
+                     manualRoadT = carT;
+                     
+                     realSpeed = Math.abs(deltaT) * totalLen;
+                     
+                     const lookAheadT = Math.min(1, carT + 0.005);
+                     const laOffset = Math.sin(lookAheadT * zigZagFreq) * zigZagAmp;
+                     curve.getPointAt(lookAheadT, lookAheadPos);
+                     curve.getTangentAt(lookAheadT, tmpLookTangent).normalize();
+                     tmpLookSide.crossVectors(tmpLookTangent, yAxis).normalize();
+                     lookAheadPos.addScaledVector(tmpLookSide, laOffset);
+                     tmpRayOrigin.set(lookAheadPos.x, 50, lookAheadPos.z);
+                     raycaster.set(tmpRayOrigin, downVector);
+                     const laHits = raycaster.intersectObject(road);
+                     if (laHits.length > 0) lookAheadPos.y = laHits[0].point.y + chassisSkinWidth;
+                     else lookAheadPos.y -= 1.5;
+                     
+                     manualPosition.copy(basePos);
+                     vegCarSampleIndex = Math.floor(carT * manualRoadSampleCount);
+
+                     if (lookAheadPos.distanceToSquared(basePos) > 1e-4) {
+                        carModel.position.copy(basePos);
+                        carModel.lookAt(lookAheadPos);
+                     }
+                     
+                     carModel.getWorldDirection(tmpForwardDir);
+                     tmpForwardDir.y = 0;
+                     if (tmpForwardDir.lengthSq() > 1e-8) {
+                        tmpForwardDir.normalize();
+                        manualRotation = Math.atan2(tmpForwardDir.x, -tmpForwardDir.z);
+                     }
+
+                 } else {
+                     tmpGroundNormal.set(0, 1, 0);
+                     let targetChassisY = manualPosition.y;
+                     let hasGround = false;
+
+                     let bestDist2 = Infinity;
+                     let bestIndex = 0;
+                     let bestU = 0;
+                     const px = manualPosition.x;
+                     const pz = manualPosition.z;
+
+                     for (let i = 0; i < manualRoadSampleCount; i++) {
+                         const ax = manualRoadSampleX[i], az = manualRoadSampleZ[i];
+                         const bx = manualRoadSampleX[i + 1], bz = manualRoadSampleZ[i + 1];
+                         const dx = bx - ax, dz = bz - az;
+                         const denom = dx * dx + dz * dz;
+                         if (denom < 1e-8) continue;
+
+                         let u = ((px - ax) * dx + (pz - az) * dz) / denom;
+                         if (u < 0) u = 0;
+                         else if (u > 1) u = 1;
+
+                         const cx = ax + dx * u;
+                         const cz = az + dz * u;
+                         const ddx = px - cx;
+                         const ddz = pz - cz;
+                         const dist2 = ddx * ddx + ddz * ddz;
+                         if (dist2 < bestDist2) {
+                             bestDist2 = dist2;
+                             bestIndex = i;
+                             bestU = u;
+                         }
+                     }
+
+                     const ax = manualRoadSampleX[bestIndex], az = manualRoadSampleZ[bestIndex], ay = manualRoadSampleY[bestIndex];
+                     const bx = manualRoadSampleX[bestIndex + 1], bz = manualRoadSampleZ[bestIndex + 1], by = manualRoadSampleY[bestIndex + 1];
+                     const segDx = bx - ax, segDz = bz - az;
+
+                     manualRoadT = (bestIndex + bestU) / manualRoadSampleCount;
+                     vegCarSampleIndex = bestIndex;
+
+                     tmpRoadCenter.set(
+                         ax + segDx * bestU,
+                         ay + (by - ay) * bestU,
+                         az + segDz * bestU
+                     );
+
+                    tmpRoadForward.set(segDx, 0, segDz);
+                    if (tmpRoadForward.lengthSq() < 1e-8) tmpRoadForward.set(0, 0, -1);
+                    else tmpRoadForward.normalize();
+                    if (justEnteredManual && manualStartLimitHasPos) {
+                        manualStartLimitForward.copy(tmpRoadForward);
+                        manualStartLimitActive = true;
+                    }
+                    tmpRoadTangent.copy(tmpRoadForward);
+                    tmpForwardDir.set(0, 0, -1).applyAxisAngle(yAxis, manualRotation);
+                    tmpForwardDir.y = 0;
+                    if (tmpForwardDir.lengthSq() > 1e-8) tmpForwardDir.normalize();
+                    else tmpForwardDir.set(0, 0, -1);
+                    if (tmpRoadTangent.dot(tmpForwardDir) < 0) tmpRoadTangent.negate();
+                    tmpRoadSide.crossVectors(tmpRoadTangent, yAxis).normalize();
+                    if (justEnteredManual) {
+                        streetForwardSmoothed.copy(tmpRoadTangent);
+                    } else {
+                        tmpStreetForward.copy(tmpRoadTangent);
+                        if (tmpStreetForward.dot(streetForwardSmoothed) < 0) tmpStreetForward.negate();
+                        streetForwardSmoothed.lerp(tmpStreetForward, Math.min(1, 0.25 * timeScale)).normalize();
+                    }
+
+                    tmpRoadDelta.copy(manualPosition).sub(tmpRoadCenter);
+                    const maxLateral = (roadWidth * 0.5) - 1.5;
+                    const rawLateral = tmpRoadDelta.dot(tmpRoadSide);
+                    const clampedLateral = THREE.MathUtils.clamp(rawLateral, -maxLateral, maxLateral);
+                     if (!justEnteredManual || Math.abs(rawLateral) > maxLateral) {
+                         manualPosition.x = tmpRoadCenter.x + tmpRoadSide.x * clampedLateral;
+                         manualPosition.z = tmpRoadCenter.z + tmpRoadSide.z * clampedLateral;
+                     }
+                     if (manualStartLimitActive) {
+                        tmpStartDelta.copy(manualPosition).sub(manualStartLimitPos);
+                        tmpStartDelta.y = 0;
+                        const behindStart = tmpStartDelta.dot(manualStartLimitForward);
+                        if (behindStart < 0) {
+                            manualPosition.addScaledVector(manualStartLimitForward, -behindStart);
+                            const vForward = manualVelocity.dot(manualStartLimitForward);
+                            if (vForward < 0) manualVelocity.addScaledVector(manualStartLimitForward, -vForward);
+                        }
+                     }
+                     if (rawLateral > maxLateral) {
+                         const sideVel = manualVelocity.dot(tmpRoadSide);
+                         if (sideVel > 0) manualVelocity.addScaledVector(tmpRoadSide, -sideVel);
+                     } else if (rawLateral < -maxLateral) {
+                         const sideVel = manualVelocity.dot(tmpRoadSide);
+                         if (sideVel < 0) manualVelocity.addScaledVector(tmpRoadSide, -sideVel);
+                     }
+
+                    {
+                       const vForward = manualVelocity.dot(tmpRoadTangent);
+                        if (manualRoadT > 0.82 && vForward > 0.02) {
+                            appendManualPoints(30);
+                            const extraPointCount = points.length - basePointCount;
+                            if (extraPointCount > manualMaxPoints && manualRoadT > 0.45) {
+                                const carPointApprox = Math.floor(manualRoadT * (points.length - 1));
+                                const carExtraApprox = Math.max(0, carPointApprox - basePointCount);
+                                const removableExtra = extraPointCount - (manualKeepBehindPoints + 6);
+                                const removeCount = Math.max(0, Math.min(carExtraApprox - manualKeepBehindPoints, removableExtra));
+                                if (removeCount > 0) {
+                                    points.splice(basePointCount, removeCount);
+                                }
+                            }
+                            rebuildManualRoad();
+                            rebuildManualTerrain();
+                            vegWarmup = 45;
+                            vegNeedsResync = true;
+                        }
+                      }
+
+                     tmpRayOrigin.set(manualPosition.x, 50, manualPosition.z);
+                     raycaster.set(tmpRayOrigin, downVector);
+                     const hits = raycaster.intersectObject(road);
+                     if (hits.length > 0) {
+                         hasGround = true;
+                         targetChassisY = hits[0].point.y + chassisSkinWidth;
+                         if (hits[0].face) {
+                             tmpWorldNormal.copy(hits[0].face.normal).transformDirection(hits[0].object.matrixWorld);
+                             tmpGroundNormal.copy(tmpWorldNormal);
+                         }
+                     }
+
+                     if (tmpGroundNormal.y < 0) tmpGroundNormal.negate();
+                     groundNormalSmoothed.lerp(tmpGroundNormal, Math.min(1, 0.08 * timeScale)).normalize();
+
+                     if (manualNeedsGroundSnap && hasGround) {
+                        manualPosition.y = targetChassisY;
+                        manualVelocity.y = 0;
+                        manualNeedsGroundSnap = false;
+                     }
+
+                     if (hasGround) {
+                        const upDelta = targetChassisY - manualPosition.y;
+                        if (upDelta > 0) {
+                            const maxUpStep = 0.35 * timeScale;
+                            manualPosition.y += Math.min(upDelta, maxUpStep);
+                            if (manualVelocity.y < 0) manualVelocity.y = 0;
+                        }
+                     }
+
+                    const accel = acceleration * timeScale;
+                    const forwardInput = keys.w || keys.arrowup;
+                    const backwardInput = keys.s || keys.arrowdown;
+
+                    if (isEndlessRunner) {
+                        carSpeed = Math.min(carSpeed + accel, maxSpeed);
+                    } else if (forwardInput && !backwardInput) {
+                        carSpeed = Math.min(carSpeed + accel, maxSpeed);
+                    } else if (backwardInput && !forwardInput) {
+                        carSpeed = Math.max(carSpeed - accel, -maxSpeed);
+                    } else {
+                        const frictionFactor = Math.pow(friction, timeScale);
+                        carSpeed *= frictionFactor;
+                        if (Math.abs(carSpeed) < 1e-4) carSpeed = 0;
+                    }
+                    
+                    {
+                        const maxSteer = Math.PI / 6;
+                        const horizontalSpeed = Math.hypot(manualVelocity.x, manualVelocity.z);
+                        const speedFactor = Math.min(1, horizontalSpeed / 1.2);
+                        const steerInput = ((keys.a || keys.arrowleft) ? 1 : 0) + ((keys.d || keys.arrowright) ? -1 : 0);
+
+                        const steerRate = 0.12 * (0.35 + 0.65 * speedFactor) * timeScale;
+                        manualSteerAngle += steerInput * steerRate;
+                        if (steerInput === 0) manualSteerAngle *= Math.pow(0.85, timeScale);
+                        manualSteerAngle = THREE.MathUtils.clamp(manualSteerAngle, -maxSteer, maxSteer);
+
+                        const yawFromSteer = 0.08 * speedFactor * timeScale;
+                        const reverseSteer = carSpeed < 0 ? -1 : 1;
+                        manualRotation += manualSteerAngle * yawFromSteer * reverseSteer;
+                    }
+
+                    tmpForwardDir.set(0, 0, -1).applyAxisAngle(yAxis, manualRotation).normalize();
+                    const forwardVec = tmpForwardDir;
+                    const drivingOnGround = hasGround && manualPosition.y <= targetChassisY + 0.05;
+                    
+                    if (drivingOnGround) {
+                        forwardVec.projectOnPlane(groundNormalSmoothed).normalize();
+                    }
+
+                    manualVelocity.addScaledVector(forwardVec, carSpeed * 0.12 * timeScale);
+
+                    if (drivingOnGround) {
+                        const horizontalSpeed = Math.hypot(manualVelocity.x, manualVelocity.z);
+                        if (horizontalSpeed > 1e-4) {
+                            const speedFactor = Math.min(1, horizontalSpeed / 1.2);
+                            tmpVelDir.set(manualVelocity.x, 0, manualVelocity.z).multiplyScalar(1 / horizontalSpeed);
+                            tmpDesiredDir.copy(forwardVec);
+                            if (carSpeed < 0) tmpDesiredDir.negate();
+                            tmpDesiredDir.y = 0;
+                            if (tmpDesiredDir.lengthSq() > 1e-8) {
+                                tmpDesiredDir.normalize();
+                                const steerStrength = (0.12 + 0.45 * speedFactor) * timeScale;
+                                tmpVelDir.lerp(tmpDesiredDir, Math.min(1, steerStrength)).normalize();
+                                manualVelocity.x = tmpVelDir.x * horizontalSpeed;
+                                manualVelocity.z = tmpVelDir.z * horizontalSpeed;
+                            }
+                        }
+                    }
+                    
+                    const velFriction = Math.pow(0.87, timeScale);
+                    manualVelocity.x *= velFriction;
+                    manualVelocity.z *= velFriction;
+                    manualVelocity.y *= Math.pow(0.99, timeScale);
+                    manualVelocity.y -= gravity * timeScale;
+                    
+                    manualPosition.addScaledVector(manualVelocity, timeScale);
+
+                    if (hasGround && manualPosition.y < targetChassisY) {
+                        manualPosition.y = targetChassisY;
+                        if (manualVelocity.y < 0) manualVelocity.y = 0;
+                        if (manualVelocity.dot(groundNormalSmoothed) < 0) {
+                            manualVelocity.projectOnPlane(groundNormalSmoothed);
+                        }
+                    }
+
+                    onGround = hasGround && manualPosition.y <= targetChassisY + 0.05;
+
+                    if (onGround) {
+                        if (manualVelocity.y < 0) manualVelocity.y = 0;
+                        const slopeAngle = groundNormalSmoothed.angleTo(yAxis);
+                        if (slopeAngle > 0.05) {
+                            tmpSlopeDir.copy(downVector).projectOnPlane(groundNormalSmoothed).normalize();
+                            manualVelocity.addScaledVector(tmpSlopeDir, slopeAngle * 0.01 * timeScale);
+                        }
+                    }
+                     
+                     carModel.position.copy(manualPosition);
+                     
+                     const targetUp = onGround ? groundNormalSmoothed : yAxis;
+                     carLookAtTarget.copy(manualPosition).addScaledVector(forwardVec, -1);
+                     carTargetMatrix.lookAt(manualPosition, carLookAtTarget, targetUp);
+                     carTargetQuat.setFromRotationMatrix(carTargetMatrix);
+                     carModel.quaternion.slerp(carTargetQuat, Math.min(1, 0.15 * timeScale));
+
+                     basePos.copy(manualPosition);
+                     realSpeed = manualVelocity.length(); 
+                 }
+
+                 const rawProgress = maxT > 1e-8 ? (manualRoadT / maxT) : 0;
+                 const reachedEnd = rawProgress >= 1 - 1e-4;
+                if (!isEndlessRunner && isManualControl && reachedEnd) {
+                    setEndlessRunnerMode(true);
+                    endlessLives = 3;
+                    renderEndlessLives();
+                    showHintTemporarily('Endless Mode', 1800);
+                }
+
+                 if (!isEndlessRunner) {
+                    const progress = THREE.MathUtils.clamp(rawProgress, 0, 1);
+                    progressFill.style.transform = `scaleX(${progress})`;
+                    {
+                        const viewportWidth = progressViewport.clientWidth;
+                        const innerWidth = progressInner.scrollWidth;
+                        if (innerWidth > viewportWidth + 1) {
+                            const maxScroll = innerWidth - viewportWidth;
+                            const scrollX = THREE.MathUtils.clamp(progress * maxScroll, 0, maxScroll);
+                            progressInner.style.transform = `translateX(-${scrollX}px)`;
+                        } else {
+                            progressInner.style.transform = 'translateX(0)';
+                        }
+                    }
+                    for (const m of markerEls) {
+                         const d = Math.abs(progress - m.pos);
+                        const influence = Math.max(0, 1 - d * 10);
+                        const scale = 1 + influence * 1.4;
+                        m.marker.style.setProperty('--scale', String(scale));
+                        m.label.style.opacity = String(0.65 + influence * 0.35);
+                    }
+                }
+                 
+                {
+                    const minSample = Math.max(0, vegCarSampleIndex - manualVegBehindSamples);
+                    const maxSample = Math.min(manualRoadSampleCount, vegCarSampleIndex + manualVegAheadSamples);
+                    const maxFillSample = Math.min(manualRoadSampleCount, maxSample + manualVegPrefetchAheadSamples);
+                    tmpVegCarPos.copy(carModel.position);
+                    releaseOutOfRangeManualVeg(tmpVegCarPos.x, tmpVegCarPos.z);
+                    updateManualVegAppearances(timeScale);
+                    if (!activeManualVeg.length && manualVegAheadCursor === 0 && manualVegBehindCursor === 0) {
+                        manualVegAheadCursor = vegCarSampleIndex;
+                        manualVegBehindCursor = vegCarSampleIndex;
+                    }
+                    if (vegNeedsResync) {
+                        manualVegAheadCursor = vegCarSampleIndex;
+                        manualVegBehindCursor = vegCarSampleIndex;
+                        vegNeedsResync = false;
+                    }
+                    manualVegAheadCursor = Math.max(vegCarSampleIndex, Math.min(maxFillSample, manualVegAheadCursor));
+                    manualVegBehindCursor = Math.max(minSample, Math.min(vegCarSampleIndex, manualVegBehindCursor));
+                    if ((treeModel || cactusModel)) {
+                        const aheadBacklog = Math.max(0, (maxFillSample - manualVegAheadCursor) / vegSpawnInterval);
+                        const aheadCatchup = Math.min(55, Math.floor(aheadBacklog * 0.4));
+                        const aheadWarmupBoost = vegWarmup > 0 ? 28 : 0;
+                        const aheadBudget = vegMaxPlacementsPerFrame + aheadCatchup + aheadWarmupBoost;
+                        const aheadToSample = vegWarmup > 0
+                            ? Math.min(maxFillSample, vegCarSampleIndex + manualVegAheadSamples + vegWarmupMaxSampleOffset)
+                            : maxFillSample;
+                        if (manualVegAheadCursor <= aheadToSample) {
+                            manualVegAheadCursor = fillManualVegetation(manualVegAheadCursor, aheadToSample, aheadBudget);
+                        }
+
+                        const behindBacklog = Math.max(0, (manualVegBehindCursor - minSample) / vegSpawnInterval);
+                        const behindCatchup = Math.min(18, Math.floor(behindBacklog * 0.25));
+                        const behindBudget = (vegWarmup > 0 ? 2 : 4) + behindCatchup;
+                        if (manualVegBehindCursor >= minSample) {
+                            manualVegBehindCursor = fillManualVegetation(manualVegBehindCursor, minSample, behindBudget);
+                        }
+                        if (vegWarmup > 0) vegWarmup--;
+                    }
+                }
+
+                 const speedFactor = Math.min(realSpeed * 1.5, 2.0);
+                 const time = Date.now() * 0.001;
+                 tmpFinalPos.copy(basePos);
+                 carModel.position.copy(tmpFinalPos);
+                 updateHudDistance();
+                 
+                 if (!isManualControl) {
+                     curve.getTangentAt(carT, tmpCurveTangent).normalize();
+                     tmpScrollSide.crossVectors(tmpCurveTangent, yAxis).normalize();
+                     tmpRoadNormal.crossVectors(tmpScrollSide, tmpCurveTangent).normalize();
+                     if (tmpRoadNormal.y < 0) tmpRoadNormal.negate();
+                     carModel.up.copy(tmpRoadNormal);
+                 }
+                 
+                 const scaleFreq = 10;
+                 const scaleAmp = speedFactor * 0.1; 
+
+                 const scaleXZ = 1 - Math.sin(time * scaleFreq) * (scaleAmp * 0.5); 
+                 
+                 const scaleVibX = (Math.random() - 0.5) * scaleAmp;
+                 const scaleVibZ = (Math.random() - 0.5) * scaleAmp;
+
+                 const baseScale = 6;
+                 carModel.scale.set(
+                    baseScale * (scaleXZ + scaleVibX), 
+                    baseScale, 
+                    baseScale * (scaleXZ + scaleVibZ)
+                 );
+
+                 if (roadMaterial.userData.uniforms) {
+                    roadMaterial.userData.uniforms.carPos.value.copy(tmpFinalPos);
+                    if (roadMaterial.userData.uniforms.carDir) {
+                        carModel.getWorldDirection(tmpForwardDir);
+                        tmpForwardDir.y = 0;
+                        if (tmpForwardDir.lengthSq() > 1e-8) tmpForwardDir.normalize();
+                        else tmpForwardDir.set(0, 0, -1);
+                        roadMaterial.userData.uniforms.carDir.value.set(tmpForwardDir.x, tmpForwardDir.z);
+                    }
+                 }
+                 
+                 const localBack = tmpDesiredDir.set(0, 0, 1).applyQuaternion(carModel.quaternion);
+
+                let spawnChance = 0;
+
+                const isMovingForward = isManualControl
+                    ? (manualVelocity.dot(streetForwardSmoothed) > 0.01)
+                    : (deltaT > 0.0001);
+                if (isMovingForward && realSpeed > 0.01) {
+                    spawnChance = 0.1 + (realSpeed * 0.5);
+                } else {
+                    spawnChance = 0;
+                }
+                 
+                 if (Math.random() < spawnChance) {
+                     const p = particlePool.acquire();
+                     if (p) {
+                         p.maxLife = 1.0 + Math.random() * 0.5;
+                         p.life = p.maxLife;
+                         
+                         tmpSpawnPos.copy(tmpFinalPos).addScaledVector(localBack, 2.5);
+                         p.mesh.position.copy(tmpSpawnPos);
+                         
+                         p.mesh.position.x += (Math.random() - 0.5) * 0.3;
+                         p.mesh.position.z += (Math.random() - 0.5) * 0.3;
+                         
+                         p.mesh.scale.set(1, 1, 1);
+                         
+                         const gray = 0.5 + Math.random() * 0.5; 
+                         p.mesh.material.color.setScalar(gray);
+                         activeParticles.push(p);
+                     }
+                 }
+                 
+                 for (let i = activeParticles.length - 1; i >= 0; i--) {
+                     const p = activeParticles[i];
+                     p.life -= 0.03 * timeScale;
+                     if (p.life <= 0) {
+                         activeParticles.splice(i, 1);
+                         particlePool.release(p);
+                     } else {
+                         p.mesh.position.y += 0.02 * timeScale;
+                         const lifeRatio = p.life / p.maxLife;
+                         const scale = 3 * lifeRatio * (1 - lifeRatio);
+                         const s = scale * 2.5;
+                         p.mesh.scale.set(s, s, s);
+                     }
+                }
+            }
+
+            if (isManualControl) {
+                tmpCamDir.copy(streetForwardSmoothed);
+                tmpCamDir.y = 0;
+                if (tmpCamDir.lengthSq() > 1e-8) tmpCamDir.normalize();
+                else tmpCamDir.set(0, 0, -1);
+                tmpCamOffset.copy(tmpCamDir).multiplyScalar(-15);
+                tmpCamOffset.y += 5;
+                cameraTargetPos.copy(manualPosition).add(tmpCamOffset);
+                tmpCamLookOffset.copy(tmpCamDir).multiplyScalar(20);
+                cameraTargetLookAt.copy(manualPosition).add(tmpCamLookOffset);
+            } else {
+                const camPos = curve.getPointAt(currentT);
+                const lookAtPos = curve.getPointAt(Math.min(1, currentT + 0.05)); 
+                
+                cameraTargetPos.copy(camPos);
+                cameraTargetPos.y += 2.5;
+                
+                cameraTargetLookAt.set(lookAtPos.x, lookAtPos.y - 2 + 1, lookAtPos.z);
+            }
+
+            if (isManualControl && !wasManualControl) {
+                cameraBlend = 0;
+                cameraFromPos.copy(camera.position);
+                cameraFromLookAt.copy(cameraLookAtCurrent);
+            }
+
+            if (isManualControl) {
+                cameraBlend = Math.min(1, cameraBlend + dt * 3);
+                camera.position.lerpVectors(cameraFromPos, cameraTargetPos, cameraBlend);
+                cameraLookAtCurrent.lerpVectors(cameraFromLookAt, cameraTargetLookAt, cameraBlend);
+            } else {
+                cameraBlend = 1;
+                camera.position.copy(cameraTargetPos);
+                cameraLookAtCurrent.copy(cameraTargetLookAt);
+            }
+
+            camera.lookAt(cameraLookAtCurrent);
+            wasManualControl = isManualControl;
+
+            if (!isEndlessRunner && markerInfo.length > 0) {
+                const infoT = carModel ? manualRoadT : currentT;
+                let bestIndex = 0;
+                let bestDist = Infinity;
+                for (let i = 0; i < markerInfo.length; i++) {
+                    const d = Math.abs(markerInfo[i].t - infoT);
+                    if (d < bestDist) {
+                        bestDist = d;
+                        bestIndex = i;
+                    }
+                }
+                setActiveInfo(bestIndex);
+            } else {
+                setActiveInfo(null);
+            }
+            
+            objects.forEach(obj => {
+                const dist = obj.position.distanceTo(camera.position);
+                
+                const fadeStart = 50;
+                const fadeEnd = 90;
+                
+                let opacity = 1;
+                
+                if (dist > fadeStart) {
+                    opacity = 1 - (dist - fadeStart) / (fadeEnd - fadeStart);
+                    opacity = Math.max(0, Math.min(1, opacity));
+                }
+
+                setOpacity(obj, opacity);
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                updateRendererSize();
+            }
+            updateProgressInnerLayout();
+        });
+        resizeObserver.observe(container);
+        queueMicrotask(() => {
+            if (!loadingBegan && !destroyed) revealWhenReady();
+        });
+
+        const destroy = () => {
+            if (destroyed) return;
+            destroyed = true;
+
+            window.removeEventListener('keydown', onKeyDown);
+            window.removeEventListener('keyup', onKeyUp);
+            scrollContainer.removeEventListener('scroll', updateScroll);
+            dragOverlay.removeEventListener('pointerdown', onDragPointerDown);
+            dragOverlay.removeEventListener('pointermove', onDragPointerMove);
+            dragOverlay.removeEventListener('pointerup', endDrag);
+            dragOverlay.removeEventListener('pointercancel', endDrag);
+            dragOverlay.removeEventListener('wheel', onDragWheel);
+            resizeObserver.disconnect();
+            if (revealFallbackTimer) {
+                clearTimeout(revealFallbackTimer);
+                revealFallbackTimer = 0;
+            }
+
+            if (rafId) cancelAnimationFrame(rafId);
+
+            scene.traverse((obj) => {
+                if (obj.isMesh) {
+                    if (obj.geometry) obj.geometry.dispose();
+                    const mat = obj.material;
+                    if (Array.isArray(mat)) {
+                        for (const m of mat) {
+                            if (m && m.map) m.map.dispose();
+                            if (m) m.dispose();
+                        }
+                    } else if (mat) {
+                        if (mat.map) mat.map.dispose();
+                        mat.dispose();
+                    }
+                }
+            });
+
+            if (roadTexture) roadTexture.dispose();
+            renderer.dispose();
+
+            if (renderer.domElement && renderer.domElement.parentNode) {
+                renderer.domElement.parentNode.removeChild(renderer.domElement);
+            }
+
+            if (uiRoot && uiRoot.parentNode) {
+                uiRoot.parentNode.removeChild(uiRoot);
+            }
+
+            container.innerHTML = '';
+        };
+
+        return { destroy };
+    } catch (e) {
+        console.error("Error initializing 3D timeline:", e);
+        container.innerHTML = "Error initializing 3D view: " + e.message;
+        container.style.opacity = '1';
+        return null;
+    }
+}
+
+function createRoadGeometry(curve, segments, width) {
+    const geometry = new THREE.BufferGeometry();
+    const vertices = [];
+    const uvs = [];
+    const indices = [];
+
+    const up = new THREE.Vector3(0, 1, 0);
+
+    for (let i = 0; i <= segments; i++) {
+        const t = i / segments;
+        const point = curve.getPointAt(t);
+        const tangent = curve.getTangentAt(t).normalize();
+        
+        const side = new THREE.Vector3().crossVectors(tangent, up).normalize().multiplyScalar(width / 2);
+        
+        const left = new THREE.Vector3().copy(point).add(side);
+        const right = new THREE.Vector3().copy(point).sub(side);
+        
+        vertices.push(left.x, left.y, left.z);
+        vertices.push(right.x, right.y, right.z);
+        
+        const v = i / segments; 
+        uvs.push(0, v);
+        uvs.push(1, v);
+    }
+
+    for (let i = 0; i < segments; i++) {
+        const base = i * 2;
+        indices.push(base, base + 1, base + 2);
+        indices.push(base + 1, base + 3, base + 2);
+    }
+
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+    geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+    geometry.setIndex(indices);
+    geometry.computeVertexNormals();
+
+    return geometry;
+}
+
+function createRoadTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 2048;
+    canvas.height = 2048;
+    const ctx = canvas.getContext('2d');
+    
+    ctx.fillStyle = '#333333';
+    ctx.fillRect(0, 0, 2048, 2048);
+    
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(40, 0, 40, 2048);
+    ctx.fillRect(1968, 0, 40, 2048);
+    
+    ctx.strokeStyle = '#facc15';
+    ctx.lineWidth = 32;
+    ctx.setLineDash([128, 128]);
+    ctx.beginPath();
+    ctx.moveTo(1024, 0);
+    ctx.lineTo(1024, 2048);
+    ctx.stroke();
+
+    const tex = new THREE.CanvasTexture(canvas);
+    return tex;
+}
+
+function wrapText(context, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '';
+
+    for(let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = context.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+            context.fillText(line, x, y);
+            line = words[n] + ' ';
+            y += lineHeight;
+        } else {
+            line = testLine;
+        }
+    }
+    context.fillText(line, x, y);
+}
+
+function createTextTexture(text, options = {}) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const width = options.width || 256;
+    const height = options.height || 128;
+    canvas.width = width;
+    canvas.height = height;
+    
+    ctx.font = `bold ${options.fontSize || 40}px Arial`;
+    ctx.fillStyle = options.color || 'white';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    
+    ctx.fillText(text, width/2, height/2);
+    
+    return new THREE.CanvasTexture(canvas);
+}
+
+function createMileMarkerTexture(year, label, options = {}) {
+    const width = options.width ?? 360;
+    const cleanYear = String(year ?? '').trim();
+    const cleanLabel = String(label ?? '').replace(/\s+/g, ' ').trim();
+
+    const measureCanvas = document.createElement('canvas');
+    const measureCtx = measureCanvas.getContext('2d');
+
+    const padX = Math.max(20, Math.round(width * 0.12));
+    const basePadY = Math.max(18, Math.round(width * 0.08));
+    const innerWidth = Math.max(1, width - padX * 2);
+
+    const wrapWithFont = (ctx, text, maxWidth) => {
+        const raw = String(text ?? '').trim();
+        if (!raw) return [];
+        const words = raw.split(' ');
+        const lines = [];
+        let line = '';
+
+        const pushLine = (value) => {
+            const trimmed = value.trim();
+            if (trimmed) lines.push(trimmed);
+        };
+
+        const breakLongWord = (word) => {
+            let chunk = '';
+            for (const ch of word) {
+                const next = chunk + ch;
+                if (ctx.measureText(next).width > maxWidth && chunk) {
+                    pushLine(chunk);
+                    chunk = ch;
+                } else {
+                    chunk = next;
+                }
+            }
+            pushLine(chunk);
+        };
+
+        for (const word of words) {
+            const test = line ? `${line} ${word}` : word;
+            if (ctx.measureText(test).width <= maxWidth) {
+                line = test;
+                continue;
+            }
+            if (line) pushLine(line);
+            line = '';
+            if (ctx.measureText(word).width <= maxWidth) line = word;
+            else breakLongWord(word);
+        }
+        if (line) pushLine(line);
+        return lines;
+    };
+
+    let yearSize = Math.max(34, Math.round(width * 0.24));
+    measureCtx.font = `800 ${yearSize}px Arial`;
+    while (yearSize > 34 && measureCtx.measureText(cleanYear).width > innerWidth) {
+        yearSize -= 2;
+        measureCtx.font = `800 ${yearSize}px Arial`;
+    }
+
+    const gap = Math.max(10, Math.round(width * 0.06));
+    const yearBlockHeight = yearSize * 1.15;
+
+    let labelSize = 0;
+    let labelLines = [];
+    if (cleanLabel) {
+        labelSize = Math.max(48, Math.round(width * 0.11));
+        measureCtx.font = `700 ${labelSize}px Arial`;
+        labelLines = wrapWithFont(measureCtx, cleanLabel, innerWidth);
+    }
+
+    const lineHeight = labelSize ? labelSize * 1.16 : 0;
+    const labelBlockHeight = labelLines.length ? (labelLines.length * lineHeight) : 0;
+    const padY = Math.max(basePadY, Math.round((yearSize + (labelSize || 0)) * 0.35));
+    const contentHeight = cleanLabel ? (yearBlockHeight + gap + labelBlockHeight) : yearBlockHeight;
+    const height = Math.round(padY * 2 + contentHeight);
+
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#0b5d1e';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
+
+    const borderWidth = Math.max(5, Math.round(width * 0.03));
+    const cornerRadius = Math.max(10, Math.round(width * 0.12));
+
+    const x0 = borderWidth * 0.5;
+    const y0 = borderWidth * 0.5;
+    const w = width - borderWidth;
+    const h = height - borderWidth;
+    const r = Math.min(cornerRadius, w * 0.5, h * 0.5);
+
+    ctx.beginPath();
+    ctx.moveTo(x0 + r, y0);
+    ctx.arcTo(x0 + w, y0, x0 + w, y0 + h, r);
+    ctx.arcTo(x0 + w, y0 + h, x0, y0 + h, r);
+    ctx.arcTo(x0, y0 + h, x0, y0, r);
+    ctx.arcTo(x0, y0, x0 + w, y0, r);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.lineWidth = borderWidth;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+
+    const cx = width * 0.5;
+    const yearBaseline = padY + yearSize;
+    ctx.font = `800 ${yearSize}px Arial`;
+    ctx.fillText(cleanYear, cx, yearBaseline);
+
+    if (cleanLabel && labelLines.length) {
+        ctx.font = `700 ${labelSize}px Arial`;
+        let y = yearBaseline + gap + labelSize;
+        for (let i = 0; i < labelLines.length; i++) {
+            ctx.fillText(labelLines[i], cx, y);
+            y += lineHeight;
+        }
+    }
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.userData = tex.userData || {};
+    tex.userData.cornerRadius01 = width > 0 ? (r / width) : 0;
+    tex.generateMipmaps = false;
+    tex.minFilter = THREE.LinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+    tex.wrapS = THREE.ClampToEdgeWrapping;
+    tex.wrapT = THREE.ClampToEdgeWrapping;
+    tex.needsUpdate = true;
+    return tex;
+}
+
+function createRoundedRectShape(width, height, radius) {
+    const w = width;
+    const h = height;
+    const r = Math.max(0, Math.min(radius, w * 0.5, h * 0.5));
+    const x = -w * 0.5;
+    const y = -h * 0.5;
+    const shape = new THREE.Shape();
+    shape.moveTo(x + r, y);
+    shape.lineTo(x + w - r, y);
+    shape.quadraticCurveTo(x + w, y, x + w, y + r);
+    shape.lineTo(x + w, y + h - r);
+    shape.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    shape.lineTo(x + r, y + h);
+    shape.quadraticCurveTo(x, y + h, x, y + h - r);
+    shape.lineTo(x, y + r);
+    shape.quadraticCurveTo(x, y, x + r, y);
+    return shape;
+}
+
+function normalizeShapeUvs(geometry) {
+    geometry.computeBoundingBox();
+    const bb = geometry.boundingBox;
+    if (!bb) return;
+    const minX = bb.min.x;
+    const minY = bb.min.y;
+    const rangeX = Math.max(1e-8, bb.max.x - bb.min.x);
+    const rangeY = Math.max(1e-8, bb.max.y - bb.min.y);
+
+    const pos = geometry.getAttribute('position');
+    if (!pos) return;
+    const uv = new Float32Array(pos.count * 2);
+    for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        const y = pos.getY(i);
+        uv[i * 2] = (x - minX) / rangeX;
+        uv[i * 2 + 1] = (y - minY) / rangeY;
+    }
+    geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
+
+function applyFadeToMaterial(material) {
+    material.transparent = true;
+    const signShadowMax = material.userData?.signShadowMax;
+    const hasSignShadows = typeof signShadowMax === 'number' && Number.isFinite(signShadowMax) && signShadowMax > 0;
+    if (hasSignShadows) {
+        material.defines = material.defines || {};
+        material.defines.SIGN_SHADOW_MAX = Math.max(1, Math.floor(signShadowMax));
+        material.userData.uniforms = material.userData.uniforms || {};
+        if (!material.userData.uniforms.signCount) material.userData.uniforms.signCount = { value: 0 };
+        if (!material.userData.uniforms.signPos) material.userData.uniforms.signPos = { value: material.userData.signShadowPositions || [] };
+    }
+    material.onBeforeCompile = (shader) => {
+        if (hasSignShadows) {
+            shader.uniforms.signCount = material.userData.uniforms.signCount;
+            shader.uniforms.signPos = material.userData.uniforms.signPos;
+
+            shader.vertexShader = `
+                varying vec3 vWorldPosition;
+                ${shader.vertexShader}
+            `;
+
+            shader.vertexShader = shader.vertexShader.replace(
+                '#include <project_vertex>',
+                `
+                vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+                vWorldPosition = worldPosition.xyz;
+                #include <project_vertex>
+                `
+            );
+
+            shader.fragmentShader = `
+                uniform int signCount;
+                uniform vec3 signPos[SIGN_SHADOW_MAX];
+                varying vec3 vWorldPosition;
+                ${shader.fragmentShader}
+            `;
+        }
+        shader.fragmentShader = shader.fragmentShader.replace(
+            '#include <dithering_fragment>',
+            `
+            #include <dithering_fragment>
+            ${hasSignShadows ? `
+            float signShadow = 0.0;
+            for (int i = 0; i < SIGN_SHADOW_MAX; i++) {
+                if (i < signCount) {
+                    vec2 rel = vWorldPosition.xz - signPos[i].xz;
+                    float d = length(rel);
+                    float radius = 0.525;
+                    float soft = 0.35;
+                    float s = 1.0 - smoothstep(radius, radius + soft, d);
+                    signShadow = max(signShadow, s);
+                }
+            }
+            gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * 0.55, signShadow * 0.6);
+            ` : ''}
+            float dist = gl_FragCoord.z / gl_FragCoord.w;
+            float fadeStart = 50.0;
+            float fadeEnd = 90.0;
+            float alpha = 1.0 - smoothstep(fadeStart, fadeEnd, dist);
+            gl_FragColor.a *= alpha;
+            `
+        );
+    };
+}
+
+function applyRoadShader(material) {
+    material.transparent = true;
+    material.userData.uniforms = {
+        carPos: { value: new THREE.Vector3() },
+        carDir: { value: new THREE.Vector2(0, -1) }
+    };
+    
+    material.onBeforeCompile = (shader) => {
+        shader.uniforms.carPos = material.userData.uniforms.carPos;
+        shader.uniforms.carDir = material.userData.uniforms.carDir;
+        
+        shader.vertexShader = `
+            varying vec3 vWorldPosition;
+            ${shader.vertexShader}
+        `;
+        
+        shader.vertexShader = shader.vertexShader.replace(
+            '#include <project_vertex>',
+            `
+            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+            vWorldPosition = worldPosition.xyz;
+            #include <project_vertex>
+            `
+        );
+        
+        shader.fragmentShader = `
+            uniform vec3 carPos;
+            uniform vec2 carDir;
+            varying vec3 vWorldPosition;
+            ${shader.fragmentShader}
+        `;
+        
+        shader.fragmentShader = shader.fragmentShader.replace(
+            '#include <dithering_fragment>',
+            `
+            #include <dithering_fragment>
+            
+            vec2 rel = vWorldPosition.xz - carPos.xz;
+            vec2 f = normalize(carDir);
+            vec2 r = vec2(f.y, -f.x);
+            vec2 local = vec2(dot(rel, r), dot(rel, f));
+
+            vec2 halfSize = vec2(1.3, 2.2);
+            vec2 q = abs(local) - halfSize;
+            float outside = length(max(q, vec2(0.0)));
+            float inside = min(max(q.x, q.y), 0.0);
+            float boxDist = outside + inside;
+
+            float shadowSoft = 0.01;
+            float shadow = 1.0 - smoothstep(0.0, shadowSoft, max(boxDist, 0.0));
+            gl_FragColor.rgb = mix(gl_FragColor.rgb, gl_FragColor.rgb * 0.55, shadow * 0.85);
+            
+            float depth = gl_FragCoord.z / gl_FragCoord.w;
+            float fadeStart = 50.0;
+            float fadeEnd = 90.0;
+            float alpha = 1.0 - smoothstep(fadeStart, fadeEnd, depth);
+            gl_FragColor.a *= alpha;
+            `
+        );
+    };
+}

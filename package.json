@@ -10,7 +10,8 @@
     "clean": "node -e \"require('fs').rmSync('dist',{recursive:true,force:true})\"",
     "optimize-images": "node optimize-images.js",
     "minify": "node minify-assets.js",
-    "generate-cv": "node cv-generator/generate-cv.js"
+    "generate-cv": "node cv-generator/generate-cv.js",
+    "deploy": "gh-pages -d dist"
   },
   "keywords": [
     "portfolio",

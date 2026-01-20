@@ -1,1 +1,841 @@
-var game=null;const groundHeight=148,ceilingHeight=2,chunkSize=400;let hearticon;const deg2rad=Math.PI/180,bulletChunks=5,chanceToSpawnCollectible=25,letters="JUMPXAEIOU",invencibilityTime=1.5;var textStyle;function onGameOpen(){if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)||window.innerWidth<768||void 0!==window.orientation){const e=document.querySelector(".game");return void(e&&(e.innerHTML='\n                <div style="text-align: center; padding: 20px; color: white;">\n                    <h3>Mobile Game Not Available</h3>\n                    <p>The game requires a keyboard and mouse for optimal gameplay.</p>\n                    <p>Please visit this site on a desktop computer to play.</p>\n                    <button class="red" onclick="onGameClose()">Back</button>\n                </div>\n            '))}(game={playing:!1,graphics:null,currentGround:0,currentCeiling:148,firstFrame:!0,invencibility:0,app:null,speed:0,score:0,distance:0,lastGeneratedChunk:-1,doubleJump:!1,player:{position:[100,0],size:[30,30],lives:3,jumpForce:315,gravityForce:940,velocity:0},bullets:[],chunks:[],elements:{score:$(".game #score")},getHighscore:()=>{let e=localStorage.getItem("gjg_highscore");return null==e?0:parseInt(e)},setHighscore:e=>{localStorage.setItem("gjg_highscore",e)},getAudio:()=>{let e=localStorage.getItem("audio");return null==e||"true"==e},setAudio:e=>{localStorage.setItem("audio",e),$(".audiobtn").html('<i class="fa '+(e?"fa-volume-up":"fa-volume-off")+'"></i>')},sortCollection:e=>{var t=e;return(t=(t=t.split("")).sort()).join("")},mustGenCollectible:()=>!0,addToCollection:e=>{s=game.sortCollection(e+game.getCollection()),localStorage.setItem("gjg_collection",s)},getCollection:()=>{let e=localStorage.getItem("gjg_collection");return null==e?"":e},getCollectibleToGen:()=>{let e=game.getCollection(),t=letters.split("").filter(t=>!e.includes(t));return t[Math.floor(Math.random()*t.length)]}}).elements.score.text(padNumber(game.score,4)),$(".highscore").text("HI "+padNumber(game.getHighscore(),4)),game.setAudio(game.getAudio()),$("#lives").html('<img src="/img/heart.png">'.repeat(game.player.lives)),game.app=new PIXI.Application({transparent:!0,resizeTo:document.getElementById("gamecanvas"),width:$("#gamecanvas").width(),height:150}),$("#gamecanvas").append(game.app.view),hearticon=PIXI.Texture.from("/img/heart.png"),onGameStart(),textStyle=new PIXI.TextStyle({fill:"#00FF00",fontFamily:"Share Tech Mono",fontSize:40}),game.app.ticker.add(e=>{onGameUpdate(e/PIXI.settings.TARGET_FPMS/1e3)}),$("#score").removeClass("blink_me")}function onGameStart(){let e=new PIXI.Graphics;e.lineStyle(4,16777215),e.drawRect(game.player.position[0],game.player.position[1]+148-game.player.size[0],game.player.size[0],game.player.size[1]),game.app.stage.addChild(e),game.graphics={player:e}}function genWorldPiece(e,t=0){e=Math.max(game.lastGeneratedChunk+1,e);let a=0==game.chunks.length?0:game.chunks[game.chunks.length-1].x+400;4==t?createWorldChunk(a,400*e,!0,3):createWorldChunk(a,400*e,t>1||e<1,3==t?2:1==t?1:0),game.lastGeneratedChunk=e}function onGameUpdate(e){for(let e=Math.max(game.lastGeneratedChunk+1,Math.floor(game.distance/400));e<Math.ceil((game.distance+game.app.view.width)/400);e++)genWorldPiece(e,e%10==2?1:0);if(game.playing||game.firstFrame){game.firstFrame=!1,game.player.position[1]-=game.player.velocity*e*game.speed*1.02,game.player.velocity-=game.player.gravityForce*e*game.speed*1.02,game.player.position[0]+=e*game.speed*300,game.player.position[1]>game.currentGround?(game.player.position[1]=game.currentGround,game.player.velocity=0,game.doubleJump=!0):-game.player.position[1]+game.player.size[0]>game.currentCeiling&&(game.player.position[1]=game.player.size[0]-game.currentCeiling,game.player.velocity=0),game.graphics.player.alpha=game.invencibility<=0?1:Math.floor(Math.round(Math.sin(game.invencibility*deg2rad*720*2))),game.graphics.player.y=game.player.position[1],game.distance+=e*game.speed*300,game.invencibility-=e,game.speed<1?(game.speed+=e/1.75,game.speed>1&&(game.speed=1)):game.speed+=e/150;for(let t=0;t<game.chunks.length;t++){let a=game.chunks[t];(a.x-=e*game.speed*300)<-400&&(game.app.stage.removeChild(a),game.chunks.splice(t,1),t--);for(let t=0;t<a.bullets.length;t++){let i=a.bullets[t];if(i.sprite.rotation+=360*e*Math.PI/180,i.sprite.x-=e*game.speed*60,i.position[0]-=e*game.speed*60,intersection(i,game.player)){a.removeChild(i.sprite),a.bullets.splice(t,1),game.invencibility<=0&&(game.player.lives--,game.invencibility=1.5,playEffect("damage"),updateLives(),0==game.player.lives&&(gameOver(),game.playing=0));break}}}let t=game.chunks[0];if(null==t)return;game.currentGround=0,game.currentCeiling=148;for(let e=0;e<t.collectibles.length;e++){let a=t.collectibles[e];if(intersection(a,game.player)){"heart"==a.type?(game.player.lives++,playEffect("heart"),updateLives()):(playEffect("letter"),game.addToCollection(a.type)),t.removeChild(a.sprite),t.collectibles.splice(e,1);break}}for(let e=0;e<t.objects.length;e++){let a=t.objects[e];if(intersection(a,game.player))t.objects.splice(e,1),e--,game.invencibility<=0&&(a.chunk.addChild(a.renderer),game.invencibility=1.5,game.player.lives--,playEffect("damage"),updateLives(),0==game.player.lives&&(gameOver(),game.playing=0));else if(game.player.position[0]>a.position[0]+a.size[0]+10&&a.point){if(game.score++,game.score%10==0&&($("#score").addClass("blink"),playEffect("points")),game.score%50==0){for(let e=0;e<5;e++)genWorldPiece(-1,4==e?3:2);game.mustGenCollectible()&&100*Math.random()<25&&genWorldPiece(-1,4)}game.elements.score.text(padNumber(game.score,4)),t.objects.splice(e,1),e--}}}}function jump(){(game.doubleJump||game.player.position[1]==game.currentGround)&&(game.player.position[1]==game.currentGround?(playEffect("jump"),game.player.velocity=game.player.jumpForce):(playEffect("doubleJump"),game.doubleJump=!1,game.player.velocity=1*game.player.jumpForce+game.player.position[1]/-20))}function createWorldChunk(e,t,a=!1,i=2){const n=200,o=new PIXI.Graphics;o.collectibles=[],o.starting=e,o.objects=[],o.bullets=[];let l=Math.floor(99999*Math.random())%4;if(!a){let e={position:[n+t,0==l?-46:0],size:[40,2==l?80:0==l?100:40],hit:!1,point:!0,solid:!0};if(o.objects.push(e),1==l){let e={position:[n+t,-96],size:[40,50],hit:!1,point:!1,solid:!0};o.objects.push(e)}if(game.player.lives<3&&t/400%5==0&&10*Math.random()<5){let e=0==l?-5:1==l||3==l?-55:-100;const a=new PIXI.Sprite(hearticon);a.anchor.set(.5),a.x=220,a.y=e+148-16,a.scale.y=.75,a.scale.x=.75,o.addChild(a),o.collectibles.push({position:[n+t,e],size:[20,20],sprite:a,type:"heart"})}}if(2==i){const e=2400,a=-1600,i=400/1;for(let l=0;l<e/i;l++){let s=(l+.5)*i+a;switch(Math.floor(100*Math.random())%4){case 0:createBullet(n+s,t,-10,o),createBullet(n+s,t,-95,o),l+1<e/i&&(s=(l+1)*i+a,createBullet(n+s,t,-50,o));break;case 1:createBullet(n+s,t,-10,o),createBullet(n+s,t,-50,o),l+1<e/i&&(s=(l+1)*i+a,createBullet(n+s,t,-95,o));break;case 2:createBullet(n+s,t,-50,o),createBullet(n+s,t,-95,o);break;case 3:createBullet(n+s,t,-15,o),l++,l<e/i&&(s=l*i+a,createBullet(n+s,t,-15,o),createBullet(n+s,t,-50,o),s=(l+.5)*i+a,createBullet(n+s,t,-50,o))}}}else if(1==i){createBullet(100,t,[-50,-90][Math.floor(100*Math.random())%2],o)}if(3==i&&game.score%50==0){let e=-50,a=game.getCollectibleToGen(),i=new PIXI.Text(a,textStyle);i.anchor.set(.5),i.x=270,i.y=e+148,o.addChild(i),o.collectibles.push({position:[n+t+50,e],size:[20,20],sprite:i,type:a})}let s=rgbToHex(lerp([255,255,255],[230,173,67],Math.abs(Math.sin(t/400*5*Math.PI/180)))),r=[0,2],c=[0,148];for(let e=0;e<o.objects.length;e++){let a=o.objects[e],i=a.position[1]>=0,n=a.position[0]-t,l=new PIXI.Graphics;l.lineStyle(4,0),i?(l.moveTo(n,148),l.lineTo(n,148-a.size[1]),l.moveTo(n+a.size[0],148-a.size[1]),l.lineTo(n+a.size[0],148),c.push(n,148),c.push(n,148-a.size[1]),c.push(n+a.size[0],148-a.size[1]),c.push(n+a.size[0],148)):(l.moveTo(n,a.position[1]+148-a.size[1]),l.lineTo(n,a.position[1]+148),l.moveTo(n+a.size[0],a.position[1]+148),l.lineTo(n+a.size[0],a.position[1]+148-a.size[1]),r.push(n,a.position[1]+148-a.size[1]),r.push(n,a.position[1]+148),r.push(n+a.size[0],a.position[1]+148),r.push(n+a.size[0],a.position[1]+148-a.size[1])),a.chunk=o,a.renderer=l}r.push(400,2),c.push(400,148),o.moveTo(r[0],r[1]);for(let e=2;e<r.length;e+=2)e/2%2==1?o.lineStyle(4,s):o.lineStyle(4,16711680),o.lineTo(r[e],r[e+1]);o.moveTo(c[0],c[1]);for(let e=2;e<c.length;e+=2)e/2%2==1?o.lineStyle(4,s):o.lineStyle(4,16711680),o.lineTo(c[e],c[e+1]);o.x=e,game.chunks.push(o),game.app.stage.addChild(o)}function createBullet(e,t,a,i){const n=new PIXI.Graphics;n.lineStyle(3,16711680);let o=[8,10,12][Math.floor(3*Math.random())],l=Math.floor(97*Math.random())%4+2,s=360/l;const r=Math.PI/180;n.moveTo(Math.sin(0*r)*o,Math.cos(0*r)*o);for(let e=1;e<l;e++)n.lineTo(Math.sin(s*e*r)*o,Math.cos(s*e*r)*o);n.lineTo(Math.sin(0*r)*o,Math.cos(0*r)*o),n.x=e+20,n.y=a+148-16,i.addChild(n),i.bullets.push({position:[e+t,a],size:[20,20],sprite:n})}function rgbToHex(e){return(1<<24)+(e[0]<<16)+(e[1]<<8)+e[2]}function lerp(e,t,a){return[Math.floor(e[0]+(t[0]-e[0])*a),Math.floor(e[1]+(t[1]-e[1])*a),Math.floor(e[2]+(t[2]-e[2])*a)]}function padNumber(e,t){var a="00000"+Math.floor(e);return a.substring(a.length-t)}function intersection(e,t){return!(e.position[0]>=t.position[0]+t.size[0])&&(!(e.position[0]+e.size[0]<=t.position[0])&&(-e.position[1]>=-t.position[1]+t.size[1]?(e.solid&&(game.currentCeiling=-e.position[1]),!1):!(-e.position[1]+e.size[1]<=-t.position[1])||(e.solid&&(game.currentGround=e.position[1]-e.size[1]),!1)))}function updateLives(){$("#lives img").each(function(e,t){e>=game.player.lives?$(t).css("opacity","0.25"):$(t).css("opacity","1")})}function gameOver(){game.score>game.getHighscore()&&(game.setHighscore(game.score),$(".highscore").text("HI "+padNumber(game.score,4))),game.playing=!1,$(".menu").addClass("open"),$("#pageover").addClass("active"),anime({targets:".menu.open",opacity:[0,1],duration:250,easing:"linear"})}function playAgain(){onGameClose(),onGameOpen(),anime({targets:".menu.open",opacity:[1,0],duration:250,easing:"linear",complete:()=>{closeGameWindows(),playEffect("play"),$(".menu").removeClass("open"),game.playing=!0}})}function resumeGame(e=null){playEffect(null!=e?"resume":"play"),anime({targets:".menu.open",opacity:[1,0],duration:250,easing:"linear",complete:()=>{closeGameWindows(),$(".menu").removeClass("open"),game.playing=!0}})}function playEffect(e){if(!game.getAudio())return;"running"!==Tone.context.state&&Tone.context.resume();const t=Tone.now(),a=(new Tone.Synth).toDestination();switch(e){case"play":a.triggerAttackRelease("C3","18n",t),a.triggerAttackRelease("C3","18n",t+1),a.triggerAttackRelease("C4","18n",t+2);break;case"resume":a.triggerAttackRelease("D3","18n",t),a.triggerAttackRelease("D3","18n",t+.15);break;case"pause":a.triggerAttackRelease("D2","18n",t),a.triggerAttackRelease("D2","18n",t+.15);break;case"pause":a.triggerAttackRelease("G4","18n",t),a.triggerAttackRelease("G4","18n",t+.15);break;case"audioToggle":a.triggerAttackRelease("A3","18n",t);break;case"jump":a.triggerAttackRelease("E2","10n",t);break;case"doubleJump":a.triggerAttackRelease("F2","10n",t);break;case"damage":0==game.player.lives?(a.triggerAttackRelease("C2","18n",t),a.triggerAttackRelease("B1","9n",t+.3),a.triggerAttackRelease("A1","5n",t+.6)):a.triggerAttackRelease("B1","5n",t);break;case"heart":a.triggerAttackRelease("D5","10n",t);break;case"letter":a.triggerAttackRelease("E6","10n",t);break;case"points":a.triggerAttackRelease("E4","10n",t),a.triggerAttackRelease("E5","10n",t+.1)}}function openCollectionFromGameOver(){onGameClose(),onGameOpen(),openCollection()}function openCollection(){$(".menu").addClass("open"),anime({targets:".menu.open",opacity:[1,0],duration:250,easing:"linear",complete:()=>{onCollectionOpen(),closeGameWindows(),$("#pagecollection").addClass("active"),anime({targets:".menu.open",opacity:[0,1],duration:250,easing:"linear"})}})}function closeCollection(){$(".menu").addClass("open"),anime({targets:".menu.open",opacity:[1,0],duration:250,easing:"linear",complete:()=>{onCollectionOpen(),closeGameWindows(),$("#pageplay").addClass("active"),anime({targets:".menu.open",opacity:[0,1],duration:250,easing:"linear"})}})}function pauseGame(){if(null==game||!game.playing)return!1;playEffect("pause"),game.playing=!1,$(".menu").addClass("open"),$("#pagepause").addClass("active"),$(".currentscore").text(padNumber(game.score,4)),anime({targets:".menu.open",opacity:[0,1],duration:250,easing:"linear"})}function closeGameWindows(){$(".menu .page.active").removeClass("active")}function onGameClose(){closeGameWindows(),game.app.destroy({removeView:!0}),game=null}function onCollectionOpen(){document.getElementById("pagecollection").scrollTop=0;let e="",t=game.getCollection();for(c in letters)t.indexOf(letters[c])>-1?e+='<a class="letter found">'+letters[c]+"</a>":e+='<a class="letter">'+letters[c]+"</a>";$("#collectioncontent").html(e)}$("body").keydown(function(e){null!=game&&game.playing&&game.speed>=1&&jump()}),$("body").mousedown(function(){try{var e=event.clientX,t=event.clientY;"canvas"==document.elementFromPoint(e,t).tagName.toLowerCase()&&null!=game&&game.playing&&game.speed>=1&&jump()}catch(e){}}),window.addEventListener("touchstart",function(e){try{"canvas"==e.target.tagName.toLowerCase()&&null!=game&&game.playing&&game.speed>=1&&jump()}catch(e){}},!1),$(window).blur(function(){null!=game&&game.playing&&pauseGame()});
+var game = null;
+const groundHeight = 148;
+const ceilingHeight = 2;
+const chunkSize = 400;
+let hearticon;
+const deg2rad = Math.PI / 180;
+const bulletChunks = 5;
+const chanceToSpawnCollectible = 25;
+const letters = 'JUMPXAEIOU';
+const invencibilityTime = 1.5;
+var textStyle;
+
+
+function onGameOpen() {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+                    window.innerWidth < 768 ||
+                    window.orientation !== undefined;
+
+    if (isMobile) {
+        const gameContainer = document.querySelector('.game');
+        if (gameContainer) {
+            gameContainer.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: white;">
+                    <h3>Mobile Game Not Available</h3>
+                    <p>The game requires a keyboard and mouse for optimal gameplay.</p>
+                    <p>Please visit this site on a desktop computer to play.</p>
+                    <button class="red" onclick="onGameClose()">Back</button>
+                </div>
+            `;
+        }
+        return;
+    }
+
+    game = {
+        playing: false,
+        graphics: null,
+        currentGround: 0,
+        currentCeiling: 148,
+        firstFrame: true,
+        invencibility: 0,
+        app: null,
+        speed: 0,
+        score: 0,
+        distance: 0,
+        lastGeneratedChunk: -1,
+        doubleJump: false,
+        player: {
+            position: [100, 0],
+            size: [30, 30],
+            lives: 3,
+            jumpForce: 315,
+            gravityForce: 940,
+            velocity: 0,
+        },
+        bullets: [],
+        chunks: [],
+        elements: {
+            score: $(".game #score")
+        },
+        getHighscore: () => {
+            let hg = localStorage.getItem("gjg_highscore");
+            return hg == null ? 0 : parseInt(hg);
+        },
+        setHighscore: (value) => {
+            localStorage.setItem("gjg_highscore", value);
+        },
+        getAudio: () => {
+            let hg = localStorage.getItem("audio");
+            return hg == null ? true : hg == "true";
+        },
+        setAudio: (value) => {
+            localStorage.setItem("audio", value);
+            $(".audiobtn").html('<i class="fa ' + (value ? 'fa-volume-up' : 'fa-volume-off') + '"></i>');
+        },
+
+        sortCollection: (collection) => {
+            var str = collection;
+            str = str.split("");
+            str = str.sort();
+            return str.join("");
+        },
+
+        mustGenCollectible: () => {
+            return true;
+        },
+
+        addToCollection: (item) => {
+            s = game.sortCollection(item + game.getCollection());
+            localStorage.setItem("gjg_collection", s);
+        },
+
+        getCollection: () => {
+            let cl = localStorage.getItem("gjg_collection");
+            return cl == null ? "" : cl;
+        },
+
+        getCollectibleToGen: () => {
+            let c = game.getCollection();
+            let newLetters = letters.split("").filter(x => !c.includes(x));
+
+            return newLetters[Math.floor(Math.random() * newLetters.length)];
+        }
+    };
+
+    game.elements.score.text(padNumber(game.score, 4));
+    $(".highscore").text("HI " + padNumber(game.getHighscore(), 4));
+
+    game.setAudio(game.getAudio());
+
+    $("#lives").html('<img src="/img/heart.png">'.repeat(game.player.lives));
+
+    game.app = new PIXI.Application({ transparent: true, resizeTo: document.getElementById("gamecanvas"), width: $("#gamecanvas").width(), height: 150 });
+    $("#gamecanvas").append(game.app.view);
+
+    hearticon = PIXI.Texture.from('/img/heart.png');
+    onGameStart();
+
+    textStyle = new PIXI.TextStyle({
+        fill: '#00FF00',
+        fontFamily: 'Share Tech Mono',
+        fontSize: 40
+    });
+
+    game.app.ticker.add((delta) => {
+        const ms = delta / PIXI.settings.TARGET_FPMS;
+        onGameUpdate(ms / 1000);
+    });
+
+    $("#score").removeClass("blink_me");
+}
+
+function onGameStart() {
+    let player = new PIXI.Graphics();
+    player.lineStyle(4, 0xFFFFFF);
+    player.drawRect(game.player.position[0], game.player.position[1] + groundHeight - game.player.size[0], game.player.size[0], game.player.size[1]);
+    game.app.stage.addChild(player);
+
+    game.graphics = { player: player };
+}
+
+function genWorldPiece(i, type = 0) {
+    i = Math.max(game.lastGeneratedChunk + 1, i);
+    let x = game.chunks.length == 0 ? 0 : game.chunks[game.chunks.length - 1].x + chunkSize;
+
+    if (type == 4) {
+        createWorldChunk(x, i * chunkSize, true, 3);
+    }
+    else
+        createWorldChunk(x, i * chunkSize, type > 1 ? true : i < 1, type == 3 ? 2 : (type == 1 ? 1 : 0));
+
+    game.lastGeneratedChunk = i;
+}
+
+function onGameUpdate(delta) {
+    for (let i = Math.max(game.lastGeneratedChunk + 1, Math.floor(game.distance / chunkSize)); i < Math.ceil((game.distance + game.app.view.width) / chunkSize); i++) {
+        genWorldPiece(i, i % 10 == 2 ? 1 : 0);
+    }
+
+    if (game.playing || game.firstFrame) {
+        game.firstFrame = false;
+
+        game.player.position[1] -= game.player.velocity * delta * game.speed * 1.02;
+        game.player.velocity -= game.player.gravityForce * delta * game.speed * 1.02;
+        game.player.position[0] += delta * game.speed * 300;
+
+        if (game.player.position[1] > game.currentGround) {
+            game.player.position[1] = game.currentGround;
+            game.player.velocity = 0;
+            game.doubleJump = true;
+        }
+        else if (-game.player.position[1] + game.player.size[0] > game.currentCeiling) {
+            game.player.position[1] = game.player.size[0] - game.currentCeiling;
+            game.player.velocity = 0;
+        }
+
+        game.graphics.player.alpha = game.invencibility <= 0 ? 1 : Math.floor(Math.round(Math.sin(game.invencibility * deg2rad * 720 * 2)));
+
+        game.graphics.player.y = game.player.position[1];
+
+        game.distance += delta * game.speed * 300;
+        game.invencibility -= delta;
+
+        if (game.speed < 1) {
+            game.speed += delta / 1.75;
+            if (game.speed > 1)
+                game.speed = 1;
+        }
+        else
+            game.speed += delta / 150;
+
+        for (let i = 0; i < game.chunks.length; i++) {
+            let chunk = game.chunks[i];
+            if ((chunk.x -= delta * game.speed * 300) < -chunkSize) {
+                game.app.stage.removeChild(chunk);
+                game.chunks.splice(i, 1);
+                i--;
+            }
+
+            for (let j = 0; j < chunk.bullets.length; j++) {
+                let bullet = chunk.bullets[j];
+                bullet.sprite.rotation += delta * 360 * Math.PI / 180;
+                bullet.sprite.x -= delta * game.speed * 60;
+                bullet.position[0] -= delta * game.speed * 60;
+
+                if (intersection(bullet, game.player)) {
+                    chunk.removeChild(bullet.sprite);
+                    chunk.bullets.splice(j, 1);
+
+                    if (game.invencibility <= 0) {
+                        game.player.lives--;
+                        game.invencibility = invencibilityTime;
+                        playEffect('damage');
+                        updateLives();
+
+                        if (game.player.lives == 0) {
+                            gameOver();
+                            game.playing = 0;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        let chunk = game.chunks[0];
+        if(chunk == null)
+            return;
+
+        game.currentGround = 0;
+        game.currentCeiling = 148;
+
+        for (let j = 0; j < chunk.collectibles.length; j++) {
+            let o = chunk.collectibles[j];
+
+            if (intersection(o, game.player)) {
+
+                if (o.type == 'heart') {
+                    game.player.lives++;
+                    playEffect('heart');
+                    updateLives();
+                }
+                else {
+                    playEffect('letter');
+                    game.addToCollection(o.type);
+                }
+
+                chunk.removeChild(o.sprite);
+                chunk.collectibles.splice(j, 1);
+                break;
+            }
+        }
+
+        for (let i = 0; i < chunk.objects.length; i++) {
+
+            let o = chunk.objects[i];
+
+            if (intersection(o, game.player)) {
+                chunk.objects.splice(i, 1);
+                i--;
+                if (game.invencibility <= 0) {
+                    o.chunk.addChild(o.renderer);
+                    game.invencibility = invencibilityTime;
+                    game.player.lives--;
+                    playEffect('damage');
+                    updateLives();
+                    if (game.player.lives == 0) {
+                        gameOver();
+                        game.playing = 0;
+                    }
+                }
+            }
+            else if (game.player.position[0] > (o.position[0] + o.size[0] + 10)) {
+                if (o.point) {
+                    game.score++;
+                    if (game.score % 10 == 0) {
+                        $("#score").addClass("blink");
+                        playEffect('points');
+                    }
+
+                    if (game.score % 50 == 0) {
+                        for (let l = 0; l < bulletChunks; l++)
+                            genWorldPiece(-1, l == bulletChunks - 1 ? 3 : 2);
+
+                        if (game.mustGenCollectible() && (Math.random() * 100 < chanceToSpawnCollectible))
+                            genWorldPiece(-1, 4);
+                    }
+
+                    game.elements.score.text(padNumber(game.score, 4));
+                    chunk.objects.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
+}
+
+
+function jump() {
+    if (game.doubleJump || (game.player.position[1] == game.currentGround)) {
+        if (game.player.position[1] == game.currentGround) {
+            playEffect("jump");
+            game.player.velocity = game.player.jumpForce
+        }
+        else {
+            playEffect("doubleJump");
+            game.doubleJump = false;
+            game.player.velocity = game.player.jumpForce * 1. + (game.player.position[1] / -20)
+        }
+    }
+}
+
+function createWorldChunk(x, rx, empty = false, bullets = 2) {
+    const offset = 200;
+    const chunk = new PIXI.Graphics();
+
+    chunk.collectibles = [];
+    chunk.starting = x;
+    chunk.objects = [];
+    chunk.bullets = [];
+
+    let type = Math.floor(Math.random() * 99999) % 4;
+
+    //#region Obstacles And Hearts
+    if (!empty) {
+        let o = {
+            position: [offset + rx, type == 0 ? -46 : 0],
+            size: [40, (type == 2) ? 80 : (type == 0 ? 100 : 40)],
+            hit: false,
+            point: true,
+            solid: true
+        };
+        chunk.objects.push(o);
+
+        if (type == 1) {
+            let o = {
+                position: [offset + rx, -96],
+                size: [40, 50],
+                hit: false,
+                point: false,
+                solid: true
+            }
+            chunk.objects.push(o);
+        }
+
+        if (game.player.lives < 3 && (rx / chunkSize) % 5 == 0 && (Math.random() * 10) < 5) {
+            let y = (type == 0 ? -5 : (type == 1 || type == 3 ? -55 : -100));
+
+            const heart = new PIXI.Sprite(hearticon);
+            heart.anchor.set(0.5);
+            heart.x = offset + 20;
+            heart.y = y + groundHeight - 16;
+            heart.scale.y = 0.75;
+            heart.scale.x = 0.75;
+            chunk.addChild(heart);
+            chunk.collectibles.push({
+                position: [offset + rx, y],
+                size: [20, 20],
+                sprite: heart,
+                type: 'heart',
+            });
+        }
+    }
+    if (bullets == 2) {
+        const c = (chunkSize * bulletChunks) * (1.2);
+        const start = (-chunkSize * bulletChunks) * (0.8);
+        const perChunk = 1;
+        const ds = chunkSize / perChunk;
+
+        for (let i = 0; i < c / ds; i++) {
+            let y = Math.floor(Math.random() * 100) % 4;
+            let dx = ((i + 0.5) * ds) + start;
+
+            switch (y) {
+                case 0:
+                    createBullet(offset + dx, rx, -10, chunk);
+                    createBullet(offset + dx, rx, -95, chunk);
+
+                    if ((i + 1) < c / ds) {
+                        dx = ((i + 1) * ds) + start;
+                        createBullet(offset + dx, rx, -50, chunk);
+                    }
+                    break;
+
+                case 1:
+                    createBullet(offset + dx, rx, -10, chunk);
+                    createBullet(offset + dx, rx, -50, chunk);
+
+                    if ((i + 1) < c / ds) {
+                        dx = ((i + 1) * ds) + start;
+                        createBullet(offset + dx, rx, -95, chunk);
+                    }
+                    break;
+
+                case 2:
+                    createBullet(offset + dx, rx, -50, chunk);
+                    createBullet(offset + dx, rx, -95, chunk);
+                    break;
+
+                case 3:
+                    createBullet(offset + dx, rx, -15, chunk);
+                    i++;
+
+                    if (i < c / ds) {
+                        dx = ((i) * ds) + start;
+                        createBullet(offset + dx, rx, -15, chunk);
+                        createBullet(offset + dx, rx, -50, chunk);
+
+                        dx = ((i + 0.5) * ds) + start;
+                        createBullet(offset + dx, rx, -50, chunk);
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    else if (bullets == 1) {
+
+        let y = [-50, -90][Math.floor(Math.random() * 100) % 2];
+        createBullet(offset - 100, rx, y, chunk);
+    }
+    if (bullets == 3 && game.score % 50 == 0) {
+        let y = -50;
+        let s = game.getCollectibleToGen();
+        let collectible = new PIXI.Text(s, textStyle)
+        collectible.anchor.set(0.5);
+        collectible.x = offset + 70;
+        collectible.y = y + groundHeight;
+        chunk.addChild(collectible);
+        chunk.collectibles.push({
+            position: [offset + rx + 50, y],
+            size: [20, 20],
+            sprite: collectible,
+            type: s
+        });
+    }
+    let color = rgbToHex(lerp([255, 255, 255], [230, 173, 67], Math.abs(Math.sin((rx / chunkSize) * 5 * Math.PI / 180))));
+  
+    let top = [0, ceilingHeight];
+    let bottom = [0, groundHeight];
+
+    for (let i = 0; i < chunk.objects.length; i++) {
+        let o = chunk.objects[i];
+        let ground = o.position[1] >= 0;
+
+        let aa = o.position[0] - rx;
+
+        let object = new PIXI.Graphics();
+        object.lineStyle(4, 0x000000);
+
+        if (ground) {
+            object.moveTo(aa, groundHeight);
+            object.lineTo(aa, groundHeight - o.size[1]);
+            object.moveTo(aa + o.size[0], groundHeight - o.size[1]);
+            object.lineTo(aa + o.size[0], groundHeight);
+
+            bottom.push(aa, groundHeight)
+            bottom.push(aa, groundHeight - o.size[1])
+            bottom.push(aa + o.size[0], groundHeight - o.size[1])
+            bottom.push(aa + o.size[0], groundHeight)
+        }
+        else {
+            object.moveTo(aa, o.position[1] + groundHeight - o.size[1]);
+            object.lineTo(aa, o.position[1] + groundHeight);
+            object.moveTo(aa + o.size[0], o.position[1] + groundHeight);
+            object.lineTo(aa + o.size[0], o.position[1] + groundHeight - o.size[1]);
+
+            top.push(aa, o.position[1] + groundHeight - o.size[1]) 
+            top.push(aa, o.position[1] + groundHeight)
+            top.push(aa + o.size[0], o.position[1] + groundHeight)
+            top.push(aa + o.size[0], o.position[1] + groundHeight - o.size[1])
+        }
+
+        o.chunk = chunk;
+        o.renderer = object;
+    }
+
+    top.push(chunkSize, ceilingHeight);
+    bottom.push(chunkSize, groundHeight);
+
+    chunk.moveTo(top[0], top[1]);
+    for (let i = 2; i < top.length; i += 2)
+    {
+        if((i/2)%2 == 1)
+            chunk.lineStyle(4, color);
+        else
+            chunk.lineStyle(4, 0xff0000);
+
+        chunk.lineTo(top[i], top[i + 1]);
+    }
+
+    chunk.moveTo(bottom[0], bottom[1]);
+    for (let i = 2; i < bottom.length; i += 2)
+    {
+        if((i/2)%2 == 1)
+            chunk.lineStyle(4, color);
+        else
+            chunk.lineStyle(4, 0xff0000);
+
+        chunk.lineTo(bottom[i], bottom[i + 1]);
+    }
+
+
+    chunk.x = x;
+
+    game.chunks.push(chunk);
+    game.app.stage.addChild(chunk);
+}
+
+function createBullet(offset, rx, y, chunk) {
+    const bullet = new PIXI.Graphics();
+    bullet.lineStyle(3, 0xFF0000);
+    let m = [8, 10, 12][Math.floor(Math.random() * 3)];
+
+    let sides = Math.floor(Math.random() * 97) % 4 + 2;
+    let sd = 360 / sides;
+
+    const deg2rad = Math.PI / 180;
+    bullet.moveTo(Math.sin(0 * deg2rad) * m, Math.cos(0 * deg2rad) * m);
+    for (let s = 1; s < sides; s++)
+        bullet.lineTo(Math.sin(sd * s * deg2rad) * m, Math.cos(sd * s * deg2rad) * m);
+    bullet.lineTo(Math.sin(0 * deg2rad) * m, Math.cos(0 * deg2rad) * m);
+
+    bullet.x = offset + 20;
+    bullet.y = y + groundHeight - 16;
+    chunk.addChild(bullet);
+    chunk.bullets.push({
+        position: [offset + rx, y],
+        size: [20, 20],
+        sprite: bullet
+    });
+}
+
+function rgbToHex(c) {
+    return ((1 << 24) + (c[0] << 16) + (c[1] << 8) + c[2]);
+}
+
+function lerp(a, b, t) {
+    return [Math.floor(a[0] + (b[0] - a[0]) * t), Math.floor(a[1] + (b[1] - a[1]) * t), Math.floor(a[2] + (b[2] - a[2]) * t)];
+}
+
+function padNumber(num, size) {
+    var s = "00000" + Math.floor(num);
+    return s.substring(s.length - size);
+}
+
+function intersection(a, b) {
+
+    if (a.position[0] >= b.position[0] + b.size[0]) return false;
+    if (a.position[0] + a.size[0] <= b.position[0]) return false;
+
+    if (-a.position[1] >= -b.position[1] + b.size[1]) {
+        if (a.solid)
+            game.currentCeiling = -a.position[1];
+        return false;
+    }
+
+    if (-a.position[1] + a.size[1] <= -b.position[1]) {
+        if (a.solid)
+            game.currentGround = a.position[1] - a.size[1];
+        return false;
+    }
+
+    return true;
+}
+
+function updateLives() {
+    $("#lives img").each(function (i, el) {
+        if (i >= game.player.lives)
+            $(el).css('opacity', '0.25')
+        else
+            $(el).css('opacity', '1')
+    });
+}
+
+function gameOver() {
+
+    let isHighscore = game.score > game.getHighscore();
+    if (isHighscore) {
+        game.setHighscore(game.score);
+        $(".highscore").text("HI " + padNumber(game.score, 4));
+    }
+
+    game.playing = false;
+    $(".menu").addClass("open");
+    $("#pageover").addClass("active");
+
+    anime({
+        targets: '.menu.open',
+        opacity: [0, 1],
+        duration: 250,
+        easing: 'linear',
+    });
+}
+
+function playAgain() {
+
+    onGameClose();
+    onGameOpen();
+
+    anime({
+        targets: '.menu.open',
+        opacity: [1, 0],
+        duration: 250,
+        easing: 'linear',
+        complete: () => {
+            closeGameWindows();
+            playEffect('play');
+            $(".menu").removeClass("open");
+            game.playing = true;
+        }
+    });
+}
+
+function resumeGame(paused = null) {
+    if (paused != null)
+        playEffect('resume');
+    else
+        playEffect('play');
+
+    anime({
+        targets: '.menu.open',
+        opacity: [1, 0],
+        duration: 250,
+        easing: 'linear',
+        complete: () => {
+            closeGameWindows();
+            $(".menu").removeClass("open");
+            game.playing = true;
+        }
+    });
+
+    /*
+        if (Tone.context.state !== 'running') {
+            Tone.context.resume();
+        }
+    
+        const synth = new Tone.Synth().toDestination();
+        const now = Tone.now()
+        synth.triggerAttackRelease("C4", "8n", now)
+        synth.triggerAttackRelease("E4", "8n", now + 0.5)
+        synth.triggerAttackRelease("G4", "8n", now + 1)
+        */
+}
+
+function playEffect(eff) {
+    if (!game.getAudio())
+        return;
+
+    if (Tone.context.state !== 'running') {
+        Tone.context.resume();
+    }
+
+    const now = Tone.now();
+    const synth = new Tone.Synth().toDestination();
+
+    switch (eff) {
+        case 'play':
+            synth.triggerAttackRelease("C3", "18n", now)
+            synth.triggerAttackRelease("C3", "18n", now + 1)
+            synth.triggerAttackRelease("C4", "18n", now + 2)
+
+            break;
+        case 'resume':
+            synth.triggerAttackRelease("D3", "18n", now)
+            synth.triggerAttackRelease("D3", "18n", now + 0.15)
+            break;
+
+        case 'pause':
+            synth.triggerAttackRelease("D2", "18n", now)
+            synth.triggerAttackRelease("D2", "18n", now + 0.15)
+            break;
+
+        case 'pause':
+            synth.triggerAttackRelease("G4", "18n", now)
+            synth.triggerAttackRelease("G4", "18n", now + 0.15)
+            break;
+
+        case 'audioToggle':
+            synth.triggerAttackRelease("A3", "18n", now)
+            break;
+
+        case 'jump':
+            synth.triggerAttackRelease("E2", "10n", now)
+            break;
+
+        case 'doubleJump':
+            synth.triggerAttackRelease("F2", "10n", now)
+            break;
+
+        case 'damage':
+            if (game.player.lives == 0) {
+                synth.triggerAttackRelease("C2", "18n", now)
+                synth.triggerAttackRelease("B1", "9n", now + 0.3)
+                synth.triggerAttackRelease("A1", "5n", now + 0.6)
+            }
+            else
+                synth.triggerAttackRelease("B1", "5n", now)
+            break;
+
+        case 'heart':
+            synth.triggerAttackRelease("D5", "10n", now)
+            break;
+
+        case 'letter':
+            synth.triggerAttackRelease("E6", "10n", now)
+            break;
+
+        case 'points':
+            synth.triggerAttackRelease("E4", "10n", now)
+            synth.triggerAttackRelease("E5", "10n", now + 0.1)
+            break;
+
+        default:
+            break;
+    }
+}
+
+function openCollectionFromGameOver(){
+    onGameClose();
+    onGameOpen();
+    openCollection();
+}
+
+function openCollection() {
+    $(".menu").addClass("open");
+
+    anime({
+        targets: '.menu.open',
+        opacity: [1, 0],
+        duration: 250,
+        easing: 'linear',
+        complete: () => {
+            onCollectionOpen();
+            closeGameWindows();
+            $("#pagecollection").addClass("active");
+            anime({
+                targets: '.menu.open',
+                opacity: [0, 1],
+                duration: 250,
+                easing: 'linear',
+            });
+        }
+    });
+}
+
+function closeCollection() {
+    $(".menu").addClass("open");
+
+    anime({
+        targets: '.menu.open',
+        opacity: [1, 0],
+        duration: 250,
+        easing: 'linear',
+        complete: () => {
+            onCollectionOpen();
+            closeGameWindows();
+            $("#pageplay").addClass("active");
+            anime({
+                targets: '.menu.open',
+                opacity: [0, 1],
+                duration: 250,
+                easing: 'linear',
+            });
+        }
+    });
+}
+
+function pauseGame() {
+    if(game == null || !game.playing)
+        return false;
+
+    playEffect('pause');
+    game.playing = false;
+    $(".menu").addClass("open");
+    $("#pagepause").addClass("active");
+    $(".currentscore").text(padNumber(game.score, 4));
+
+    anime({
+        targets: '.menu.open',
+        opacity: [0, 1],
+        duration: 250,
+        easing: 'linear'
+    });
+}
+
+function closeGameWindows() {
+    $(".menu .page.active").removeClass("active");
+}
+
+function onGameClose() {
+    closeGameWindows();
+    game.app.destroy({ removeView: true })
+    game = null;
+}
+
+function onCollectionOpen() {
+    document.getElementById('pagecollection').scrollTop = 0;
+
+    let s = "";
+    let col = game.getCollection();
+    for (c in letters) {
+        if (col.indexOf(letters[c]) > -1)
+            s += '<a class="letter found">' + letters[c] + '</a>'
+        else
+            s += '<a class="letter">' + letters[c] + '</a>'
+    }
+
+    $("#collectioncontent").html(s);
+}
+
+
+$('body').keydown(function (e) {
+    if (game != null && game.playing && game.speed >= 1) {
+        jump();
+    }
+});
+
+$('body').mousedown(function () {
+    try {
+        var x = event.clientX, y = event.clientY;
+        let c = document.elementFromPoint(x, y);
+        if (c.tagName.toLowerCase() == "canvas")
+            if (game != null && game.playing && game.speed >= 1)
+                jump();
+    } catch (e) { }
+});
+
+window.addEventListener('touchstart', function (event) {
+    try {
+        if (event.target.tagName.toLowerCase() == "canvas")
+            if (game != null && game.playing && game.speed >= 1)
+                jump();
+    } catch (e) { }
+}, false);
+
+$(window).blur(function () {
+    if (game != null && game.playing) pauseGame()
+});
+
