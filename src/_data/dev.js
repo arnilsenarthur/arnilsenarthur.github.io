@@ -226,6 +226,28 @@ module.exports = {
         "Responsive design working on all devices",
         "RESTful API with proper input validation"
       ]
+    },
+    {
+      title: "Configo",
+      subtitle: "Modern Configuration Management Library for Go",
+      url: "https://github.com/arnilsenarthur/go_configo",
+      externalLink: true,
+      tags: [
+        { name: "Go", type: "Language" },
+        { name: "Library", type: "Concept" },
+        { name: "Configuration Management", type: "Technology" },
+        { name: "Systems Programming", type: "Concept" },
+        { name: "Open Source", type: "Concept" }
+      ],
+      description: ["<b>Configo</b> is a powerful, flexible configuration management library for Go applications that supports multiple configuration sources with validation, hot-reloading, and type-safe access. Features include support for environment variables, YAML/JSON files, command-line flags, hierarchical configuration with dot notation, built-in validators, and hot-reload capabilities for production-ready applications."],
+      achievements: [
+        "Multiple configuration sources (env vars, YAML/JSON, CLI flags)",
+        "Built-in validation with custom validators support",
+        "Hot-reload functionality with file watching",
+        "Type-safe configuration access with automatic conversion",
+        "High performance with comprehensive test coverage (100+ tests)",
+        "Production-ready with modern Go practices"
+      ]
     }
   ],
   skills: {
@@ -318,6 +340,10 @@ module.exports = {
       {
         title: "Python (Data Science & Development)",
         level: 4
+      },
+      {
+        title: "Go (Systems Programming)",
+        level: 3,
       },
       {
         title: "SQL (Database Management)",
