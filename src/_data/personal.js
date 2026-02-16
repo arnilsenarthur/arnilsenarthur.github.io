@@ -2,8 +2,8 @@ module.exports = {
   name: "Árnilsen Arthur",
   avatar: "/img/icon.png",
   cv: {
-    subtitle: "Full Stack Developer & Data Engineer",
-    professionalSummary: "Versatile full-stack developer and data engineer with 8+ years of experience in software development, game development, and data-driven solutions. Expert in modern web technologies (React, TypeScript, Node.js) and data science (Python, SQL, data modeling). Proven track record in building scalable applications, multiplayer game systems, and data pipelines. Strong background in AI/ML integration, API development, and performance optimization. Passionate about solving complex problems through code and data.",
+    subtitle: "Senior Fullstack Programmer, Technical Artist, Networking/Graphics Engineer",
+    professionalSummary: "Versatile programmer with 8+ years of experience in software development, game development, and data-driven solutions. Expert in modern web technologies (React, TypeScript, Node.js) and data science (Python, SQL, data modeling). Proven track record in building scalable applications, multiplayer game systems, and data pipelines. Strong background in AI/ML integration, API development, and performance optimization. Passionate about solving complex problems through code and data.",
     about: [
       "I've always loved maths, logic and understanding how things work, starting with game development at age 13 (2013). This passion led me to pursue Information Technology and later a specialized Game Development degree.",
       "Over 8+ years, I've built expertise across the full stack: from React/TypeScript frontend applications to Python data pipelines, SQL database design, and AI/ML integrations. I've developed multiplayer games serving 1000+ concurrent players and enterprise systems used by 50+ institutions.",
@@ -28,13 +28,31 @@ module.exports = {
     ],
     experience: [
       {
-        years: "2023 - Present",
-        title: "Senior Full-Stack Developer & Data Engineer",
+        years: "2025 - Present",
+        title: "Senior Game Developer",
+        org: "Triplo Studios",
+        achievements: [
+          "Deep diving into graphics programming and technical art",
+          "Network programming and optimization"
+        ]
+      },
+      {
+        years: "2025 - Present",
+        title: "Senior Fullstack Developer",
+        org: "LAP Code",
+        achievements: [
+          "Building scalable web applications using React, Node.js, and TypeScript",
+          "Building enterprise systems using Python, SQL, and data modeling",
+          "Building AI/ML models using Python, SQL, and data modeling"
+        ]
+      },
+      {
+        years: "2023 - 2025",
+        title: "Game Developer",
         org: "Monomyto Studio",
         achievements: [
           "Developed multiplayer games using Photon Quantum engine serving 1000+ concurrent players with <50ms latency",
-          "Built real-time analytics dashboard using Python, SQL, and React for game performance monitoring",
-          "Integrated AI-powered matchmaking system using machine learning algorithms"
+          "Built real-time analytics dashboard using Python, SQL, and React for game performance monitoring"
         ]
       },
       {
